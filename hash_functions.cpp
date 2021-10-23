@@ -1,3 +1,4 @@
+#include <hash_functions.hpp>
 #include <math.h>       /* pow */
 
 #define K 6
