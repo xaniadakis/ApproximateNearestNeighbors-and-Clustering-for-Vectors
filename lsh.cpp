@@ -4,6 +4,8 @@
 #include <cstring>
 #include <unistd.h>
 
+#include "utils.hpp"
+
 
 //#include <hash_functions.hpp>
 
@@ -69,11 +71,6 @@ int main(int argc, char *argv[]){
         double R = 10000; //-R
     }
 
-    while(input_file.empty())
-    {
-        cout<<"Enter input file location: ";
-        cin >> input_file;
-    }
 
     while(input_file.empty())
     {
