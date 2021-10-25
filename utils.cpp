@@ -4,10 +4,40 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <random>
 
 #include "utils.hpp"
 
 using namespace std;
+
+int modulo(int a, int b) 
+{
+    //Real modulo operator
+    const int result = a % b;
+    return result >= 0 ? result : result + b;
+}
+
+int normal_distribution_rng()
+{
+    //Random number generator using normal distribution
+    random_device rd;
+    mt19937 gen(rd());
+    normal_distribution<float> d(0,1);
+    return round(d(gen));
+}
+
+int uniform_distribution_rng(int lowerRange,int higherRange)
+{
+    const int range_from  = 0;
+    const int range_to    = 10;
+    random_device rand_dev;
+    mt19937 generator(rand_dev());
+    uniform_int_distribution<int> distr(range_from, range_to);
+
+    return round(distr(generator));
+}  
+
+
 
 void read_file(string filename)
 {
