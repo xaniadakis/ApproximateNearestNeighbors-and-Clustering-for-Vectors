@@ -11,6 +11,12 @@ using namespace std;
 
 #include <iostream>
 
+struct hashtable_item
+{
+	vector<float> p;
+	unsigned int ID;
+};
+
 class LSH
 {
 private:
@@ -23,7 +29,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_map<int, float> *hashtables;
+	unordered_map<int, hashtable_item> *hashtables;
 	int num_hashtables;
 	int k;
 
@@ -32,12 +38,16 @@ private:
 	float **t;
 	int w=uniform_distribution_rng(0,6);
 	unsigned int M = UINT32_MAX - 4;
+
+	int hash(unsigned int i,vector<float> p,vector<float> *v,float *t);
+	unsigned int g(vector<float> p,unsigned int j);
+	unsigned int ID(vector<float> p,unsigned int j);
 	
 public:
 	LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))//Constructor
 	{
 		num_hashtables=L;
-		hashtables = new unordered_map<int, float>[L];
+		hashtables = new unordered_map<int, hashtable_item>[L];
 		k=k;
 		read_file(input_file,vectors,ids);
 		vectorSize=vectors[0].size();
@@ -69,4 +79,5 @@ public:
 	~LSH()//Destructor
 	{
 	};
+	void query(string query_file,string output_file,int N,int R);
 };

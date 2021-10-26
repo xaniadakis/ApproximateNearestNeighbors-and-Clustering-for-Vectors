@@ -1,91 +1,28 @@
-//File for LSH implementation
 #include "lsh.hpp"
+#include <math.h>
+#include <numeric>
 
-// να τρεχει με παραμετρους απο την γραμμή εντολών ή να τους δίνει διαδραστικά κατα την εκτέλεση
-// στο τέλος θα διερωτάται ο χρήστης αν θέλει να τερματίσει ή να επαναλάβει με διαφορετικές παραμέτρους όπου ξαναχτίζω
- 
-int main(int argc, char *argv[]){
-	
-	srand((time(0)));
+int LSH::hash(unsigned int i,vector<float> p,vector<float> *v,float *t) {
+	float innerProduct = inner_product(p.begin(), p.end(), v[i].begin(), 0);
+	return floor((innerProduct+t[i])/w);
+}
 
-	string input_file; //-i
-	string query_file; //-q
-	string output_file; //-o
-	int k = 4; //-k
-	int L = 5; //-L
-	int N = 1; //-N
-	double R = 10000; //-R
+unsigned int LSH::g(vector<float> p,unsigned int j){
+	int *h = new int[k];
+	for(int i=0; i<k; i++)
+		h[i] = modulo(hash(i,p,v[j],t[j]),M);
+	int _g = 0;
+	for(int i=0; i<k; i++)
+		_g += modulo((r[i]*h[i]),M);
+	return modulo(modulo(_g,M),tableSize);
+}
 
-	int k_flag=0,L_flag=0;
-
-	//Read arguments
-	int c;
-	while ((c = getopt (argc, argv, "i:q:k:L:o:N:R:")) != -1)
-	{
-		switch (c)
-		{
-		case 'i':
-			input_file = optarg;
-			break;
-		case 'q':
-			query_file = optarg;
-			break;
-		case 'k':
-			k_flag=1;
-			k=std::stoi(optarg);
-			break;
-		case 'L':
-			L_flag=1;
-			L=std::stoi(optarg);
-			break;
-		case 'o':
-			output_file = optarg;
-			break;
-		case 'N':
-			N = std::stoi(optarg);
-			break;
-		case 'R':
-			R = std::stof(optarg);
-			break;
-		default:
-			exit (1);
-		}
-	}
-
-	//k and L arguments not provided,use default values
-	if (k_flag==0 || L_flag==0)
-	{
-		int k = 4; //-k
-		int L = 5; //-L
-		int N = 1; //-N
-		double R = 10000; //-R
-	}
-
-
-	while(input_file.empty())
-	{
-		cout<<"Enter input file location: ";
-		cin >> input_file;
-	}
-	while (query_file.empty())
-	{
-		cout<<"Enter query file location: ";
-		cin >> query_file;
-	}
-	while (output_file.empty())
-	{
-		cout<<"Enter output file location: ";
-		cin >> output_file;
-	}
-
-	LSH a(input_file,k,L,&eucledian_distance);
-
-	string option;
-	cout << "Enter /exit to exit program.\n";
-	cout << "Enter /rerun to rerun program with new options.\n";
-	while (option.compare("/exit")!=0)
-	{   
-		cin >> option;
-	}
-	return 0;
+unsigned int LSH::ID(vector<float> p,unsigned int j) {
+	int *h = new int[k];
+	for(int i=0; i<k; i++)
+		h[i] = modulo(hash(i,p,v[j],t[j]),M);
+	int _g = 0;
+	for(int i=0; i<k; i++)
+		_g += modulo((r[i]*h[i]),M);
+	return modulo(_g,M);
 }

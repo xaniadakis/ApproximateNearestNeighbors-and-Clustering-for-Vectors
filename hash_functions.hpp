@@ -1,4 +1,4 @@
-int hash(unsigned int i, unsigned int p);
-unsigned int g(unsigned int p);
-unsigned int ID(unsigned int p);
-int f(void);
+using namespace std;
+#include <vector>
+
+int hash(unsigned int i,vector<float> p,vector<float> *v,float *t,int w);
