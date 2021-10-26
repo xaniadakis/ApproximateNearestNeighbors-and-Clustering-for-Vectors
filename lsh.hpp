@@ -23,7 +23,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_map<int, float> hashtable;
+	unordered_map<int, float> *hashtables;
 	int num_hashtables;
 	int k;
 
@@ -37,6 +37,7 @@ public:
 	LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))//Constructor
 	{
 		num_hashtables=L;
+		hashtables = new unordered_map<int, float>[L];
 		k=k;
 		read_file(input_file,vectors,ids);
 		vectorSize=vectors[0].size();
@@ -62,6 +63,8 @@ public:
 			}
 		}
 		distance=metric;
+
+		//Add vectors to L hashtables
 	};
 	~LSH()//Destructor
 	{

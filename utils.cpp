@@ -6,12 +6,18 @@
 #include <string>
 #include <random>
 #include <algorithm>
+#include <cmath>
 
 #include "utils.hpp"
 
-float eucledian_distance(vector<float>,vector<float>)
+float eucledian_distance(vector<float> p1,vector<float> p2)
 {
-	return 0;
+	int distance=0;
+	for (int i=0;i<p1.size();i++)
+	{
+		distance+=pow((p2[i]-p1[i]),2);
+	}
+	return sqrt(distance);
 }
 
 int modulo(int a, int b) 
