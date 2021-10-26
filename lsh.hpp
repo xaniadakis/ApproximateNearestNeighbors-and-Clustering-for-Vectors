@@ -3,6 +3,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <vector>
+#include <unordered_map>
 
 #include "utils.hpp"
 
@@ -13,10 +14,56 @@ using namespace std;
 class LSH
 {
 private:
-    int (*distance)(int, int);
-public:
-    LSH(string input_file,string query_file,string output_file,int k,int L,int N,double R,int (* distance)(vector<int>,vector<int>))
-    {
+	int n;//Number of vectors
+	int tableSize;
+	int vectorSize;
 
-    };
+	vector<float> *vectors;
+	vector<string> ids;
+
+	float (*distance)(vector<float>, vector<float>);//Distance function
+
+	unordered_map<int, float> hashtable;
+	int num_hashtables;
+	int k;
+
+	vector<int> r;
+	vector<float> **v;
+	float **t;
+	int w=uniform_distribution_rng(0,6);
+	unsigned int M = UINT32_MAX - 4;
+	
+public:
+	LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))//Constructor
+	{
+		num_hashtables=L;
+		k=k;
+		read_file(input_file,vectors,ids);
+		vectorSize=vectors[0].size();
+		n=ids.size();
+		tableSize=n/4;
+		v = new vector<float>*[L];
+		t = new float*[L];
+		for (int i = 0; i < L; i++)
+		{
+			v[i] = new vector<float>[k];
+			t[i] = new float[k];
+		}
+		for (int i = 0; i < num_hashtables; i++)
+		{
+			r.push_back(uniform_distribution_rng(0,INT32_MAX));
+			for (int x = 0; x < k; x++)
+			{
+				t[i][x]=uniform_distribution_rng(0,w-1);
+				for (int y = 0; y < vectorSize; y++)
+				{
+					v[i][x].push_back(normal_distribution_rng());
+				}
+			}
+		}
+		distance=metric;
+	};
+	~LSH()//Destructor
+	{
+	};
 };
