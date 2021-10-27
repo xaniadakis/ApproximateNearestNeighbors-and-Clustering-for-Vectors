@@ -1,3 +1,5 @@
+#Makefile
+
 PROGRAM = lsh
 
 MODULES = ./src/$(PROGRAM)
