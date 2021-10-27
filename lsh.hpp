@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "utils.hpp"
+#include "hash_functions.hpp"
 
 using namespace std;
 
@@ -39,7 +40,6 @@ private:
 	int w=uniform_distribution_rng(0,6);
 	unsigned int M = UINT32_MAX - 4;
 
-	int hash(unsigned int i,vector<float> p,vector<float> *v,float *t);
 	unsigned int g(vector<float> p,unsigned int j);
 	unsigned int ID(vector<float> p,unsigned int j);
 	
