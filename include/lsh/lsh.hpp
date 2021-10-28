@@ -37,7 +37,7 @@ private:
 	vector<int> r;
 	vector<float> **v;
 	float **t;
-	int w=uniform_distribution_rng(0,6);
+	int w;
 	unsigned int M = UINT32_MAX - 4;
 
 	unsigned int g(vector<float> p,unsigned int j);
@@ -50,6 +50,7 @@ public:
 		hashtables = new unordered_map<int, hashtable_item>[L];
 		k=k;
 		read_file(input_file,vectors,ids);
+		w=uniform_distribution_rng(0,6);
 		vectorSize=vectors[0].size();
 		n=ids.size();
 		tableSize=n/4;
