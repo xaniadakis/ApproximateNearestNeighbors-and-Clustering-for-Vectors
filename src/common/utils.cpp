@@ -13,7 +13,7 @@
 float eucledian_distance(vector<float> p1,vector<float> p2)
 {
 	int distance=0;
-	for (int i=0;i<p1.size();i++)
+	for (unsigned int i=0;i<p1.size();i++)
 	{
 		distance+=pow((p2[i]-p1[i]),2);
 	}

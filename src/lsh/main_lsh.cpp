@@ -56,10 +56,10 @@ int main(int argc, char *argv[]){
 	//k and L arguments not provided,use default values
 	if (k_flag==0 || L_flag==0)
 	{
-		int k = 4; //-k
-		int L = 5; //-L
-		int N = 1; //-N
-		double R = 10000; //-R
+		k = 4; //-k
+		L = 5; //-L
+		N = 1; //-N
+		R = 10000; //-R
 	}
 
 
