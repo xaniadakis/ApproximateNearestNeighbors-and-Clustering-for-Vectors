@@ -3,20 +3,7 @@
 #include <numeric>
 #include <map>
 #include <utils.hpp>
-
-unsigned int cube::g(vector<float> p,unsigned int j){
-	return modulo(ID(p,j),tableSize);
-}
-
-unsigned int cube::ID(vector<float> p,unsigned int j) {
-	int *h = new int[k];
-	for(int i=0; i<k; i++)
-		h[i] = modulo(hash_L2(i,p,v[j],t[j],w),M);
-	long long int _g = 0;
-	for(int i=0; i<k; i++)
-		_g += modulo((r[i]*h[i]),M);
-	return modulo(_g,M);
-}
+#include <unordered_map>
 
 unsigned int cube::f(int i, int h_p) {
 	int _f = rand() % 2;
@@ -60,6 +47,7 @@ cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>)
 	cube::k=k;
 	read_file(input_file,vectors,ids);
 	f_table = new map<int, int>[k];
+	hypercube = new map<int, hashtable_item>;
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
@@ -75,6 +63,14 @@ cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>)
 
 	distance=metric;
 
+	for(int i = 0;i<n;i++)
+	{
+		for(int y=0;y<L;y++)
+		{
+			hashtable_item p{vectors[i],ID(vectors[i],y),i};
+			hashtables[y].insert({modulo(p.ID,tableSize),p});
+		}
+	}
 };
 
 cube::~cube()//Destructor

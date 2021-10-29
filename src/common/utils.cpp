@@ -9,6 +9,12 @@
 #include <cmath>
 #include <map>
 #include "utils.hpp"
+using namespace std;
+
+int binaryToDecimal(string binary) {
+	int decimal;
+	return stoi(binary, 0, 2);
+}
 
 int getValue(map<int,int> m, int key){
 	return m.find(key)->second;

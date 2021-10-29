@@ -33,17 +33,13 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_map<unsigned int, hashtable_item> *hashtables;//Hashtables
-	int L;//Number of hashtables
+	unordered_map<unsigned int, hashtable_item> hypercube;
 	int k;//Number of hash functions
 
-	vector<int> r;//r vector used by g
-	vector<float> **v;//Random vector used by hash function
-	float **t;//Random number used by hash function
+	vector<float> *v;//Random vector used by hash function
+	float *t;//Random number used by hash function
 	unsigned int w;//Window used by hash function
 	map<int, int> *f_table;
-
-	unsigned int M = UINT32_MAX - 4;//M used by g
 
 	unsigned int f(int i);
 	
