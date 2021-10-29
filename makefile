@@ -1,6 +1,8 @@
 #Makefile
+all : lsh cube
 
-PROGRAM = lsh
+lsh: PROGRAM=lsh
+cube: PROGRAM=cube
 
 MODULES = ./src/$(PROGRAM)
 COMMON = ./src/common
@@ -10,8 +12,11 @@ INCLUDE_COMMON = ./include/common
 
 CFLAGS = -g -Wextra -Wall -I$(INCLUDE) -I$(INCLUDE_COMMON)
 
-$(BIN_TARGET): clean
-	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS) 
+lsh: clean
+	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
+
+cube: clean
+	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp -o $(BIN_TARGET) $(CFLAGS) 
 
 clean:
 	rm -f $(BIN_TARGET)

@@ -1,4 +1,5 @@
 using namespace std;
+#include <string>
 
 float eucledian_distance(vector<float>,vector<float>);
 void read_file(string filename,vector<float> *&vectors,vector<string> &ids);

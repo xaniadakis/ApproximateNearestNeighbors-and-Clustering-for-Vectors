@@ -4,7 +4,7 @@ using namespace std;
 struct vector_item
 {
     float true_distance;
-	int index;
+	unsigned int index;
 };
 
-vector<vector_item> exhaustive_search(vector<float> p,vector<float> *vectors,int R,unsigned int n);
+vector<vector_item> exhaustive_search(vector<float> p,vector<float> *vectors,unsigned int N,int R,unsigned int n);

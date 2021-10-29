@@ -51,5 +51,5 @@ public:
 
 	LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>));//Constructor
 	~LSH();//Destructor
-	void query(string query_file,string output_file,int N,int R);
+	void query(string query_file,string output_file,unsigned int N,int R);
 };

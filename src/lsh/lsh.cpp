@@ -22,7 +22,7 @@ unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
 	return modulo(_g,M);
 }
 
-void LSH::query(string query_file,string output_file,int N,int R)
+void LSH::query(string query_file,string output_file,unsigned int N,int R)
 {
 	struct stat info;
 	if (stat("./output",&info) == -1) {
@@ -55,11 +55,15 @@ void LSH::query(string query_file,string output_file,int N,int R)
 				}
 			}
 		}
+		vector<vector_item> nBest_true = exhaustive_search(p,vectors,N,R,n);
 
 		//Print N closest neighbors
-		for(int i=0 ; i < N ; i++)
+		unsigned int y=0;
+   		auto it=distances.begin();
+		for(;it != distances.end() && y<nBest_true.size() ;++it,y++)
 		{
-			
+			hashtable_item closest = it->second;
+			cout << it->first << nBest_true[y].true_distance << endl;
 		}
 	}
 	outfile.close();

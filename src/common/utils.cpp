@@ -9,6 +9,8 @@
 #include <cmath>
 #include <map>
 #include <algorithm>
+
+
 #include "utils.hpp"
 using namespace std;
 
@@ -29,7 +31,7 @@ int getHammingDistance(string first, string second)
 	return _hammingDistance;
 }
 
-string decimalToBinary(int decimal) {
+string decimalToBinary(int decimal)
 {
     string r;
     while(decimal != 0) 
@@ -41,7 +43,6 @@ string decimalToBinary(int decimal) {
 }
 
 int binaryToDecimal(string binary){
-	int decimal;
 	return stoi(binary, 0, 2);
 }
 

@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
 	string output_file; //-o
 	int k = 4; //-k
 	int L = 5; //-L
-	int N = 1; //-N
+	unsigned int N = 1; //-N
 	double R = 10000; //-R
 
 
