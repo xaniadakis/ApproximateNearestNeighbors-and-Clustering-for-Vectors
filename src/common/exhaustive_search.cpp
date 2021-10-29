@@ -1,3 +1,4 @@
+#include <iostream>
 #include "exhaustive_search.hpp"
 #include "utils.hpp"
 #include <map>

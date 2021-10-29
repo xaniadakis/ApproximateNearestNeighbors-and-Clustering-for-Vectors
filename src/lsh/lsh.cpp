@@ -63,7 +63,6 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 		for(;it != distances.end() && y<nBest_true.size() ;++it,y++)
 		{
 			hashtable_item closest = it->second;
-			cout << it->first << nBest_true[y].true_distance << endl;
 		}
 	}
 	outfile.close();
