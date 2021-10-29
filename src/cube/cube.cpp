@@ -4,6 +4,7 @@
 #include <map>
 #include <utils.hpp>
 #include <unordered_map>
+#define M 4294967291
 
 unsigned int cube::f(int i, int h_p) {
 	int _f = rand() % 2;
@@ -13,6 +14,13 @@ unsigned int cube::f(int i, int h_p) {
 	} 
 	else 
 		return getValue(f_table[i], h_p);
+}
+
+unsigned int cube::F(int p){
+	string _F;
+	for(int i=0; i<k; i++)
+		_F.push_back( f(i, modulo( hash_L2(i,p,v[j],t[j],w) ,M)));
+	return binaryToDecimal(_F);
 }
 
 void cube::query(string query_file,string output_file,int N,int R)
@@ -65,11 +73,8 @@ cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>)
 
 	for(int i = 0;i<n;i++)
 	{
-		for(int y=0;y<L;y++)
-		{
-			hashtable_item p{vectors[i],ID(vectors[i],y),i};
-			hashtables[y].insert({modulo(p.ID,tableSize),p});
-		}
+		hashtable_item p{vectors[i],i};
+		hypercube.insert({F(vectors[i]),p});
 	}
 };
 

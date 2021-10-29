@@ -15,7 +15,6 @@ using namespace std;
 struct hashtable_item
 {
 	vector<float> p;
-	unsigned int ID;
 	int index;
 };
 

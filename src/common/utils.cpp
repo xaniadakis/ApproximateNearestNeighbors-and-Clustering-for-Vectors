@@ -8,10 +8,39 @@
 #include <algorithm>
 #include <cmath>
 #include <map>
+#include <algorithm>
 #include "utils.hpp"
 using namespace std;
 
-int binaryToDecimal(string binary) {
+int getHammingDistance(string first, string second)
+{
+	int len1 = first.size();
+	int len2 = second.size();
+	int _hammingDistance = 0;
+	for(int i=0; i<min(len1, len2); i++){
+		if(first[i] != second[i]){
+			string j(1,first[i]);
+			string k(1,second[i]);
+			_hammingDistance += abs(stoi(j)-stoi(k));
+		}
+	}
+	if(len1 != len2)
+		_hammingDistance += abs(len1-len2);
+	return _hammingDistance;
+}
+
+string decimalToBinary(int decimal) {
+{
+    string r;
+    while(decimal != 0) 
+	{
+		r = ( decimal % 2 == 0 ? "0" : "1" ) + r; 
+		decimal /= 2;
+	}
+    return r;
+}
+
+int binaryToDecimal(string binary){
 	int decimal;
 	return stoi(binary, 0, 2);
 }
