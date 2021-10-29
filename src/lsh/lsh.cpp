@@ -1,12 +1,13 @@
 #include "lsh.hpp"
 #include <math.h>
 #include <numeric>
+#include <map>
 
 unsigned int LSH::g(vector<float> p,unsigned int j){
 	return modulo(ID(p,j),tableSize);
 }
 
-unsigned int LSH::ID(vector<float> p,unsigned int j) {
+unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
 	int *h = new int[k];
 	for(int i=0; i<k; i++)
 		h[i] = modulo(hash_L2(i,p,v[j],t[j],w),M);
@@ -23,33 +24,39 @@ void LSH::query(string query_file,string output_file,int N,int R)
 	read_file(query_file,vectors_query,ids_query);
 
 	unsigned int n_query=ids_query.size();
+	map<float, hashtable_item> distances;
 
-	for (int i=0 ; i<n_query ; i++)
+	for (unsigned int i=0 ; i<n_query ; i++)
 	{
 		vector<float> p = vectors_query[i];
 		for (int y=0 ; y<L ; y++)
 		{
-			unsigned int ID = LSH::ID(vectors[i],y);
+			unsigned long long int ID = LSH::ID(vectors[i],y);
 			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
 			{
 				hashtable_item p_b = it->second;
 				if (p_b.ID == ID)
 				{
-					
+					float distance = LSH::distance(p,p_b.p);
+					if(distance<=R)
+					{
+						distances.insert({distance,p_b});
+					}
 				}
 			}
 		}
 	}
+	//Get N closest neighbors
 };
 
-void LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))
+LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))//Constructor
 {
 	//Initialize values
 	LSH::L=L;
 	hashtables = new unordered_map<unsigned int, hashtable_item>[L];
 	LSH::k=k;
 	read_file(input_file,vectors,ids);
-	w=uniform_distribution_rng(0,6);
+	w=uniform_distribution_rng(0,6);//Should be average of vector distances times 3
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=n/4;
@@ -86,7 +93,7 @@ void LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vecto
 	}
 };
 
-void LSH::~LSH()//Destructor
+LSH::~LSH()//Destructor
 {
 	return;
 };
