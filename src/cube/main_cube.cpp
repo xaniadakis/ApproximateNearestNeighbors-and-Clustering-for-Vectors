@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
 
 	//Read given arguments 
 	int c;
-	while ((c = getopt (argc, argv, "i:q:k:L:o:N:R:")) != -1)
+	while ((c = getopt (argc, argv, "i:q:k:M:probes:o:N:R:")) != -1)
 	{
 		switch (c)
 		{
