@@ -8,7 +8,6 @@ int main(int argc, char *argv[]){
 	
 	srand((time(0)));
 
-
     //./cube –i<input  file> –q  <query  file> –k  <int> -M  <int> -probes  <int> -ο<output file> -Ν<number of nearest> -R <radius>
 	
     string input_file; //-i
@@ -19,6 +18,8 @@ int main(int argc, char *argv[]){
 	int probes = 2; //-probes
     int N = 1;//-N
 	double R = 10000; //-R
+
+	int k_flag=0,L_flag=0;
 
 	//Read given arguments 
 	int c;
@@ -33,12 +34,15 @@ int main(int argc, char *argv[]){
 			query_file = optarg;
 			break;
 		case 'k':
+			k_flag=1;
 			k=std::stoi(optarg);
 			break;
 		case 'M':
+			M_flag=1;
 			M=std::stoi(optarg);
 			break;
         case 'probes':
+			probes_flag=1;
 			probes=std::stoi(optarg);
 			break;
 		case 'o':
