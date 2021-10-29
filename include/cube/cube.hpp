@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <vector>
 #include <unordered_map>
-
+#include <map>
 #include "utils.hpp"
 #include "hash_functions.hpp"
 
@@ -41,14 +41,15 @@ private:
 	vector<float> **v;//Random vector used by hash function
 	float **t;//Random number used by hash function
 	unsigned int w;//Window used by hash function
+	map<int, int> *f_table;
+
 	unsigned int M = UINT32_MAX - 4;//M used by g
 
-	unsigned int g(vector<float> p,unsigned int j);
-	unsigned int ID(vector<float> p,unsigned int j);
+	unsigned int f(int i);
 	
 public:
 
-	cube(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>));//Constructor
+	cube(string input_file,int k,float (* metric)(vector<float>,vector<float>));//Constructor
 	~cube();//Destructor
 	void query(string query_file,string output_file,int N,int R);
 };

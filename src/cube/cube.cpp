@@ -1,6 +1,8 @@
 #include "cube.hpp"
 #include <math.h>
 #include <numeric>
+#include <map>
+#include <utils.hpp>
 
 unsigned int cube::g(vector<float> p,unsigned int j){
 	return modulo(ID(p,j),tableSize);
@@ -14,6 +16,16 @@ unsigned int cube::ID(vector<float> p,unsigned int j) {
 	for(int i=0; i<k; i++)
 		_g += modulo((r[i]*h[i]),M);
 	return modulo(_g,M);
+}
+
+unsigned int cube::f(int i, int h_p) {
+	int _f = rand() % 2;
+	if (notExists(f_table[i], h_p) {
+		f_table[i].insert(pair<int,int>(h_p, _f));
+		return _f;
+	} 
+	else 
+		return getValue(f_table[i], h_p);
 }
 
 void cube::query(string query_file,string output_file,int N,int R)
@@ -42,44 +54,27 @@ void cube::query(string query_file,string output_file,int N,int R)
 	}
 };
 
-cube::cube(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))
+cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>))
 {
 	//Initialize values
-	cube::L=L;
-	hashtables = new unordered_map<unsigned int, hashtable_item>[L];
 	cube::k=k;
 	read_file(input_file,vectors,ids);
+	f_table = new map<int, int>[k];
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=n/4;
-	v = new vector<float>*[L];
-	t = new float*[L];
+	v = new vector<float>[k];
+	t = new float*[k];
 
-	for (int i = 0; i < L; i++)
+	for (int i = 0; i < k; i++)
 	{
-		v[i] = new vector<float>[k];
-		t[i] = new float[k];
-		for (int x = 0; x < k; x++)
-		{
-			t[i][x]=uniform_distribution_rng(0,w-1);
-			for (int y = 0; y < vectorSize; y++)
-			{
-				v[i][x].push_back(normal_distribution_rng());
-			}
-		}
+		v[i].push_back(normal_distribution_rng());
+		t[i] = uniform_distribution_rng(0,w-1);
 	}
+
 	distance=metric;
 
-	//Add vectors to L hashtables
-	for(int i = 0;i<n;i++)
-	{
-		for(int y=0;y<L;y++)
-		{
-			hashtable_item p{vectors[i],ID(vectors[i],y),i};
-			hashtables[y].insert({modulo(p.ID,tableSize),p});
-		}
-	}
 };
 
 cube::~cube()//Destructor

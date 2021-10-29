@@ -8,7 +8,6 @@ int main(int argc, char *argv[]){
 	
 	srand((time(0)));
 
-
     //./cube –i<input  file> –q  <query  file> –k  <int> -M  <int> -probes  <int> -ο<output file> -Ν<number of nearest> -R <radius>
 	
     string input_file; //-i

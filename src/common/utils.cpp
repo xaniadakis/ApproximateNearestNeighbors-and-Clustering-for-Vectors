@@ -7,8 +7,19 @@
 #include <random>
 #include <algorithm>
 #include <cmath>
-
+#include <map>
 #include "utils.hpp"
+
+int getValue(map<int,int> m, int key){
+	return m.find(key)->second;
+}
+
+int notExists(map<int,int> m, int key){
+	if(m.find(key) == m.end())
+		return 1;
+	else 
+		return 0;
+}
 
 float eucledian_distance(vector<float> p1,vector<float> p2)
 {
