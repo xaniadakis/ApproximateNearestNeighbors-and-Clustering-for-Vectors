@@ -15,7 +15,7 @@ using namespace std;
 struct hashtable_item
 {
 	vector<float> p;
-	unsigned int ID;
+	unsigned long long int ID;
 	int index;
 };
 
@@ -44,7 +44,7 @@ private:
 	unsigned int M = UINT32_MAX - 4;//M used by g
 
 	unsigned int g(vector<float> p,unsigned int j);
-	unsigned int ID(vector<float> p,unsigned int j);
+	unsigned long long int ID(vector<float> p,unsigned int j);
 	
 public:
 

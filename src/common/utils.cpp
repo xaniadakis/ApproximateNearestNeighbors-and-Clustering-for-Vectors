@@ -29,7 +29,7 @@ int notExists(map<int,int> m, int key){
 
 float eucledian_distance(vector<float> p1,vector<float> p2)
 {
-	int distance=0;
+	float distance=0;
 	for (unsigned int i=0;i<p1.size();i++)
 	{
 		distance+=pow((p2[i]-p1[i]),2);

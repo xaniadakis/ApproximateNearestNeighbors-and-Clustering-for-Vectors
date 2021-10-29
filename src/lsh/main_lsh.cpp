@@ -5,7 +5,6 @@
 // στο τέλος θα διερωτάται ο χρήστης αν θέλει να τερματίσει ή να επαναλάβει με διαφορετικές παραμέτρους όπου ξαναχτίζω
  
 int main(int argc, char *argv[]){
-	
 	srand((time(0)));
 
 	string input_file; //-i
@@ -79,7 +78,8 @@ int main(int argc, char *argv[]){
 		cin >> output_file;
 	}
 
-	LSH a(input_file,k,L,&eucledian_distance);
+	LSH lsh(input_file,k,L,&eucledian_distance);
+	lsh.query(query_file,output_file,N,R);
 
 	string option;
 	cout << "Enter /exit to exit program.\n";
