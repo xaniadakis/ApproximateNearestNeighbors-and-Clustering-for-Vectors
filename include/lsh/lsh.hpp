@@ -7,6 +7,7 @@
 
 #include "utils.hpp"
 #include "hash_functions.hpp"
+#include "exhaustive_search.hpp"
 
 using namespace std;
 
