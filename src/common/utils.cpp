@@ -37,10 +37,10 @@ float eucledian_distance(vector<float> p1,vector<float> p2)
 	return sqrt(distance);
 }
 
-int modulo(int a, int b) 
+unsigned long long int modulo(long long int a,long long int b) 
 {
 	//Real modulo operator
-	const int result = a % b;
+	const long long int result = a % b;
 	return result >= 0 ? result : result + b;
 }
 

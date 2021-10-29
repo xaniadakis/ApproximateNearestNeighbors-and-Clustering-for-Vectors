@@ -2,16 +2,21 @@
 #include <math.h>
 #include <numeric>
 #include <map>
+#include <fstream>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 unsigned int LSH::g(vector<float> p,unsigned int j){
 	return modulo(ID(p,j),tableSize);
 }
 
 unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
-	int *h = new int[k];
+	unsigned long long int *h = new unsigned long long int[k];
 	for(int i=0; i<k; i++)
 		h[i] = modulo(hash_L2(i,p,v[j],t[j],w),M);
-	long long int _g = 0;
+	unsigned long long int _g = 0;
 	for(int i=0; i<k; i++)
 		_g += modulo((r[i]*h[i]),M);
 	return modulo(_g,M);
@@ -19,10 +24,15 @@ unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
 
 void LSH::query(string query_file,string output_file,int N,int R)
 {
+	struct stat info;
+	if (stat("./output",&info) == -1) {
+		mkdir("./output", 0700);
+	}
+	ofstream outfile ("./output/" + output_file);
+
 	vector<float> *vectors_query;
 	vector<string> ids_query;
 	read_file(query_file,vectors_query,ids_query);
-
 	unsigned int n_query=ids_query.size();
 	map<float, hashtable_item> distances;
 
@@ -45,8 +55,14 @@ void LSH::query(string query_file,string output_file,int N,int R)
 				}
 			}
 		}
+
+		//Print N closest neighbors
+		for(int i=0 ; i < N ; i++)
+		{
+			
+		}
 	}
-	//Get N closest neighbors
+	outfile.close();
 };
 
 LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))//Constructor
