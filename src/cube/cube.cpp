@@ -1,4 +1,4 @@
-#include "lsh.hpp"
+#include "cube.hpp"
 #include <math.h>
 #include <numeric>
 
@@ -29,7 +29,7 @@ void cube::query(string query_file,string output_file,int N,int R)
 		vector<float> p = vectors_query[i];
 		for (int y=0 ; y<L ; y++)
 		{
-			unsigned int ID = LSH::ID(vectors[i],y);
+			unsigned int ID = cube::ID(vectors[i],y);
 			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
 			{
 				hashtable_item p_b = it->second;
@@ -42,7 +42,7 @@ void cube::query(string query_file,string output_file,int N,int R)
 	}
 };
 
-void cube::cube(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))
+cube::cube(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))
 {
 	//Initialize values
 	cube::L=L;
@@ -56,10 +56,6 @@ void cube::cube(string input_file,int k,int L,float (* metric)(vector<float>,vec
 	v = new vector<float>*[L];
 	t = new float*[L];
 
-	for (int x = 0; x < k; x++)
-	{
-		r.push_back(uniform_distribution_rng(0,INT32_MAX));
-	}
 	for (int i = 0; i < L; i++)
 	{
 		v[i] = new vector<float>[k];
@@ -86,7 +82,7 @@ void cube::cube(string input_file,int k,int L,float (* metric)(vector<float>,vec
 	}
 };
 
-void cube::~cube()//Destructor
+cube::~cube()//Destructor
 {
 	return;
 };

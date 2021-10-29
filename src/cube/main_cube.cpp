@@ -20,9 +20,6 @@ int main(int argc, char *argv[]){
     int N = 1;//-N
 	double R = 10000; //-R
 
-
-	int k_flag=0,L_flag=0;
-
 	//Read given arguments 
 	int c;
 	while ((c = getopt (argc, argv, "i:q:k:L:o:N:R:")) != -1)
@@ -36,15 +33,12 @@ int main(int argc, char *argv[]){
 			query_file = optarg;
 			break;
 		case 'k':
-			k_flag=1;
 			k=std::stoi(optarg);
 			break;
 		case 'M':
-			M_flag=1;
 			M=std::stoi(optarg);
 			break;
         case 'probes':
-			probes_flag=1;
 			probes=std::stoi(optarg);
 			break;
 		case 'o':
