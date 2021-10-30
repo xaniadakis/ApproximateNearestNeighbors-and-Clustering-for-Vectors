@@ -3,6 +3,7 @@
 #include <numeric>
 #include <map>
 #include <fstream>
+#include <chrono>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -28,17 +29,18 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 	if (stat("./output",&info) == -1) {
 		mkdir("./output", 0700);
 	}
-	ofstream outfile ("./output/" + output_file);
+	ofstream outfile ("./output/" + output_file, ios::out | ios::trunc);
 
 	vector<float> *vectors_query;
 	vector<string> ids_query;
 	read_file(query_file,vectors_query,ids_query);
 	unsigned int n_query=ids_query.size();
-	map<float, hashtable_item> distances;
 
 	for (unsigned int i=0 ; i<n_query ; i++)
 	{
+		multimap<float, int> distances;
 		vector<float> p = vectors_query[i];
+		auto start_lsh = chrono::high_resolution_clock::now();
 		for (int y=0 ; y<L ; y++)
 		{
 			unsigned long long int ID = LSH::ID(vectors[i],y);
@@ -50,20 +52,24 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 					float distance = LSH::distance(p,p_b.p);
 					if(distance<=R)
 					{
-						distances.insert({distance,p_b});
+						if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
+							distances.insert({distance,p_b.index});
 					}
 				}
 			}
 		}
-		vector<vector_item> nBest_true = exhaustive_search(p,vectors,N,R,n);
+		auto stop_lsh = chrono::high_resolution_clock::now();
+		auto elapsed_lsh = stop_lsh - start_lsh ;
+		double time_lsh = chrono::duration<double>(elapsed_lsh).count();
 
-		//Print N closest neighbors
-		unsigned int y=0;
-   		auto it=distances.begin();
-		for(;it != distances.end() && y<nBest_true.size() ;++it,y++)
-		{
-			hashtable_item closest = it->second;
-		}
+		auto start_true = chrono::high_resolution_clock::now();
+		vector<vector_item> nBest_true = exhaustive_search(p,vectors,N,R,n,LSH::distance);
+		auto stop_true = chrono::high_resolution_clock::now();
+		auto elapsed_true = stop_true - start_true ;
+		double time_true = chrono::duration<double>(elapsed_true).count();
+
+		//Print N closest neighbors to output file
+		write_file(outfile,ids_query[i],ids,distances,nBest_true,time_lsh,time_true,"LSH");
 	}
 	outfile.close();
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <ctime>
 #include <cstring>
@@ -5,9 +7,9 @@
 #include <vector>
 #include <unordered_map>
 
-#include "utils.hpp"
 #include "hash_functions.hpp"
 #include "exhaustive_search.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
