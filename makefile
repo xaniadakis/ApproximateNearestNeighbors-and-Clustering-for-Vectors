@@ -14,7 +14,7 @@ INCLUDE_COMMON = ./include/common
 CFLAGS = -g -Wextra -Wall -I$(INCLUDE) -I$(INCLUDE_COMMON)
 
 lsh: clean
-	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
+	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp $(COMMON)/hash_table.cpp -o $(BIN_TARGET) $(CFLAGS)
 
 cube: clean
 	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp -o $(BIN_TARGET) $(CFLAGS)

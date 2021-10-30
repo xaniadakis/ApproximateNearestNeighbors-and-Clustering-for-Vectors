@@ -10,6 +10,7 @@
 #include "hash_functions.hpp"
 #include "exhaustive_search.hpp"
 #include "utils.hpp"
+#include "hash_table.hpp"
 
 using namespace std;
 
@@ -21,6 +22,8 @@ struct hashtable_item
 	unsigned long long int ID;
 	int index;
 };
+
+template class hash_table<hashtable_item>;
 
 class LSH
 {
@@ -36,7 +39,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_multimap<unsigned int, hashtable_item> *hashtables;//Hashtables
+	hash_table<hashtable_item> *hashtables;//Hashtables
 	int L;//Number of hashtables
 	int k;//Number of hash functions
 

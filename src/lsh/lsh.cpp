@@ -46,7 +46,7 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 			unsigned long long int ID = LSH::ID(vectors[i],y);
 			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
 			{
-				hashtable_item p_b = it->second;
+				hashtable_item p_b = *it;
 				if (p_b.ID == ID)
 				{
 					float distance = LSH::distance(p,p_b.p);
@@ -55,6 +55,7 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 				}
 			}
 		}
+
 		auto stop_lsh = chrono::high_resolution_clock::now();
 		auto elapsed_lsh = stop_lsh - start_lsh ;
 		double time_lsh = chrono::duration<double>(elapsed_lsh).count();
@@ -75,13 +76,18 @@ LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<flo
 {
 	//Initialize values
 	LSH::L=L;
-	hashtables = new unordered_multimap<unsigned int, hashtable_item>[L];
 	LSH::k=k;
 	read_file(input_file,vectors,ids);
 	w=300;//Should be average of vector distances times 3
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=n/4;
+	hashtables = new hash_table<hashtable_item>[L];
+	for (int i = 0; i < L; i++)
+	{
+		hashtables[i]=hash_table<hashtable_item>(tableSize);
+	}
+	
 	v = new vector<float>*[L];
 	t = new float*[L];
 
@@ -110,7 +116,7 @@ LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<flo
 		for(int y=0;y<L;y++)
 		{
 			hashtable_item p{vectors[i],ID(vectors[i],y),i};
-			hashtables[y].insert({modulo(p.ID,tableSize),p});
+			hashtables[y].insert(modulo(p.ID,tableSize),p);
 		}
 	}
 };
