@@ -9,4 +9,4 @@ struct vector_item
 	unsigned int index;
 };
 
-vector<vector_item> exhaustive_search(vector<float> p,vector<float> *vectors,unsigned int N,int R,unsigned int n,float (* distance)(vector<float>,vector<float>));
+vector<vector_item> exhaustive_search(vector<float> p,vector<float> *vectors,unsigned int N,unsigned int n,float (* distance)(vector<float>,vector<float>));

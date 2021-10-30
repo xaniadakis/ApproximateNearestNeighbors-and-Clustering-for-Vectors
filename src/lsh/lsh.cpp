@@ -50,11 +50,8 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 				if (p_b.ID == ID)
 				{
 					float distance = LSH::distance(p,p_b.p);
-					if(distance<=R)
-					{
-						if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
-							distances.insert({distance,p_b.index});
-					}
+					if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
+						distances.insert({distance,p_b.index});
 				}
 			}
 		}
@@ -63,13 +60,13 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 		double time_lsh = chrono::duration<double>(elapsed_lsh).count();
 
 		auto start_true = chrono::high_resolution_clock::now();
-		vector<vector_item> nBest_true = exhaustive_search(p,vectors,N,R,n,LSH::distance);
+		vector<vector_item> nBest_true = exhaustive_search(p,vectors,N,n,LSH::distance);
 		auto stop_true = chrono::high_resolution_clock::now();
 		auto elapsed_true = stop_true - start_true ;
 		double time_true = chrono::duration<double>(elapsed_true).count();
 
 		//Print N closest neighbors to output file
-		write_file(outfile,ids_query[i],ids,distances,nBest_true,time_lsh,time_true,"LSH");
+		write_file(outfile,ids_query[i],ids,distances,R,nBest_true,time_lsh,time_true,"LSH");
 	}
 	outfile.close();
 };

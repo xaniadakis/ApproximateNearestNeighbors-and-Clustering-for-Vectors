@@ -120,7 +120,7 @@ void read_file(string filename,vector<float> *&vectors,vector<string> &ids)
 	}
 }
 
-void write_file(ofstream &outfile,string query_id,vector<string> ids,multimap<float, int> distances,vector<vector_item> distances_true,double time,double time_true,string algorithm)
+void write_file(ofstream &outfile,string query_id,vector<string> ids,multimap<float, int> distances,int R,vector<vector_item> distances_true,double time,double time_true,string algorithm)
 {
 	outfile << "Query: " << query_id << endl;
 	unsigned int y=0;
@@ -138,6 +138,7 @@ void write_file(ofstream &outfile,string query_id,vector<string> ids,multimap<fl
 	outfile << "R-near neighbors:" << endl;
 	for (it = distances.begin(); it != distances.end(); ++it)
 	{
+		if (it->first>R) break;
 		outfile << ids[it->second] << endl;
 	}
 }
