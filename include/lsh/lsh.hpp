@@ -36,7 +36,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_map<unsigned int, hashtable_item> *hashtables;//Hashtables
+	unordered_multimap<unsigned int, hashtable_item> *hashtables;//Hashtables
 	int L;//Number of hashtables
 	int k;//Number of hash functions
 

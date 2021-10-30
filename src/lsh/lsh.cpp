@@ -75,10 +75,10 @@ LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<flo
 {
 	//Initialize values
 	LSH::L=L;
-	hashtables = new unordered_map<unsigned int, hashtable_item>[L];
+	hashtables = new unordered_multimap<unsigned int, hashtable_item>[L];
 	LSH::k=k;
 	read_file(input_file,vectors,ids);
-	w=uniform_distribution_rng(0,6);//Should be average of vector distances times 3
+	w=300;//Should be average of vector distances times 3
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=n/4;
