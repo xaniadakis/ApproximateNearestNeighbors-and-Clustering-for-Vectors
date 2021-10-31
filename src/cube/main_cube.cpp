@@ -1,5 +1,6 @@
 //File for cube implementation
 #include "cube.hpp"
+#include <getopt.h>
 
 // να τρεχει με παραμετρους απο την γραμμή εντολών ή να τους δίνει διαδραστικά κατα την εκτέλεση
 // στο τέλος θα διερωτάται ο χρήστης αν θέλει να τερματίσει ή να επαναλάβει με διαφορετικές παραμέτρους όπου ξαναχτίζω
@@ -21,7 +22,13 @@ int main(int argc, char *argv[]){
 
 	//Read given arguments 
 	int c;
-	while ((c = getopt (argc, argv, "i:q:k:M:probes:o:N:R:")) != -1)
+
+	struct option long_opt[] =
+	{
+		{"probes",required_argument,NULL,'p'},
+		{NULL,0,NULL,0}
+	};
+	while ((c = getopt_long_only(argc, argv, "i:q:k:M:p:o:N:R:",long_opt,NULL)) != -1)
 	{
 		switch (c)
 		{
@@ -37,7 +44,7 @@ int main(int argc, char *argv[]){
 		case 'M':
 			M=std::stoi(optarg);
 			break;
-        case 'probes':
+        case 'p':
 			probes=std::stoi(optarg);
 			break;
 		case 'o':

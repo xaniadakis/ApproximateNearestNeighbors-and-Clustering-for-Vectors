@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <getopt.h>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ int main(int argc, char *argv[]){
 
 	string input_file; //-i
 	string output_file; //-o
-    int complete;//-complete
+    int complete = false;//-complete
     string method = "Classic";//-m
 
     string configuration_file; //-c
@@ -28,7 +29,13 @@ int main(int argc, char *argv[]){
 
 	//Read given arguments 
 	int c;
-	while ((c = getopt (argc, argv, "i:c:o:complete:m:")) != -1)
+
+	struct option long_opt[] =
+	{
+		{"complete",no_argument,NULL,'l'},
+		{NULL,0,NULL,0}
+	};
+	while ((c = getopt_long_only(argc, argv, "i:c:o:m:l",long_opt,NULL)) != -1)
 	{
 		switch (c)
 		{
@@ -41,11 +48,11 @@ int main(int argc, char *argv[]){
 		case 'o':
 			output_file = optarg;
 			break;
-		case 'complete':
-			complete=std::stoi(optarg);
-			break;
 		case 'm':
 			method= optarg;
+			break;
+		case 'l':
+			complete = true;
 			break;
 		default:
 			exit (1);
@@ -98,7 +105,7 @@ int main(int argc, char *argv[]){
         }
 	}
 
-    if(K_flag==false)
+	if(K_flag==false)
         exit(1);
 
 	string option;
