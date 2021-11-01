@@ -46,7 +46,7 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 			unsigned long long int ID = LSH::ID(vectors[i],y);
 			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
 			{
-				hashtable_item p_b = *it;
+				hashtable_item_lsh p_b = *it;
 				if (p_b.ID == ID)
 				{
 					float distance = LSH::distance(p,p_b.p);
@@ -82,10 +82,10 @@ LSH::LSH(string input_file,int k,int L,int metric)//Constructor
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=n/4;
-	hashtables = new hash_table<hashtable_item>[L];
+	hashtables = new hash_table<hashtable_item_lsh>[L];
 	for (int i = 0; i < L; i++)
 	{
-		hashtables[i]=hash_table<hashtable_item>(tableSize);
+		hashtables[i]=hash_table<hashtable_item_lsh>(tableSize);
 	}
 	
 	v = new vector<float>*[L];
@@ -116,7 +116,7 @@ LSH::LSH(string input_file,int k,int L,int metric)//Constructor
 	{
 		for(int y=0;y<L;y++)
 		{
-			hashtable_item p{vectors[i],ID(vectors[i],y),i};
+			hashtable_item_lsh p{vectors[i],ID(vectors[i],y),i};
 			hashtables[y].insert(modulo(p.ID,tableSize),p);
 		}
 	}

@@ -55,7 +55,7 @@ cube::cube(string input_file,int k,string metric)
 	cube::k=k;
 	read_file(input_file,vectors,ids);
 	f_table = new map<int, int>[k];
-	hypercube = new hash_table<hashtable_item>;
+	hypercube = new hash_table<hashtable_item_cube>;
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
@@ -74,7 +74,7 @@ cube::cube(string input_file,int k,string metric)
 
 	for(int i = 0;i<n;i++)
 	{
-		hashtable_item p{vectors[i],i};
+		hashtable_item_cube p{vectors[i],i};
 		hypercube->insert(F(vectors[i]),p);
 	}
 };

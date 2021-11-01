@@ -13,8 +13,24 @@ private:
     vector<vector<V>> Buckets;
     unsigned int tablesize;
 public:
-    hash_table(unsigned int size = 1000);
-    void insert(unsigned int key,V value);
-    typename vector<V>::iterator begin(unsigned int key);
-    typename vector<V>::iterator end(unsigned int key);
+    hash_table(unsigned int size=1000)
+    {
+        hash_table::Buckets = vector<vector<V>>(size);
+        hash_table::tablesize=size;
+    };
+
+    void insert(unsigned int key,V value)
+    {
+        Buckets[key].push_back(value);
+    };
+
+    typename vector<V>::iterator begin(unsigned int key)
+    {
+        return Buckets[key].begin();
+    };
+
+    typename vector<V>::iterator end(unsigned int key)
+    {
+        return Buckets[key].end();
+    };
 };

@@ -18,14 +18,12 @@ using namespace std;
 
 #define L2 2
 
-struct hashtable_item
+struct hashtable_item_lsh
 {
 	vector<float> p;
 	unsigned long long int ID;
 	int index;
 };
-
-template class hash_table<hashtable_item>;
 
 class LSH
 {
@@ -41,7 +39,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	hash_table<hashtable_item> *hashtables;//Hashtables
+	hash_table<hashtable_item_lsh> *hashtables;//Hashtables
 	int L;//Number of hashtables
 	int k;//Number of hash functions
 

@@ -15,7 +15,7 @@ using namespace std;
 
 #define L2 2
 
-struct hashtable_item
+struct hashtable_item_cube
 {
 	vector<float> p;
 	int index;
@@ -34,7 +34,7 @@ private:
 	vector<string> ids;//Ids of vectors from dataset
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
-	hash_table<hashtable_item> *hypercube;
+	hash_table<hashtable_item_cube> *hypercube;
 	// unordered_map<unsigned int, hashtable_item> *hypercube;
 	int k;//Number of hash functions
 
