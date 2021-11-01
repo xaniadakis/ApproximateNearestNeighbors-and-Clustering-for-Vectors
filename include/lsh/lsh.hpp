@@ -16,6 +16,8 @@ using namespace std;
 
 #include <iostream>
 
+#define L2 2
+
 struct hashtable_item
 {
 	vector<float> p;
@@ -54,7 +56,7 @@ private:
 	
 public:
 
-	LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>));//Constructor
+	LSH(string input_file,int k,int L,int metric);//Constructor
 	~LSH();//Destructor
 	void query(string query_file,string output_file,unsigned int N,int R);
 };

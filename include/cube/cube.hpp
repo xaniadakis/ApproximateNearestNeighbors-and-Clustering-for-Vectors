@@ -12,6 +12,8 @@ using namespace std;
 
 #include <iostream>
 
+#define L2 2
+
 struct hashtable_item
 {
 	vector<float> p;
@@ -44,7 +46,7 @@ private:
 	
 public:
 
-	cube(string input_file,int k,float (* metric)(vector<float>,vector<float>));//Constructor
+	cube(string input_file,int k,int metric);//Constructor
 	~cube();//Destructor
 	void query(string query_file,string output_file,int N,int R);
 };

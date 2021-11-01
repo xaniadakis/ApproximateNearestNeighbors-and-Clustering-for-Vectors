@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
 		cin >> output_file;
 	}
 
-	LSH lsh(input_file,k,L,&eucledian_distance);
+	LSH lsh(input_file,k,L,L2);
 	lsh.query(query_file,output_file,N,R);
 
 	string option;

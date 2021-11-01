@@ -72,7 +72,7 @@ void LSH::query(string query_file,string output_file,unsigned int N,int R)
 	outfile.close();
 };
 
-LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>))//Constructor
+LSH::LSH(string input_file,int k,int L,int metric)//Constructor
 {
 	//Initialize values
 	LSH::L=L;
@@ -108,7 +108,8 @@ LSH::LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<flo
 			}
 		}
 	}
-	distance=metric;
+	if(metric==L2)
+		distance=&eucledian_distance;
 
 	//Add vectors to L hashtables
 	for(int i = 0;i<n;i++)
