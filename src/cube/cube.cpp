@@ -49,7 +49,7 @@ unsigned int cube::F(vector<float> p){
 // 	}
 // };
 
-cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>))
+cube::cube(string input_file,int k,int metric)
 {
 	//Initialize values
 	cube::k=k;
@@ -69,7 +69,8 @@ cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>)
 		t[i] = uniform_distribution_rng(0,w-1);
 	}
 
-	distance=metric;
+	if(metric==L2)
+		distance=&eucledian_distance;
 
 	for(int i = 0;i<n;i++)
 	{

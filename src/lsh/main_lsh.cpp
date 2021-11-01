@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
 	string output_file; //-o
 	int k = 4; //-k
 	int L = 5; //-L
-	int N = 1; //-N
+	unsigned int N = 1; //-N
 	double R = 10000; //-R
 
 
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
 		cin >> output_file;
 	}
 
-	LSH lsh(input_file,k,L,&eucledian_distance);
+	LSH lsh(input_file,k,L,L2);
 	lsh.query(query_file,output_file,N,R);
 
 	string option;

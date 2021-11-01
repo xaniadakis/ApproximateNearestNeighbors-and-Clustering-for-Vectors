@@ -9,6 +9,7 @@
 #include <cmath>
 #include <map>
 #include <algorithm>
+
 #include "utils.hpp"
 using namespace std;
 
@@ -117,5 +118,28 @@ void read_file(string filename,vector<float> *&vectors,vector<string> &ids)
 			vectors[i].push_back(value);
 		}
 		i++;
+	}
+}
+
+void write_file(ofstream &outfile,string query_id,vector<string> ids,multimap<float, int> distances,int R,vector<vector_item> distances_true,double time,double time_true,string algorithm)
+{
+	outfile << "Query: " << query_id << endl;
+	unsigned int y=0;
+	auto it=distances.begin();
+	for(;it != distances.end() && y<distances_true.size() ;++it,y++)
+	{
+		outfile << "Nearest neighbor-" << y+1 << ": " << ids[it->second] << endl;
+		outfile << "distance" << algorithm << ": " << (double) it->first << endl;
+		outfile << "distanceTrue: " << (double) distances_true[y].true_distance << endl;
+	}
+
+	outfile << "t" << algorithm << ": " << time << endl;
+	outfile << "tTrue: " << time_true << endl;
+
+	outfile << "R-near neighbors:" << endl;
+	for (it = distances.begin(); it != distances.end(); ++it)
+	{
+		if (it->first>R) break;
+		outfile << ids[it->second] << endl;
 	}
 }

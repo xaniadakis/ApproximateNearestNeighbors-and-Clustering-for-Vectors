@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <ctime>
 #include <cstring>
@@ -5,12 +7,16 @@
 #include <vector>
 #include <unordered_map>
 
-#include "utils.hpp"
 #include "hash_functions.hpp"
+#include "exhaustive_search.hpp"
+#include "utils.hpp"
+#include "hash_table.hpp"
 
 using namespace std;
 
 #include <iostream>
+
+#define L2 2
 
 struct hashtable_item
 {
@@ -18,6 +24,8 @@ struct hashtable_item
 	unsigned long long int ID;
 	int index;
 };
+
+template class hash_table<hashtable_item>;
 
 class LSH
 {
@@ -33,7 +41,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_map<unsigned int, hashtable_item> *hashtables;//Hashtables
+	hash_table<hashtable_item> *hashtables;//Hashtables
 	int L;//Number of hashtables
 	int k;//Number of hash functions
 
@@ -48,7 +56,7 @@ private:
 	
 public:
 
-	LSH(string input_file,int k,int L,float (* metric)(vector<float>,vector<float>));//Constructor
+	LSH(string input_file,int k,int L,int metric);//Constructor
 	~LSH();//Destructor
-	void query(string query_file,string output_file,int N,int R);
+	void query(string query_file,string output_file,unsigned int N,int R);
 };
