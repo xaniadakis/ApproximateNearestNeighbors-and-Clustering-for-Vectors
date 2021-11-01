@@ -1,9 +1,10 @@
 #Makefile
 all : lsh cube cluster
 
-lsh: PROGRAM=lsh
-cube: PROGRAM=cube
-cluster: PROGRAM=cluster
+lsh: PROGRAM = lsh
+cube: PROGRAM = cube
+cluster: PROGRAM = cluster
+
 MODULES = ./src/$(PROGRAM)
 COMMON = ./src/common
 BIN_TARGET = ./bin/$(PROGRAM)

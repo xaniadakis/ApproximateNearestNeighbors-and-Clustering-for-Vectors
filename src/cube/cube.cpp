@@ -49,13 +49,13 @@ unsigned int cube::F(vector<float> p){
 // 	}
 // };
 
-cube::cube(string input_file,int k,int metric)
+cube::cube(string input_file,int k,string metric)
 {
 	//Initialize values
 	cube::k=k;
 	read_file(input_file,vectors,ids);
 	f_table = new map<int, int>[k];
-	hypercube = new unordered_map<unsigned int, hashtable_item>;
+	hypercube = new hash_table<hashtable_item>;
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
@@ -69,13 +69,13 @@ cube::cube(string input_file,int k,int metric)
 		t[i] = uniform_distribution_rng(0,w-1);
 	}
 
-	if(metric==L2)
+	if(metric=="L2")
 		distance=&eucledian_distance;
 
 	for(int i = 0;i<n;i++)
 	{
 		hashtable_item p{vectors[i],i};
-		hypercube->insert({F(vectors[i]),p});
+		hypercube->insert(F(vectors[i]),p);
 	}
 };
 

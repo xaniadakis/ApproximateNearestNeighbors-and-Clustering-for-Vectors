@@ -125,4 +125,5 @@ LSH::LSH(string input_file,int k,int L,int metric)//Constructor
 LSH::~LSH()//Destructor
 {
 	return;
+n;
 };
