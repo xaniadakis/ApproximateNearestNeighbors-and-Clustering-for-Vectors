@@ -18,17 +18,16 @@ using namespace std;
 
 #define L2 2
 
-struct hashtable_item_lsh
-{
-	vector<float> p;
-	unsigned long long int ID;
-	int index;
-};
-
 class LSH
 {
 
 private:
+	struct hashtable_item_lsh
+	{
+		vector<float> p;
+		unsigned long long int ID;
+		int index;
+	};
 
 	int n;//Number of vectors
 	int tableSize;

@@ -15,16 +15,16 @@ using namespace std;
 
 #define L2 2
 
-struct hashtable_item_cube
-{
-	vector<float> p;
-	int index;
-};
-
 class cube
 {
 
 private:
+
+	struct hashtable_item_cube
+	{
+		vector<float> p;
+		int index;
+	};
 
 	int n;//Number of vectors
 	int tableSize;

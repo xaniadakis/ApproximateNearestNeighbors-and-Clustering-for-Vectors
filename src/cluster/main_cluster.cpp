@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <getopt.h>
 
+#include "cluster.hpp"
+
 using namespace std;
 
 int main(int argc, char *argv[]){
@@ -107,6 +109,8 @@ int main(int argc, char *argv[]){
 
 	if(K_flag==false)
         exit(1);
+
+	cluster();
 
 	string option;
 	cout << "Enter /exit to exit program.\n";
