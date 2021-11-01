@@ -8,7 +8,7 @@
 
 unsigned int cube::f(int i, int h_p) {
 	int _f = rand() % 2;
-	if (notExists(f_table[i], h_p) {
+	if (notExists(f_table[i], h_p)) {
 		f_table[i].insert(pair<int,int>(h_p, _f));
 		return _f;
 	} 
@@ -16,38 +16,38 @@ unsigned int cube::f(int i, int h_p) {
 		return getValue(f_table[i], h_p);
 }
 
-unsigned int cube::F(int p){
+unsigned int cube::F(vector<float> p){
 	string _F;
 	for(int i=0; i<k; i++)
-		_F.push_back( f(i, modulo( hash_L2(i,p,v[j],t[j],w) ,M)));
+		_F.push_back( f(i, modulo( hash_L2(i,p,v,t,w) ,M)));
 	return binaryToDecimal(_F);
 }
 
-void cube::query(string query_file,string output_file,int N,int R)
-{
-	vector<float> *vectors_query;
-	vector<string> ids_query;
-	read_file(query_file,vectors_query,ids_query);
+// void cube::query(string query_file,string output_file,int N,int R)
+// {
+// 	vector<float> *vectors_query;
+// 	vector<string> ids_query;
+// 	read_file(query_file,vectors_query,ids_query);
 
-	unsigned int n_query=ids_query.size();
+// 	unsigned int n_query=ids_query.size();
 
-	for (int i=0 ; i<n_query ; i++)
-	{
-		vector<float> p = vectors_query[i];
-		for (int y=0 ; y<L ; y++)
-		{
-			unsigned int ID = cube::ID(vectors[i],y);
-			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
-			{
-				hashtable_item p_b = it->second;
-				if (p_b.ID == ID)
-				{
+// 	for (int i=0 ; i<n_query ; i++)
+// 	{
+// 		vector<float> p = vectors_query[i];
+// 		for (int y=0 ; y<L ; y++)
+// 		{
+// 			unsigned int ID = cube::ID(vectors[i],y);
+// 			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
+// 			{
+// 				hashtable_item p_b = it->second;
+// 				if (p_b.ID == ID)
+// 				{
 					
-				}
-			}
-		}
-	}
-};
+// 				}
+// 			}
+// 		}
+// 	}
+// };
 
 cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>))
 {
@@ -55,13 +55,13 @@ cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>)
 	cube::k=k;
 	read_file(input_file,vectors,ids);
 	f_table = new map<int, int>[k];
-	hypercube = new map<int, hashtable_item>;
+	hypercube = new unordered_map<unsigned int, hashtable_item>;
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=n/4;
 	v = new vector<float>[k];
-	t = new float*[k];
+	t = new float[k];
 
 	for (int i = 0; i < k; i++)
 	{
@@ -74,7 +74,7 @@ cube::cube(string input_file,int k,float (* metric)(vector<float>,vector<float>)
 	for(int i = 0;i<n;i++)
 	{
 		hashtable_item p{vectors[i],i};
-		hypercube.insert({F(vectors[i]),p});
+		hypercube->insert({F(vectors[i]),p});
 	}
 };
 

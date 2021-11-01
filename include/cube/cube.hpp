@@ -32,7 +32,7 @@ private:
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 
-	unordered_map<unsigned int, hashtable_item> hypercube;
+	unordered_map<unsigned int, hashtable_item> *hypercube;
 	int k;//Number of hash functions
 
 	vector<float> *v;//Random vector used by hash function
@@ -40,8 +40,9 @@ private:
 	unsigned int w;//Window used by hash function
 	map<int, int> *f_table;
 
-	unsigned int f(int i);
-	
+	unsigned int f(int i, int h_p);
+	unsigned int F(vector<float> p);
+
 public:
 
 	cube(string input_file,int k,float (* metric)(vector<float>,vector<float>));//Constructor

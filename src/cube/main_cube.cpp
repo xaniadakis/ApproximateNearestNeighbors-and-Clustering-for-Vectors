@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
 		cin >> output_file;
 	}
 
-	cube c(input_file,k,M,&eucledian_distance);
+	cube a(input_file,k,&eucledian_distance);
 
 	string option;
 	cout << "Enter /exit to exit program.\n";

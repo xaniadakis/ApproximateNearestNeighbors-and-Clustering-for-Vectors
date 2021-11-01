@@ -29,20 +29,20 @@ int getHammingDistance(string first, string second)
 	return _hammingDistance;
 }
 
-string decimalToBinary(int decimal) {
+string decimalToBinary(int decimal) 
 {
-    string r;
+    string binary;
     while(decimal != 0) 
 	{
-		r = ( decimal % 2 == 0 ? "0" : "1" ) + r; 
+		binary = ( decimal % 2 == 0 ? "0" : "1" ) + binary; 
 		decimal /= 2;
 	}
-    return r;
+    return binary;
 }
 
 int binaryToDecimal(string binary){
-	int decimal;
-	return stoi(binary, 0, 2);
+	int decimal = stoi(binary, 0, 2);
+	return decimal;
 }
 
 int getValue(map<int,int> m, int key){
@@ -66,10 +66,10 @@ float eucledian_distance(vector<float> p1,vector<float> p2)
 	return sqrt(distance);
 }
 
-unsigned long long int modulo(long long int a,long long int b) 
+unsigned long long int modulo(long long int a,long long int b)
 {
 	//Real modulo operator
-	const long long int result = a % b;
+	const int result = a % b;
 	return result >= 0 ? result : result + b;
 }
 
