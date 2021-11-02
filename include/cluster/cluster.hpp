@@ -9,37 +9,46 @@ using namespace std;
 class cluster
 {
 private:
+    class centroid_item
+    {
+        vector<float> p;
+		int index;
+    };
+
     class centroid
     {
         vector<float> coordinates;
-        list<vector<float>> vectors;
+        list<vector<centroid_item>> vectors;
     };
 
-    centroid *centroids;
+
+    vector<vector<float>> vectors;
+    vector<string> ids;
+    vector<centroid> centroids;
     bool complete;
     int K;
     
 public:
-    cluster(int K);
+    cluster(int K,vector<vector<float>> vectors,vector<string> ids);
     ~cluster();
 
     void output(string output_file,bool complete=false);
 };
 
-class cluster_classic : public cluster
-{
-public:
-    cluster_classic(string input_file,int K);
-};
-
 class cluster_lsh : public cluster
 {
+private:
+    LSH *Lsh;
 public:
-    cluster_lsh(string input_file,int K,int k,int L);
+    cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L);
+    ~cluster_lsh();
 };
 
 class cluster_cube : public cluster
 {
+private:
+    cube *Cube;
 public:
-    cluster_cube(string input_file,int K,int k,int probes,int M);
+    cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
+    ~cluster_cube();
 };
