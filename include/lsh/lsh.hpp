@@ -37,7 +37,6 @@ private:
 	vector<string> ids;//Ids of vectors from dataset
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
-
 	hash_table<hashtable_item_lsh> *hashtables;//Hashtables
 	int L;//Number of hashtables
 	int k;//Number of hash functions
