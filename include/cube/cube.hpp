@@ -30,7 +30,7 @@ private:
 	int tableSize;
 	int vectorSize;
 
-	vector<float> *vectors;//Vectors from dataset
+	vector<vector<float>> vectors;//Vectors from dataset
 	vector<string> ids;//Ids of vectors from dataset
 
 	float (*distance)(vector<float>, vector<float>);//Distance function

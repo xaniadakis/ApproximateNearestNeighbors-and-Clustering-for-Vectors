@@ -110,7 +110,18 @@ int main(int argc, char *argv[]){
 	if(K_flag==false)
         exit(1);
 
-	cluster();
+	if(method=="Classic")
+	{
+		cluster_classic(input_file,K_cluster);
+	}
+	else if(method=="LSH")
+	{
+		cluster_lsh(input_file,K_cluster,k_lsh,L_lsh);
+	}
+	else if(method=="Hypercube")
+	{
+		cluster_cube(input_file,K_cluster,k_cube,probes_cube,M_cube);
+	}
 
 	string option;
 	cout << "Enter /exit to exit program.\n";

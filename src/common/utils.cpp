@@ -93,13 +93,13 @@ int uniform_distribution_rng(int lowerRange,int higherRange)
 }  
 
 
-void read_file(string filename,vector<float> *&vectors,vector<string> &ids)
+void read_file(string filename,vector<vector<float>> &vectors,vector<string> &ids)
 {
 	ifstream  file(filename);
 	int filelines=count(istreambuf_iterator<char>(file), 
     istreambuf_iterator<char>(), '\n');
 
-	vectors=new vector<float>[filelines];
+	vectors=vector<vector<float>>(filelines);
 
 	file.clear();
 	file.seekg(0,ios::beg);
@@ -121,25 +121,22 @@ void read_file(string filename,vector<float> *&vectors,vector<string> &ids)
 	}
 }
 
-void write_file(ofstream &outfile,string query_id,vector<string> ids,multimap<float, int> distances,int R,vector<vector_item> distances_true,double time,double time_true,string algorithm)
+void write_file(ofstream &outfile,string query_id,vector<vector<float>> vectors,vector<string> ids,vector<pair<float,unsigned int>> N_Nearest,vector<pair<float,unsigned int>> R_Nearest,vector<pair<float,unsigned int>> True_N_Nearest,double time,double time_true,string algorithm)
 {
 	outfile << "Query: " << query_id << endl;
-	unsigned int y=0;
-	auto it=distances.begin();
-	for(;it != distances.end() && y<distances_true.size() ;++it,y++)
+	for (int i = 0; i < N_Nearest.size(); i++)
 	{
-		outfile << "Nearest neighbor-" << y+1 << ": " << ids[it->second] << endl;
-		outfile << "distance" << algorithm << ": " << (double) it->first << endl;
-		outfile << "distanceTrue: " << (double) distances_true[y].true_distance << endl;
+		outfile << "Nearest neighbor-" << i+1 << ": " << ids[N_Nearest[i].second] << endl;
+		outfile << "distance" << algorithm << ": " << N_Nearest[i].first << endl;
+		outfile << "distanceTrue: " << True_N_Nearest[i].first << endl;
 	}
 
 	outfile << "t" << algorithm << ": " << time << endl;
 	outfile << "tTrue: " << time_true << endl;
 
 	outfile << "R-near neighbors:" << endl;
-	for (it = distances.begin(); it != distances.end(); ++it)
+	for (int i = 0; i < R_Nearest.size(); i++)
 	{
-		if (it->first>R) break;
-		outfile << ids[it->second] << endl;
+		outfile << ids[R_Nearest[i].second] << endl;
 	}
 }

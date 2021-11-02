@@ -33,7 +33,7 @@ private:
 	int tableSize;
 	int vectorSize;
 
-	vector<float> *vectors;//Vectors from dataset
+	vector<vector<float>> vectors;//Vectors from dataset
 	vector<string> ids;//Ids of vectors from dataset
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
@@ -52,8 +52,8 @@ private:
 	unsigned long long int ID(vector<float> p,unsigned int j);
 	
 public:
-
-	LSH(string input_file,int k,int L,int metric);//Constructor
+	LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric);
 	~LSH();//Destructor
-	void query(string query_file,string output_file,unsigned int N,int R);
+	vector<pair<float,unsigned int>> find_N_nearest(vector<float> p,unsigned int N);
+	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);
 };

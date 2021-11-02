@@ -23,61 +23,72 @@ unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
 	return modulo(_g,M);
 }
 
-void LSH::query(string query_file,string output_file,unsigned int N,int R)
+vector<pair<float,unsigned int>> LSH::find_N_nearest(vector<float> p,unsigned int N)
 {
-	struct stat info;
-	if (stat("./output",&info) == -1) {
-		mkdir("./output", 0700);
-	}
-	ofstream outfile ("./output/" + output_file, ios::out | ios::trunc);
-
-	vector<float> *vectors_query;
-	vector<string> ids_query;
-	read_file(query_file,vectors_query,ids_query);
-	unsigned int n_query=ids_query.size();
-
-	for (unsigned int i=0 ; i<n_query ; i++)
+	//Returns indexes of N Nearest elements
+	multimap<float, int> distances;
+	for (int y=0 ; y<L ; y++)
 	{
-		multimap<float, int> distances;
-		vector<float> p = vectors_query[i];
-		auto start_lsh = chrono::high_resolution_clock::now();
-		for (int y=0 ; y<L ; y++)
+		unsigned long long int ID = LSH::ID(p,y);
+		for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
 		{
-			unsigned long long int ID = LSH::ID(vectors[i],y);
-			for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
+			hashtable_item_lsh p_b = *it;
+			if (p_b.ID == ID)
 			{
-				hashtable_item_lsh p_b = *it;
-				if (p_b.ID == ID)
-				{
-					float distance = LSH::distance(p,p_b.p);
-					if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
-						distances.insert({distance,p_b.index});
-				}
+				float distance = LSH::distance(p,p_b.p);
+				if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
+					distances.insert({distance,p_b.index});
 			}
 		}
-
-		auto stop_lsh = chrono::high_resolution_clock::now();
-		auto elapsed_lsh = stop_lsh - start_lsh ;
-		double time_lsh = chrono::duration<double>(elapsed_lsh).count();
-
-		auto start_true = chrono::high_resolution_clock::now();
-		vector<vector_item> nBest_true = exhaustive_search(p,vectors,N,n,LSH::distance);
-		auto stop_true = chrono::high_resolution_clock::now();
-		auto elapsed_true = stop_true - start_true ;
-		double time_true = chrono::duration<double>(elapsed_true).count();
-
-		//Print N closest neighbors to output file
-		write_file(outfile,ids_query[i],ids,distances,R,nBest_true,time_lsh,time_true,"LSH");
 	}
-	outfile.close();
-};
 
-LSH::LSH(string input_file,int k,int L,int metric)//Constructor
+	vector<pair<float,unsigned int>> N_Nearest;
+	unsigned int y=0;
+	auto it=distances.begin();
+	for(;it != distances.end() && y<N ;++it,y++)
+	{
+		N_Nearest.push_back({it->first,it->second});
+	}
+	return N_Nearest;
+}
+
+vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
 {
+	//Returns indexes of R nearest element
+	multimap<float, int> distances;
+	for (int y=0 ; y<L ; y++)
+	{
+		unsigned long long int ID = LSH::ID(p,y);
+		for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
+		{
+			hashtable_item_lsh p_b = *it;
+			if (p_b.ID == ID)
+			{
+				float distance = LSH::distance(p,p_b.p);
+				if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
+					distances.insert({distance,p_b.index});
+			}
+		}
+	}
+
+	vector<pair<float,unsigned int>> R_Nearest;
+	auto it=distances.begin();
+	for(;it != distances.end();++it)
+	{
+		R_Nearest.push_back({it->first,it->second});
+	}
+
+	return R_Nearest;
+}
+
+LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric)//Constructor
+{
+	vectors=input_vectors;
+	ids=input_ids;
+
 	//Initialize values
 	LSH::L=L;
 	LSH::k=k;
-	read_file(input_file,vectors,ids);
 	w=300;//Should be average of vector distances times 3
 	vectorSize=vectors[0].size();
 	n=ids.size();
@@ -125,5 +136,4 @@ LSH::LSH(string input_file,int k,int L,int metric)//Constructor
 LSH::~LSH()//Destructor
 {
 	return;
-n;
 };

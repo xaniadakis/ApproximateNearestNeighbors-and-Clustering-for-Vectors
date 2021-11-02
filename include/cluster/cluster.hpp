@@ -17,8 +17,30 @@ private:
     };
 
     centroid *centroids;
+    bool complete;
+    int K;
     
 public:
-    cluster();
+    cluster(int K);
     ~cluster();
+
+    void output(string output_file,bool complete=false);
+};
+
+class cluster_classic : public cluster
+{
+public:
+    cluster_classic(string input_file,int K);
+};
+
+class cluster_lsh : public cluster
+{
+public:
+    cluster_lsh(string input_file,int K,int k,int L);
+};
+
+class cluster_cube : public cluster
+{
+public:
+    cluster_cube(string input_file,int K,int k,int probes,int M);
 };
