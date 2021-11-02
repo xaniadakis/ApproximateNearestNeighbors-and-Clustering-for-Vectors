@@ -5,7 +5,6 @@ using namespace std;
 
 #include "lsh.hpp"
 #include "cube.hpp"
-#include "lloyds.hpp"
 
 class cluster
 {

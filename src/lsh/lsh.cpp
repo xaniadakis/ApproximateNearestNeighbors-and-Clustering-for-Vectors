@@ -65,8 +65,11 @@ vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
 			if (p_b.ID == ID)
 			{
 				float distance = LSH::distance(p,p_b.p);
-				if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
-					distances.insert({distance,p_b.index});
+				if(distance<=R)
+				{
+					if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
+						distances.insert({distance,p_b.index});
+				}
 			}
 		}
 	}
