@@ -51,7 +51,7 @@ private:
 	unsigned long long int ID(vector<float> p,unsigned int j);
 	
 public:
-	LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric);
+	LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric,float hashtable_size_ratio = 1/4);
 	~LSH();//Destructor
 	vector<pair<float,unsigned int>> find_N_nearest(vector<float> p,unsigned int N);
 	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);
