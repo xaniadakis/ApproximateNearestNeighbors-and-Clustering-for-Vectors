@@ -68,7 +68,7 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 		distances.insert({distance,p_b.index});
 
 	}
-	
+
 	vector<pair<float,unsigned int>> N_Nearest;
 	unsigned int y=0;
 	auto it=distances.begin();
@@ -83,22 +83,15 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 {
 	//Returns indexes of R nearest element
 	multimap<float, int> distances;
-	for (int y=0 ; y<L ; y++)
+
+
+	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
 	{
-		unsigned long long int ID = Cube::ID(p,y);
-		for (auto it = hypercube->begin(modulo(ID,tableSize)); it != hypercube->end(modulo(ID,tableSize)); ++it )
-		{
-			hashtable_item_cube p_b = *it;
-			if (p_b.ID == ID)
-			{
-				float distance = Cube::distance(p,p_b.p);
-				if(distance<=R)
-				{
-					if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
-						distances.insert({distance,p_b.index});
-				}
-			}
-		}
+		hashtable_item_cube p_b = *it;
+		float distance = Cube::distance(p,p_b.p);
+		if(distance<=R)
+			distances.insert({distance,p_b.index});
+
 	}
 
 	vector<pair<float,unsigned int>> R_Nearest;

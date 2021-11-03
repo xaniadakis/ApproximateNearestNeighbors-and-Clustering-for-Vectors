@@ -5,13 +5,13 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+
+#include "exhaustive_search.hpp"
 #include "utils.hpp"
 #include "hash_functions.hpp"
 #include "hash_table.hpp"
 
 using namespace std;
-
-#include <iostream>
 
 #define L2 2
 
