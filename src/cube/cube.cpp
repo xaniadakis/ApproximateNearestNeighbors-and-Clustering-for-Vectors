@@ -4,6 +4,7 @@
 #include <map>
 #include <utils.hpp>
 #include <unordered_map>
+
 #define M 4294967291
 
 unsigned int Cube::f(int i, int h_p) {
@@ -18,8 +19,11 @@ unsigned int Cube::f(int i, int h_p) {
 
 unsigned int Cube::F(vector<float> p){
 	string _F;
-	for(int i=0; i<k; i++)
-		_F.push_back( f(i, modulo( hash_L2(i,p,v,t,w) ,M)));
+	for(int i=0; i<k; i++){
+		// cout << f(i, hash_L2(i,p,v,t,w)) << endl;
+		_F.push_back( f(i, hash_L2(i,p,v,t,w)));
+		cout << _F << endl;
+	}
 	return binaryToDecimal(_F);
 }
 

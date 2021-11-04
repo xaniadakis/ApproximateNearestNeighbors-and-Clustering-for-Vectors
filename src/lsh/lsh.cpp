@@ -84,7 +84,7 @@ vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
 	return R_Nearest;
 }
 
-LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric,float hashtable_size_ratio = 1/4)//Constructor
+LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric,float hashtable_size_ratio)//Constructor
 {
 	vectors=input_vectors;
 	ids=input_ids;
