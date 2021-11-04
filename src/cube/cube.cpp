@@ -19,11 +19,19 @@ unsigned int Cube::f(int i, int h_p) {
 
 unsigned int Cube::F(vector<float> p){
 	string _F;
+	char c;
+	int hash;
 	for(int i=0; i<k; i++){
-		// cout << f(i, hash_L2(i,p,v,t,w)) << endl;
-		_F.push_back( f(i, hash_L2(i,p,v,t,w)));
-		cout << _F << endl;
+		hash = modulo(hash_L2(i,p,v,t,w),M) ;
+		cout << "hash:" << hash<< endl;
+		c = intToChar(f(i,hash));
+		// cout << c << "," << i << " of " << k << endl;
+		// sprintf(&c, "%d", f(i, hash_L2(i,p,v,t,w)));
+		_F.push_back(c);
+		// cout << _F << endl;
 	}
+	cout << "F" << _F << endl;
+	cout << "binf" << binaryToDecimal(_F) << endl;
 	return binaryToDecimal(_F);
 }
 
@@ -35,7 +43,7 @@ Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids,int k,in
 	//Initialize values
 	Cube::k=k;
 	f_table = new map<int, int>[k];
-	hypercube = new hash_table<hashtable_item_cube>;
+	hypercube = hash_table<hashtable_item_cube>(2^k);
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
@@ -55,7 +63,7 @@ Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids,int k,in
 	for(int i = 0;i<n;i++)
 	{
 		hashtable_item_cube p{vectors[i],i};
-		hypercube->insert(F(vectors[i]),p);
+		hypercube.insert(F(vectors[i]),p);
 	}
 };
 
@@ -64,8 +72,7 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 	//Returns indexes of N Nearest elements
 	multimap<float, int> distances;
 
-
-	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
+	for (auto it = hypercube.begin(F(p)); it != hypercube.end(F(p)); ++it )
 	{
 		hashtable_item_cube p_b = *it;
 		float distance = Cube::distance(p,p_b.p);
@@ -88,8 +95,7 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 	//Returns indexes of R nearest element
 	multimap<float, int> distances;
 
-
-	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
+	for (auto it = hypercube.begin(F(p)); it != hypercube.end(F(p)); ++it )
 	{
 		hashtable_item_cube p_b = *it;
 		float distance = Cube::distance(p,p_b.p);
