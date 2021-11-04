@@ -43,9 +43,9 @@ int* getNearbyProbes(int key, int n, int size)
 		hammingDistance++;
 	}
 
-	int size = _nearbyProbes.size();
-	int nearbyProbes[size];
-	for(int i=0; i<size; i++)
+	int _size = _nearbyProbes.size();
+	int nearbyProbes[_size];
+	for(int i=0; i<_size; i++)
 		nearbyProbes[i] = stoi(_nearbyProbes[i]);
 	return nearbyProbes;
 }
