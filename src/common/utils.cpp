@@ -14,6 +14,42 @@
 #include "utils.hpp"
 using namespace std;
 
+int* getNearbyProbes(int key, int n, int size)
+{
+	string strkey = fixedDecimalToBinary(key, size);
+	int len = strkey.length(); 
+	int counter = 0;
+	int replaced = 0;
+	int hammingDistance = 1;
+	vector<string> _nearbyProbes;
+	while(counter<n){
+		for(int i=0; i<len; i++){
+			string probe = strkey;
+			if(probe[i] == '0')
+				probe[i]='1';
+			else if(probe[i] == '1')
+				probe[i]='0';
+			replaced++;
+			if(replaced==hammingDistance && counter<=n){
+				if(find(_nearbyProbes.begin(), _nearbyProbes.end(), probe)==_nearbyProbes.end()){
+					_nearbyProbes.push_back(probe);
+					counter++;
+				}
+				break;
+			}
+			if(counter>=n)
+				break;
+		}
+		hammingDistance++;
+	}
+
+	int size = _nearbyProbes.size();
+	int nearbyProbes[size];
+	for(int i=0; i<size; i++)
+		nearbyProbes[i] = stoi(_nearbyProbes[i]);
+	return nearbyProbes;
+}
+
 char intToChar(int number)
 {
 	string str = to_string(number);
@@ -47,6 +83,16 @@ string decimalToBinary(int decimal)
 		decimal /= 2;
 	}
     return binary;
+}
+
+string fixedDecimalToBinary(int decimal, int size) 
+{
+    string binary = decimalToBinary(decimal);
+	string zeros;
+	int len = binary.length();
+	for(int i=0; i<size-len; i++)
+		zeros.push_back('0');
+	return zeros.append(binary);
 }
 
 int binaryToDecimal(string binary){

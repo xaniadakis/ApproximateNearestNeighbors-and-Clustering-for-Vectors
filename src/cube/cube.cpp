@@ -76,17 +76,18 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 	multimap<float, int> distances;
     int counter = 0;
 	// cout << "count:" << hypercube->count(F(p)) << endl;
-
+	int* nearbyProbes = getNearbyProbes(F(p), probes, k);
 	// if(hypercube->count(F(p))>0)
-	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
-	{
-		if(counter >= argM)
-		    break;
-		hashtable_item_cube p_b = *it;
-		float distance = Cube::distance(p,p_b.p);
-		distances.insert({distance,p_b.index});
-		counter++;
-	}
+	for(int i=0; i<probes; i++)
+		for (auto it = hypercube->begin(nearbyProbes[i]); it != hypercube->end(nearbyProbes[i]); ++it )
+		{
+			if(counter >= argM)
+				break;
+			hashtable_item_cube p_b = *it;
+			float distance = Cube::distance(p,p_b.p);
+			distances.insert({distance,p_b.index});
+			counter++;
+		}
 
 	vector<pair<float,unsigned int>> N_Nearest;
 	unsigned int y=0;
@@ -107,16 +108,17 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 	// cout << "count:" << hypercube->count(F(p)) << endl;
 
 	// if(hypercube->count(F(p))>0)
-	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
-	{
-	    if(counter >= argM)
-		    break;
-		hashtable_item_cube p_b = *it;
-		float distance = Cube::distance(p,p_b.p);
-		if(distance<=R)
-			distances.insert({distance,p_b.index});
-		counter++;
-	}
+	int* nearbyProbes = getNearbyProbes(F(p), probes, k);
+	for(int i=0; i<probes; i++)
+		for (auto it = hypercube->begin(nearbyProbes[i]); it != hypercube->end(nearbyProbes[i]); ++it )	{
+			if(counter >= argM)
+				break;
+			hashtable_item_cube p_b = *it;
+			float distance = Cube::distance(p,p_b.p);
+			if(distance<=R)
+				distances.insert({distance,p_b.index});
+			counter++;
+		}
 
 	vector<pair<float,unsigned int>> R_Nearest;
 	auto it=distances.begin();
