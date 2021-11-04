@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
 	vector<string> ids;
 
 	read_file(input_file,vectors,ids);
-	Cube cube(vectors,ids,k,L2);
+	Cube cube(vectors,ids,k,M,probes,L2);
 
 	//handle output file
 	struct stat info;

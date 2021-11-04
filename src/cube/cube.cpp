@@ -23,27 +23,29 @@ unsigned int Cube::F(vector<float> p){
 	int hash;
 	for(int i=0; i<k; i++){
 		hash = modulo(hash_L2(i,p,v,t,w),M) ;
-		cout << "hash:" << hash<< endl;
+		// cout << "hash:" << hash<< endl;
 		c = intToChar(f(i,hash));
 		// cout << c << "," << i << " of " << k << endl;
 		// sprintf(&c, "%d", f(i, hash_L2(i,p,v,t,w)));
 		_F.push_back(c);
 		// cout << _F << endl;
 	}
-	cout << "F" << _F << endl;
-	cout << "binf" << binaryToDecimal(_F) << endl;
+	// cout << "F" << _F << endl;
+	// cout << binaryToDecimal(_F) << endl;
 	return binaryToDecimal(_F);
 }
 
-Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int metric)
+Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids, int k, int argM, int probes, int metric)
 {
 	vectors=input_vectors;
 	ids=input_ids;
 	
 	//Initialize values
 	Cube::k=k;
+	Cube::argM=argM;
+	Cube::probes=probes;
 	f_table = new map<int, int>[k];
-	hypercube = hash_table<hashtable_item_cube>(2^k);
+	hypercube = new hash_table<hashtable_item_cube>(280834);
 	w=uniform_distribution_rng(0,6);
 	vectorSize=vectors[0].size();
 	n=ids.size();
@@ -63,21 +65,27 @@ Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids,int k,in
 	for(int i = 0;i<n;i++)
 	{
 		hashtable_item_cube p{vectors[i],i};
-		hypercube.insert(F(vectors[i]),p);
+		hypercube->insert(F(vectors[i]),p);
 	}
 };
 
 vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned int N)
 {
+	cout << "Tracing N nearest" << endl;
 	//Returns indexes of N Nearest elements
 	multimap<float, int> distances;
+    int counter = 0;
+	// cout << "count:" << hypercube->count(F(p)) << endl;
 
-	for (auto it = hypercube.begin(F(p)); it != hypercube.end(F(p)); ++it )
+	// if(hypercube->count(F(p))>0)
+	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
 	{
+		if(counter >= argM)
+		    break;
 		hashtable_item_cube p_b = *it;
 		float distance = Cube::distance(p,p_b.p);
 		distances.insert({distance,p_b.index});
-
+		counter++;
 	}
 
 	vector<pair<float,unsigned int>> N_Nearest;
@@ -92,16 +100,22 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 
 vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 {
+	cout << "Tracing R nearest" << endl;
 	//Returns indexes of R nearest element
 	multimap<float, int> distances;
+    int counter = 0;
+	// cout << "count:" << hypercube->count(F(p)) << endl;
 
-	for (auto it = hypercube.begin(F(p)); it != hypercube.end(F(p)); ++it )
+	// if(hypercube->count(F(p))>0)
+	for (auto it = hypercube->begin(F(p)); it != hypercube->end(F(p)); ++it )
 	{
+	    if(counter >= argM)
+		    break;
 		hashtable_item_cube p_b = *it;
 		float distance = Cube::distance(p,p_b.p);
 		if(distance<=R)
 			distances.insert({distance,p_b.index});
-
+		counter++;
 	}
 
 	vector<pair<float,unsigned int>> R_Nearest;
@@ -113,6 +127,7 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 
 	return R_Nearest;
 }
+
 
 Cube::~Cube()//Destructor
 {

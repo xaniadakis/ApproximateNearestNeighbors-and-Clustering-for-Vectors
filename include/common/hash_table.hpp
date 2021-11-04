@@ -13,7 +13,7 @@ private:
     vector<vector<V>> Buckets;
     unsigned int tablesize;
 public:
-    hash_table(unsigned int size=1000)
+    hash_table(unsigned int size=28083486)
     {
         hash_table::Buckets = vector<vector<V>>(size);
         hash_table::tablesize=size;
@@ -21,6 +21,7 @@ public:
 
     void insert(unsigned int key,V value)
     {
+        Buckets[key];
         Buckets[key].push_back(value);
     };
 
