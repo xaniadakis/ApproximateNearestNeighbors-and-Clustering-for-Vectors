@@ -9,9 +9,17 @@
 #include <cmath>
 #include <map>
 #include <algorithm>
-
+#include <stdio.h>
+#include <stdlib.h>    
 #include "utils.hpp"
 using namespace std;
+
+char intToChar(int number)
+{
+	string str = to_string(number);
+	char const *num_char = str.c_str();
+	return num_char[0];
+}
 
 int getHammingDistance(string first, string second)
 {

@@ -17,6 +17,7 @@ float inner_product(vector <float> v1,vector <float> v2);
 int getHammingDistance(string first, string second);
 string decimalToBinary(int decimal);
 int binaryToDecimal(string binary);
+char intToChar(int number);
 int getValue(map<int,int> m, int key);
 int notExists(map<int,int> m, int key);
 void write_file(ofstream &outfile,string query_id,vector<vector<float>> vectors,vector<string> ids,vector<pair<float,unsigned int>> N_Nearest,vector<pair<float,unsigned int>> R_Nearest,vector<pair<float,unsigned int>> True_N_Nearest,double time,double time_true,string algorithm);
