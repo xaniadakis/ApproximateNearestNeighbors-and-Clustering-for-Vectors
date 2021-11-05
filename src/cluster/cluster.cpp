@@ -12,9 +12,9 @@ cluster::~cluster()
 }
 
 //Cluster LSH
-cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids)
+cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids),LSH(vectors,ids,k,L,L2,1/8)
 {
-
+    
 }
 
 //Cluster hypercube

@@ -35,19 +35,19 @@ public:
     void output(string output_file,bool complete=false);
 };
 
-class cluster_lsh : public cluster
+class cluster_lsh : public cluster,public LSH
 {
 private:
-    LSH *Lsh;
+    LSH *lsh;
 public:
     cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L);
     ~cluster_lsh();
 };
 
-class cluster_cube : public cluster
+class cluster_cube : public cluster,public Cube
 {
 private:
-    cube *Cube;
+    Cube *cube;
 public:
     cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
     ~cluster_cube();
