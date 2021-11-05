@@ -85,7 +85,18 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
 {
     for(int i=0;i<vectors.size();i++)
     {
-
+        int minimum=HUGE_VAL,minimum_index;
+        for (auto it = centroids.begin(); it != centroids.end(); ++it)
+        {
+            centroid_item ci={p:vectors[i],index:i};
+            float distance=eucledian_distance(vectors[i],it->coordinates);
+            if(distance<minimum)
+            {
+                minimum=distance;
+                minimum_index= it - centroids.begin();
+            }
+            centroids[minimum_index].vectors.push_back(ci);
+        }
     }
 }
 

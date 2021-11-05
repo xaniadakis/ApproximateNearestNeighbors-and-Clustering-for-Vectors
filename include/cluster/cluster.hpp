@@ -24,13 +24,13 @@ protected:
     struct centroid
     {
         vector<float> coordinates;
-        list<vector<centroid_item>> vectors;
+        list<centroid_item> vectors;
     };
 
 
     vector<vector<float>> vectors;
     vector<string> ids;
-    list<centroid> centroids;
+    vector<centroid> centroids;
     int K;
 
     int vectorSize;
@@ -40,7 +40,7 @@ protected:
     cluster(int K,vector<vector<float>> vectors,vector<string> ids);
     ~cluster();
 
-    void output(string output_file,bool complete=false);
+    void output();
 };
 
 class cluster_lloyds : public cluster
