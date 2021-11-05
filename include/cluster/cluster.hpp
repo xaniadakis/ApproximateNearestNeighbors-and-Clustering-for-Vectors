@@ -6,16 +6,21 @@ using namespace std;
 #include "lsh.hpp"
 #include "cube.hpp"
 
-class cluster
+//Implementation of centroid-based clustering
+//K-Means++ Initialization
+//L2 Metric
+//Update centroids using 
+
+class cluster //Using lloyd's
 {
 private:
-    class centroid_item
+    struct centroid_item
     {
         vector<float> p;
 		int index;
     };
 
-    class centroid
+    struct centroid
     {
         vector<float> coordinates;
         list<vector<centroid_item>> vectors;
@@ -25,8 +30,9 @@ private:
     vector<vector<float>> vectors;
     vector<string> ids;
     vector<centroid> centroids;
-    bool complete;
     int K;
+
+    int vectorSize;
     
 public:
     cluster(int K,vector<vector<float>> vectors,vector<string> ids);
@@ -35,19 +41,15 @@ public:
     void output(string output_file,bool complete=false);
 };
 
-class cluster_lsh : public cluster,public LSH
+class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (range search)
 {
-private:
-    LSH *lsh;
 public:
     cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L);
     ~cluster_lsh();
 };
 
-class cluster_cube : public cluster,public Cube
+class cluster_cube : public cluster,public Cube //Using Hypercube reverse assignment (range search)
 {
-private:
-    Cube *cube;
 public:
     cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
     ~cluster_cube();

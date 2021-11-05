@@ -30,7 +30,7 @@ vector<pair<float,unsigned int>> LSH::find_N_nearest(vector<float> p,unsigned in
 	for (int y=0 ; y<L ; y++)
 	{
 		unsigned long long int ID = LSH::ID(p,y);
-		for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
+		for (auto it = hashtables[y].begin(ID); it != hashtables[y].end(ID); ++it )
 		{
 			hashtable_item_lsh p_b = *it;
 			if (p_b.ID == ID)
@@ -59,7 +59,7 @@ vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
 	for (int y=0 ; y<L ; y++)
 	{
 		unsigned long long int ID = LSH::ID(p,y);
-		for (auto it = hashtables[y].begin(modulo(ID,tableSize)); it != hashtables[y].end(modulo(ID,tableSize)); ++it )
+		for (auto it = hashtables[y].begin(ID); it != hashtables[y].end(ID); ++it )
 		{
 			hashtable_item_lsh p_b = *it;
 			if (p_b.ID == ID)
@@ -132,7 +132,7 @@ LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int 
 		for(int y=0;y<L;y++)
 		{
 			hashtable_item_lsh p{vectors[i],ID(vectors[i],y),i};
-			hashtables[y].insert(modulo(p.ID,tableSize),p);
+			hashtables[y].insert(p.ID,p);
 		}
 	}
 };

@@ -112,15 +112,15 @@ int main(int argc, char *argv[]){
 
 	if(method=="Classic")
 	{
-		cluster_classic(input_file,K_cluster);
+		cluster();
 	}
 	else if(method=="LSH")
 	{
-		cluster_lsh(input_file,K_cluster,k_lsh,L_lsh);
+		cluster_lsh();
 	}
 	else if(method=="Hypercube")
 	{
-		cluster_cube(input_file,K_cluster,k_cube,probes_cube,M_cube);
+		cluster_cube();
 	}
 
 	string option;

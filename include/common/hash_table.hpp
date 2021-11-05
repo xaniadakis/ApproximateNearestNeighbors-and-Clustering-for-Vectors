@@ -21,17 +21,16 @@ public:
 
     void insert(unsigned int key,V value)
     {
-        Buckets[key];
-        Buckets[key].push_back(value);
+        Buckets[key%tablesize].push_back(value);
     };
 
     typename vector<V>::iterator begin(unsigned int key)
     {
-        return Buckets[key].begin();
+        return Buckets[key%tablesize].begin();
     };
 
     typename vector<V>::iterator end(unsigned int key)
     {
-        return Buckets[key].end();
+        return Buckets[key%tablesize].end();
     };
 };
