@@ -88,14 +88,14 @@ LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int 
 {
 	vectors=input_vectors;
 	ids=input_ids;
-
+	
 	//Initialize values
 	LSH::L=L;
 	LSH::k=k;
 	w=300;//Should be average of vector distances times 3
 	vectorSize=vectors[0].size();
 	n=ids.size();
-	tableSize=n*hashtable_size_ratio;
+	tableSize=round(n*hashtable_size_ratio);
 	hashtables = new hash_table<hashtable_item_lsh>[L];
 	for (int i = 0; i < L; i++)
 	{
