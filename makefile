@@ -1,7 +1,8 @@
 #Makefile
+#make (lsh/cube/cluster) (run RUN_TARGET=lsh/cube/cluster) (clean)
 all : lsh cube cluster
 
-lsh: PROGRAM = lsh
+lsh: PROGRAM=lsh
 cube: PROGRAM = cube
 cluster: PROGRAM = cluster
 
@@ -10,6 +11,8 @@ COMMON = ./src/common
 BIN_TARGET = ./bin/$(PROGRAM)
 INCLUDE = ./include/$(PROGRAM)
 INCLUDE_COMMON = ./include/common
+
+clean : BIN_TARGET = ./bin/lsh ./bin/cube ./bin/cluster
 
 INPUT_FILE ?= ./examples/Datasets/input_small_id
 QUERY_FILE ?= ./examples/Datasets/query_small_id
@@ -21,7 +24,7 @@ DEBUGFLAGS = -g -Wextra -Wall -I$(INCLUDE) -I$(INCLUDE_COMMON)
 lsh: clean
 	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
 
-cube: clean 
+cube: clean
 	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
 
 cluster: clean
@@ -30,5 +33,10 @@ cluster: clean
 clean:
 	rm -f $(BIN_TARGET)
 
-run: 
-	$(BIN_TARGET) -i $(INPUT_FILE) -q $(QUERY_FILE) -o $(OUTPUT_FILE)
+
+--check_run:
+ifndef RUN_TARGET
+	$(error RUN_TARGET is undefined)
+endif
+run: --check_run
+	./bin/$(RUN_TARGET) -i $(INPUT_FILE) -q $(QUERY_FILE) -o $(OUTPUT_FILE)

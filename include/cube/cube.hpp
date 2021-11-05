@@ -26,16 +26,11 @@ private:
 		int index;
 	};
 
-	int n;//Number of vectors
-	int tableSize;
-	int vectorSize;
-
 	vector<vector<float>> vectors;//Vectors from dataset
 	vector<string> ids;//Ids of vectors from dataset
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 	hash_table<hashtable_item_cube> *hypercube;
-	// unordered_map<unsigned int, hashtable_item> *hypercube;
 	int k;//Number of hash functions
 
 	vector<float> *v;//Random vector used by hash function
