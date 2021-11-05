@@ -146,6 +146,14 @@ int uniform_distribution_rng(int lowerRange,int higherRange)
 	return distr(generator);
 }  
 
+int uniform_distribution_rng_float(float lowerRange,float higherRange)
+{
+	random_device rand_dev;
+	mt19937 generator(rand_dev());
+	uniform_real_distribution<float> distr(lowerRange, higherRange);
+
+	return distr(generator);
+}  
 
 void read_file(string filename,vector<vector<float>> &vectors,vector<string> &ids)
 {

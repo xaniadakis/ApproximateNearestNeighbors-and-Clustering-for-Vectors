@@ -13,7 +13,8 @@ using namespace std;
 
 class cluster //Using lloyd's
 {
-private:
+//private:
+protected:
     struct centroid_item
     {
         vector<float> p;
@@ -29,16 +30,22 @@ private:
 
     vector<vector<float>> vectors;
     vector<string> ids;
-    vector<centroid> centroids;
+    list<centroid> centroids;
     int K;
 
     int vectorSize;
+    int n;
     
-public:
+//public:
     cluster(int K,vector<vector<float>> vectors,vector<string> ids);
     ~cluster();
 
     void output(string output_file,bool complete=false);
+};
+
+class cluster_lloyds : public cluster
+{
+    cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids);
 };
 
 class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (range search)
