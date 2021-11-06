@@ -11,6 +11,26 @@
 
 using namespace std;
 
+void write_file_cluster(ofstream &outfile,string query_id,vector<vector<float>> vectors,vector<string> ids,vector<pair<float,unsigned int>> N_Nearest,vector<pair<float,unsigned int>> R_Nearest,vector<pair<float,unsigned int>> True_N_Nearest,double time,double time_true,string algorithm)
+{
+	outfile << "Query: " << query_id << endl;
+	for (int i = 0; i < N_Nearest.size(); i++)
+	{
+		outfile << "Nearest neighbor-" << i+1 << ": " << ids[N_Nearest[i].second] << endl;
+		outfile << "distance" << algorithm << ": " << N_Nearest[i].first << endl;
+		outfile << "distanceTrue: " << True_N_Nearest[i].first << endl;
+	}
+
+	outfile << "t" << algorithm << ": " << time << endl;
+	outfile << "tTrue: " << time_true << endl;
+
+	outfile << "R-near neighbors:" << endl;
+	for (int i = 0; i < R_Nearest.size(); i++)
+	{
+		outfile << ids[R_Nearest[i].second] << endl;
+	}
+}
+
 int main(int argc, char *argv[]){
 	srand((time(0)));
 
@@ -113,9 +133,15 @@ int main(int argc, char *argv[]){
 	vector<vector<float>> vectors;
 	vector<string> ids;
 	read_file(input_file,vectors,ids);
+
 	if(method=="Classic")
 	{
+		cout << "Using k-means clustering with Lloyd's assignment" << endl;
+		auto start_cluster = chrono::high_resolution_clock::now();
 		cluster_lloyds(K_cluster,vectors,ids);
+		auto stop_cluster = chrono::high_resolution_clock::now();
+		auto elapsed_cluster = stop_cluster - start_cluster ;
+		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
 	}
 
 	string option;

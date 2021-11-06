@@ -39,4 +39,4 @@ ifndef RUN_TARGET
 	$(error RUN_TARGET is undefined)
 endif
 run: --check_run
-	./bin/$(RUN_TARGET) -i $(INPUT_FILE) -q $(QUERY_FILE) -o $(OUTPUT_FILE)
+	./bin/$(RUN_TARGET) $(ARGS)

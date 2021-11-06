@@ -92,10 +92,32 @@ bool cluster::new_centroids()
         }
         new_centroids.push_back(new_centroid);
 
-        
+
     }
-    return false;
+    if(converge_count==n)
+    {
+        return false;
+    }
+    for (int i=0;i<new_centroids.size();i++)
+    {
+        centroids[i].coordinates=new_centroids[i];
+        centroids[i].vectors.clear();
+    }
+    return true;
 };
+
+vector<cluster::centroid> cluster::get_clusters()
+{
+    return centroids;
+}
+
+pair<vector<float>,float> cluster::get_silhouettes_average()
+{
+    for (auto it = centroids.begin(); it != centroids.end(); ++it)
+    {
+
+    }
+}
 
 cluster::~cluster()
 {
@@ -105,8 +127,8 @@ cluster::~cluster()
 //Cluster Lloyd's
 cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids) : cluster(K,vectors,ids)
 {
-    do
-    {
+    // do
+    // {
         for(int i=0;i<vectors.size();i++)
         {
             centroid_item ci={p:vectors[i],index:i};
@@ -122,7 +144,7 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
             }
             centroids[minimum_index].vectors.push_back(ci);
         }
-    }while(new_centroids()==true);
+    // }while(new_centroids()==true);
 }
 
 //Cluster LSH

@@ -13,7 +13,7 @@ using namespace std;
 
 class cluster //Using lloyd's
 {
-protected:
+public:
     struct centroid_item
     {
         vector<float> p;
@@ -25,8 +25,7 @@ protected:
         vector<float> coordinates;
         list<centroid_item> vectors;
     };
-
-
+protected:
     vector<vector<float>> vectors;
     vector<string> ids;
     vector<centroid> centroids;
@@ -40,6 +39,8 @@ protected:
 
     bool new_centroids();
     void output();
+    vector<centroid> get_clusters();
+    pair<vector<float>,float> get_silhouettes_average();
 };
 
 class cluster_lloyds : public cluster
