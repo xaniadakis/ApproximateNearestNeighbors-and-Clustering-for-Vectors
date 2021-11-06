@@ -109,18 +109,13 @@ int main(int argc, char *argv[]){
 
 	if(K_flag==false)
         exit(1);
-
+	
+	vector<vector<float>> vectors;
+	vector<string> ids;
+	read_file(input_file,vectors,ids);
 	if(method=="Classic")
 	{
-		cluster();
-	}
-	else if(method=="LSH")
-	{
-		cluster_lsh();
-	}
-	else if(method=="Hypercube")
-	{
-		cluster_cube();
+		cluster_lloyds(K_cluster,vectors,ids);
 	}
 
 	string option;

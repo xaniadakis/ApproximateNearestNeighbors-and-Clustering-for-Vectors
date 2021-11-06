@@ -13,7 +13,6 @@ using namespace std;
 
 class cluster //Using lloyd's
 {
-//private:
 protected:
     struct centroid_item
     {
@@ -36,15 +35,16 @@ protected:
     int vectorSize;
     int n;
     
-//public:
     cluster(int K,vector<vector<float>> vectors,vector<string> ids);
     ~cluster();
 
+    bool new_centroids();
     void output();
 };
 
 class cluster_lloyds : public cluster
 {
+public:
     cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids);
 };
 

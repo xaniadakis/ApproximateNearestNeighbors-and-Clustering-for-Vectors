@@ -21,6 +21,9 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     vector<int> non_centroids;
     iota(non_centroids.begin(), non_centroids.end(), 0);
 
+    vector<float> D(n);
+    fill(D.begin(), D.end(), HUGE_VAL);
+    
     centroid c1;
     int index=uniform_distribution_rng(0,n);
     c1.coordinates=vectors[index];
@@ -28,23 +31,16 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     centroids.push_back(c1);
     for(int t=1;t<K;t++)
     {
-        vector<float> D(n);
-        float max_value=numeric_limits<float>::min();
         centroid c;
         for (int i : non_centroids)
         {
-            D[i]=HUGE_VAL;
             for (auto it = centroids.begin(); it != centroids.end(); ++it)
             {
-                float distance=eucledian_distance(vectors[i],it->coordinates);
+                float distance=eucledian_distance(vectors[i],centroids.back().coordinates);
                 if(distance<D[i]) D[i]=distance;
-                if(distance>max_value) max_value=distance;
             }
         }
-        for (int i : non_centroids)
-        {
-            D[i] /= max_value;
-        }
+        float max_value=*max_element( D.begin(), D.end() );
         
         list<pair<float,int>> P;
         float range;
@@ -54,7 +50,7 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
             for(int i:non_centroids)
             {
                 if(i>r) break;
-                P_r+=pow(D[r],2);
+                P_r+=pow(D[r]/max_value,2);
             }
             P.push_back({P_r,r});
             range=P_r;
@@ -75,6 +71,32 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     }
 }
 
+bool cluster::new_centroids()
+{
+    vector<vector<float>> new_centroids;
+    int converge_count=0;
+    for (auto it = centroids.begin(); it != centroids.end(); ++it)
+    {
+        vector<float> new_centroid(vectorSize);
+        iota(new_centroid.begin(), new_centroid.end(), 0);
+        for(auto it2 = it->vectors.begin() ; it2 != it->vectors.end(); ++it2)
+        {
+            for (int i = 0; i < vectorSize; i++)
+            {
+                new_centroid[i]+=it2->p[i];
+            }
+        }
+        for (int y = 0; y < vectorSize; y++)
+        {
+            new_centroid[y] /= it->vectors.size();
+        }
+        new_centroids.push_back(new_centroid);
+
+        
+    }
+    return false;
+};
+
 cluster::~cluster()
 {
 }
@@ -83,21 +105,24 @@ cluster::~cluster()
 //Cluster Lloyd's
 cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids) : cluster(K,vectors,ids)
 {
-    for(int i=0;i<vectors.size();i++)
+    do
     {
-        int minimum=HUGE_VAL,minimum_index;
-        for (auto it = centroids.begin(); it != centroids.end(); ++it)
+        for(int i=0;i<vectors.size();i++)
         {
             centroid_item ci={p:vectors[i],index:i};
-            float distance=eucledian_distance(vectors[i],it->coordinates);
-            if(distance<minimum)
+            int minimum=numeric_limits<int>::max(),minimum_index;
+            for (auto it = centroids.begin(); it != centroids.end(); ++it)
             {
-                minimum=distance;
-                minimum_index= it - centroids.begin();
+                float distance=eucledian_distance(vectors[i],it->coordinates);
+                if(distance<minimum)
+                {
+                    minimum=distance;
+                    minimum_index= it - centroids.begin();
+                }
             }
             centroids[minimum_index].vectors.push_back(ci);
         }
-    }
+    }while(new_centroids()==true);
 }
 
 //Cluster LSH
