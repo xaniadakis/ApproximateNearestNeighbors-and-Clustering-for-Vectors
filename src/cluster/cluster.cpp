@@ -17,7 +17,7 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     cluster::n=ids.size();
 
     //K-Means++ initialization
-    vector<int> non_centroids;
+    vector<int> non_centroids(n);
     iota(non_centroids.begin(), non_centroids.end(), 0);
 
     vector<float> D(n);
