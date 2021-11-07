@@ -12,7 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>    
 #include "utils.hpp"
+
 using namespace std;
+
 vector<int> getNearbyProbes(int key, int n, int size)
 {
 	string strkey = fixedDecimalToBinary(key, size);
@@ -31,14 +33,12 @@ vector<int> getNearbyProbes(int key, int n, int size)
 				probe[i]='0';
 			replaced++;
 			if(replaced==hammingDistance && counter<=n){
-				cout << counter << " " << probe << endl;
 				if(find(_nearbyProbes.begin(), _nearbyProbes.end(), probe)==_nearbyProbes.end()){
 					_nearbyProbes.push_back(probe);
 					counter++;
 					probe = strkey;
 				}
 				replaced = 0;
-				// break;
 			}
 			else if(counter>n)
 				break;

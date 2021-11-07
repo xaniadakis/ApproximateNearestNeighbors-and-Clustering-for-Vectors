@@ -30,7 +30,6 @@ unsigned int Cube::F(vector<float> p){
 
 vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned int N)
 {
-	cout << "Tracing N nearest" << endl;
 	//Returns indexes of N Nearest elements
 	multimap<float, int> distances;
     int counter = 0;
@@ -59,7 +58,6 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 
 vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 {
-	cout << "Tracing R nearest" << endl;
 	//Returns indexes of R nearest element
 	multimap<float, int> distances;
     int counter = 0;

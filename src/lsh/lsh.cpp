@@ -96,7 +96,6 @@ LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int 
 	vectorSize=vectors[0].size();
 	n=ids.size();
 	tableSize=ceil(n*hashtable_size_ratio);
-	cout << tableSize << endl << n <<endl;
 	hashtables = new hash_table<hashtable_item_lsh>[L];
 	for (int i = 0; i < L; i++)
 	{
