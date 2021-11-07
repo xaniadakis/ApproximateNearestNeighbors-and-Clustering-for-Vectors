@@ -16,14 +16,13 @@ using namespace std;
 
 vector<int> getNearbyProbes(int key, int n, int size)
 {
-	cout << "getting in\n" << endl;
 	string strkey = fixedDecimalToBinary(key, size);
-	cout << strkey << endl;
 	int len = strkey.length(); 
-	int counter = 0;
+	int counter = 1;
 	int replaced = 0;
 	int hammingDistance = 1;
 	vector<string> _nearbyProbes;
+	_nearbyProbes.push_back(strkey);
 	while(counter<n){
 		for(int i=0; i<len; i++){
 			string probe = strkey;
@@ -32,16 +31,14 @@ vector<int> getNearbyProbes(int key, int n, int size)
 			else if(probe[i] == '1')
 				probe[i]='0';
 			replaced++;
-			cout << "yo " << probe << endl;
-			if(replaced==hammingDistance && counter<=n){
+			if(counter<n){
 				if(find(_nearbyProbes.begin(), _nearbyProbes.end(), probe)==_nearbyProbes.end()){
 					_nearbyProbes.push_back(probe);
-					cout << probe << endl;
 					counter++;
 				}
-				break;
+				// break;
 			}
-			if(counter>=n)
+			else
 				break;
 		}
 		hammingDistance++;
@@ -50,7 +47,7 @@ vector<int> getNearbyProbes(int key, int n, int size)
 	int _size = _nearbyProbes.size();
 	vector<int> nearbyProbes;
 	for(int i=0; i<_size; i++)
-		nearbyProbes.push_back(stoi(_nearbyProbes[i]));
+		nearbyProbes.push_back(binaryToDecimal(_nearbyProbes[i]));
 	return nearbyProbes;
 }
 

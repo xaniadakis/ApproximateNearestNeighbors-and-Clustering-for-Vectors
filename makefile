@@ -45,8 +45,8 @@ run_cluster:
 
 cluster: compile_cluster run_cluster
 
-
 clean:
 	rm -f ./bin/cluster
 	rm -f ./bin/cube
 	rm -f ./bin/lsh
+	rm -f ./output/*
