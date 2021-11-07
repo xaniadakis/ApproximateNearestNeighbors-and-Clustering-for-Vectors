@@ -47,3 +47,4 @@ clean:
 	rm -f ./bin/cluster
 	rm -f ./bin/cube
 	rm -f ./bin/lsh
+	rm -f ./output/*
