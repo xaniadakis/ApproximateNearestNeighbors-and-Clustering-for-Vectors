@@ -1,5 +1,5 @@
 #Makefile
-#make (lsh/cube/cluster) (run RUN_TARGET=lsh/cube/cluster) (clean)
+#make (lsh/cube/cluster) (run RUN_TARGET=lsh/cube/cluster ARGS="{arguments}") (clean)
 all : lsh cube cluster
 
 lsh: PROGRAM=lsh
@@ -14,10 +14,6 @@ INCLUDE_COMMON = ./include/common
 
 clean : BIN_TARGET = ./bin/lsh ./bin/cube ./bin/cluster
 
-INPUT_FILE ?= ./examples/Datasets/input_small_id
-QUERY_FILE ?= ./examples/Datasets/query_small_id
-OUTPUT_FILE ?= results
-
 CFLAGS = -g -I$(INCLUDE) -I$(INCLUDE_COMMON)
 DEBUGFLAGS = -g -Wextra -Wall -I$(INCLUDE) -I$(INCLUDE_COMMON)
 
@@ -28,7 +24,7 @@ cube: clean
 	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
 
 cluster: clean
-	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS) -I./include/lsh -I./include/cube
+	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(MODULES)/$(PROGRAM)_ANN.cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS) -I./include/lsh -I./include/cube
 
 clean:
 	rm -f $(BIN_TARGET)
