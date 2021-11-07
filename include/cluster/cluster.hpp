@@ -37,10 +37,11 @@ protected:
     cluster(int K,vector<vector<float>> vectors,vector<string> ids);
     ~cluster();
 
-    bool new_centroids();
+    void new_centroids();
     void output();
+    bool convergence(vector<centroid> centroids_old);
     vector<centroid> get_clusters();
-    pair<vector<float>,float> get_silhouettes_average();
+    vector<pair<vector<float>,float>> get_silhouettes_average();
 };
 
 class cluster_lloyds : public cluster

@@ -11,24 +11,9 @@
 
 using namespace std;
 
-void write_file_cluster(ofstream &outfile,string query_id,vector<vector<float>> vectors,vector<string> ids,vector<pair<float,unsigned int>> N_Nearest,vector<pair<float,unsigned int>> R_Nearest,vector<pair<float,unsigned int>> True_N_Nearest,double time,double time_true,string algorithm)
+void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,vector<pair<vector<float>,float>> silhouettes,double time_cluster,string algorithm)
 {
-	outfile << "Query: " << query_id << endl;
-	for (int i = 0; i < N_Nearest.size(); i++)
-	{
-		outfile << "Nearest neighbor-" << i+1 << ": " << ids[N_Nearest[i].second] << endl;
-		outfile << "distance" << algorithm << ": " << N_Nearest[i].first << endl;
-		outfile << "distanceTrue: " << True_N_Nearest[i].first << endl;
-	}
 
-	outfile << "t" << algorithm << ": " << time << endl;
-	outfile << "tTrue: " << time_true << endl;
-
-	outfile << "R-near neighbors:" << endl;
-	for (int i = 0; i < R_Nearest.size(); i++)
-	{
-		outfile << ids[R_Nearest[i].second] << endl;
-	}
 }
 
 int main(int argc, char *argv[]){
