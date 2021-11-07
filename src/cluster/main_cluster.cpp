@@ -128,6 +128,15 @@ int main(int argc, char *argv[]){
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
 	}
+	else if(method=="LSH" || method=="Hypercube")
+	{
+		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << endl;
+		auto start_cluster = chrono::high_resolution_clock::now();
+		cluster_ANN(K_cluster,vectors,ids,method,K,k,M,L);
+		auto stop_cluster = chrono::high_resolution_clock::now();
+		auto elapsed_cluster = stop_cluster - start_cluster ;
+		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
+	}
 
 	string option;
 	cout << "Enter /exit to exit program.\n";

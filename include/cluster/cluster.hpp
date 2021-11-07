@@ -50,6 +50,13 @@ public:
     cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids);
 };
 
+class cluster_ANN
+{
+public:
+    cluster_ANN::cluster_ANN(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M,int L,string method);
+    ~cluster_ANN();
+};
+
 class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (range search)
 {
 public:

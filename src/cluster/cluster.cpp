@@ -4,7 +4,6 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
-
 #include "cluster.hpp"
 #include "utils.hpp"
 
@@ -180,4 +179,19 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
         if(convergence(centroids_old)==true)
             break;
     }
-}
+}    //First assignment
+    for(int i=0;i<vectors.size();i++)
+    {
+        centroid_item ci={p:vectors[i],index:i};
+        int minimum=numeric_limits<int>::max(),minimum_index;
+        for (auto it = centroids.begin(); it != centroids.end(); ++it)
+        {
+            float distance=eucledian_distance(vectors[i],it->coordinates);
+            if(distance<minimum)
+            {
+                minimum=distance;
+                minimum_index= it - centroids.begin();
+            }
+        }
+        centroids[minimum_index].vectors.push_back(ci);
+    }
