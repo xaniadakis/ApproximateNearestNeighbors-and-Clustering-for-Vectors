@@ -13,7 +13,6 @@
 #include <stdlib.h>    
 #include "utils.hpp"
 using namespace std;
-
 vector<int> getNearbyProbes(int key, int n, int size)
 {
 	string strkey = fixedDecimalToBinary(key, size);
@@ -24,21 +23,24 @@ vector<int> getNearbyProbes(int key, int n, int size)
 	vector<string> _nearbyProbes;
 	_nearbyProbes.push_back(strkey);
 	while(counter<n){
+		string probe = strkey;
 		for(int i=0; i<len; i++){
-			string probe = strkey;
 			if(probe[i] == '0')
 				probe[i]='1';
 			else if(probe[i] == '1')
 				probe[i]='0';
 			replaced++;
-			if(counter<n){
+			if(replaced==hammingDistance && counter<=n){
+				cout << counter << " " << probe << endl;
 				if(find(_nearbyProbes.begin(), _nearbyProbes.end(), probe)==_nearbyProbes.end()){
 					_nearbyProbes.push_back(probe);
 					counter++;
+					probe = strkey;
 				}
+				replaced = 0;
 				// break;
 			}
-			else
+			else if(counter>n)
 				break;
 		}
 		hammingDistance++;

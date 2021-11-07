@@ -14,9 +14,7 @@ CC			= g++
 CFLAGS = -g -I$(INCLUDE_COMMON)
 DEBUGFLAGS = -g -Wextra -Wall -I$(INCLUDE_COMMON)
 
-all: compile_lsh	\
-	compile_cube	\
-	compile_cluster
+all: compile_lsh compile_cube compile_cluster
 
 #LSH
 compile_lsh: clean
