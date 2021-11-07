@@ -106,13 +106,13 @@ vector<cluster::centroid> cluster::get_clusters()
     return centroids;
 }
 
-vector<pair<vector<float>,float>> cluster::get_silhouettes_average()
-{
-    for (auto it = centroids.begin(); it != centroids.end(); ++it)
-    {
+// vector<pair<vector<float>,float>> cluster::get_silhouettes_average()
+// {
+//     for (auto it = centroids.begin(); it != centroids.end(); ++it)
+//     {
         
-    }
-}
+//     }
+// }
 
 bool cluster::convergence(vector<centroid> centroids_old)
 {

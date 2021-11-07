@@ -33,8 +33,12 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 	cout << "Tracing N nearest" << endl;
 	//Returns indexes of N Nearest elements
 	multimap<float, int> distances;
+	cout << "Tracing N nearest1" << endl;
     int counter = 0;
-	int* nearbyProbes = getNearbyProbes(F(p), probes, k);
+	cout << "Tracing N nearest2" << endl;
+	vector<int> nearbyProbes = getNearbyProbes(F(p), probes, k);
+	cout << "Tracing N nearest3" << endl;
+	cout << nearbyProbes[0] << endl;
 	for(int i=0; i<probes; i++)
 		for (auto it = hypercube->begin(nearbyProbes[i]); it != hypercube->end(nearbyProbes[i]); ++it )
 		{
@@ -63,7 +67,8 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 	multimap<float, int> distances;
     int counter = 0;
 
-	int* nearbyProbes = getNearbyProbes(F(p), probes, k);
+	vector<int> nearbyProbes = getNearbyProbes(F(p), probes, k);
+	cout << nearbyProbes[0] << endl;
 	for(int i=0; i<probes; i++)
 		for (auto it = hypercube->begin(nearbyProbes[i]); it != hypercube->end(nearbyProbes[i]); ++it )	{
 			if(counter >= argM)

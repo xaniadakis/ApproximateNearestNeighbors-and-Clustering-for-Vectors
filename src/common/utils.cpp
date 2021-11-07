@@ -14,9 +14,11 @@
 #include "utils.hpp"
 using namespace std;
 
-int* getNearbyProbes(int key, int n, int size)
+vector<int> getNearbyProbes(int key, int n, int size)
 {
+	cout << "getting in\n" << endl;
 	string strkey = fixedDecimalToBinary(key, size);
+	cout << strkey << endl;
 	int len = strkey.length(); 
 	int counter = 0;
 	int replaced = 0;
@@ -30,9 +32,11 @@ int* getNearbyProbes(int key, int n, int size)
 			else if(probe[i] == '1')
 				probe[i]='0';
 			replaced++;
+			cout << "yo " << probe << endl;
 			if(replaced==hammingDistance && counter<=n){
 				if(find(_nearbyProbes.begin(), _nearbyProbes.end(), probe)==_nearbyProbes.end()){
 					_nearbyProbes.push_back(probe);
+					cout << probe << endl;
 					counter++;
 				}
 				break;
@@ -44,9 +48,9 @@ int* getNearbyProbes(int key, int n, int size)
 	}
 
 	int _size = _nearbyProbes.size();
-	int nearbyProbes[_size];
+	vector<int> nearbyProbes;
 	for(int i=0; i<_size; i++)
-		nearbyProbes[i] = stoi(_nearbyProbes[i]);
+		nearbyProbes.push_back(stoi(_nearbyProbes[i]));
 	return nearbyProbes;
 }
 

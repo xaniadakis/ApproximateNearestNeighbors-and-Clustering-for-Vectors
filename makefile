@@ -1,42 +1,52 @@
-#Makefile
-#make (lsh/cube/cluster) (run RUN_TARGET=lsh/cube/cluster) (clean)
-all : lsh cube cluster
+#makefile
 
-lsh: PROGRAM=lsh
-cube: PROGRAM = cube
-cluster: PROGRAM = cluster
-
-MODULES = ./src/$(PROGRAM)
 COMMON = ./src/common
-BIN_TARGET = ./bin/$(PROGRAM)
-INCLUDE = ./include/$(PROGRAM)
 INCLUDE_COMMON = ./include/common
-
-clean : BIN_TARGET = ./bin/lsh ./bin/cube ./bin/cluster
 
 INPUT_FILE ?= ./examples/Datasets/input_small_id
 QUERY_FILE ?= ./examples/Datasets/query_small_id
 OUTPUT_FILE ?= results
 
-CFLAGS = -g -I$(INCLUDE) -I$(INCLUDE_COMMON)
-DEBUGFLAGS = -g -Wextra -Wall -I$(INCLUDE) -I$(INCLUDE_COMMON)
+DEF_ARGS ?= -i $(INPUT_FILE) -o $(OUTPUT_FILE) -q $(QUERY_FILE) 
+CLUSTER_ARGS ?= -i $(INPUT_FILE) -o $(OUTPUT_FILE)
 
-lsh: clean
-	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
+CC			= g++
+CFLAGS = -g -I$(INCLUDE_COMMON)
+DEBUGFLAGS = -g -Wextra -Wall -I$(INCLUDE_COMMON)
 
-cube: clean
-	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS)
+all: compile_lsh	\
+	compile_cube	\
+	compile_cluster
 
-cluster: clean
-	g++ $(MODULES)/main_$(PROGRAM).cpp $(MODULES)/$(PROGRAM).cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o $(BIN_TARGET) $(CFLAGS) -I./include/lsh -I./include/cube
+#LSH
+compile_lsh: clean
+	$(CC) ./src/lsh/main_lsh.cpp ./src/lsh/lsh.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/lsh -I./include/lsh $(CFLAGS)
+
+run_lsh:
+	./bin/lsh $(DEF_ARGS)
+
+lsh: compile_lsh run_lsh
+
+#CUBE
+compile_cube: clean
+	$(CC) ./src/cube/main_cube.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cube -I./include/cube $(CFLAGS)
+
+run_cube: 
+	./bin/cube $(DEF_ARGS)
+
+cube: compile_cube run_cube
+
+#CLUSTER
+compile_cluster: clean
+	$(CC) ./src/cluster/main_cluster.cpp ./src/cluster/cluster.cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cluster $(CFLAGS) -I./include/lsh -I./include/cube
+
+run_cluster: 
+	./bin/cluster $(CLUSTER_ARGS)
+
+cluster: compile_cluster run_cluster
+
 
 clean:
-	rm -f $(BIN_TARGET)
-
-
---check_run:
-ifndef RUN_TARGET
-	$(error RUN_TARGET is undefined)
-endif
-run: --check_run
-	./bin/$(RUN_TARGET) $(ARGS)
+	rm -f ./bin/cluster
+	rm -f ./bin/cube
+	rm -f ./bin/lsh
