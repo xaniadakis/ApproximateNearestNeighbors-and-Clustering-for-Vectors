@@ -25,7 +25,8 @@ void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,pa
 		outfile<<"[";
 		for(auto it = centroids[i].coordinates.begin(); it != centroids[i].coordinates.end(); ++it)
 		{
-			outfile<<*it<<",";
+			outfile<<*it;
+			if(next(it,1)!=centroids[i].coordinates.end()) outfile<<",";
 		}
 		outfile<<"]}"<<endl;
 	}
@@ -47,7 +48,8 @@ void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,pa
 			outfile<<"[";
 			for(auto it = centroids[i].coordinates.begin(); it != centroids[i].coordinates.end(); ++it)
 			{
-				outfile<<*it<<",";
+				outfile<<*it;
+				if(next(it,1)!=centroids[i].coordinates.end()) outfile<<",";
 			}
 			outfile<<"]";
 
@@ -190,13 +192,5 @@ int main(int argc, char *argv[]){
 	}
 
 	outfile.close();
-
-	string option;
-	cout << "Enter /exit to exit program.\n";
-	cout << "Enter /rerun to rerun program with new options.\n";
-	while (option.compare("/exit")!=0)
-	{   
-		cin >> option;
-	}
-	return 0;
+	exit(0);
 }
