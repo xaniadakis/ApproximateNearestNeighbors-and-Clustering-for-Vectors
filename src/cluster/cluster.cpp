@@ -112,12 +112,52 @@ vector<cluster::centroid> cluster::get_clusters()
 pair<vector<float>,float> cluster::get_silhouettes_average()
 {
     vector<float> averages;
-    float total_average;
+    float total_average=0;
+    int total_number=0;
 
-    for (auto it = centroids.begin(); it != centroids.end(); ++it)
+    for (int i = 0; i < centroids.size(); i++)
     {
-        
+        float averages_si=0;
+        for (int v = 0; v < centroids[i].vectors.size(); v++)
+        {
+            float a_vector;
+            float b_vector;
+            for (int a = 0; a < centroids[i].vectors.size(); a++)
+            {
+                if(a==v) continue;
+                a_vector+=eucledian_distance(centroids[i].vectors[v].p,centroids[i].vectors[a].p);
+            }
+            a_vector/=centroids[i].vectors.size()-1;
+
+            float minimum=numeric_limits<float>::max();
+            int minimum_index;
+            for (int c=0;c<centroids.size();c++)
+            {
+                if (c==i) continue;
+                
+                float distance=eucledian_distance(centroids[i].vectors[v].p,centroids[c].coordinates);
+                if(distance<minimum)
+                {
+                    minimum=distance;
+                    minimum_index=c;
+                }
+            }
+            for (int b = 0; b < centroids[minimum_index].vectors.size(); b++)
+            {
+                b_vector+=eucledian_distance(centroids[i].vectors[v].p,centroids[minimum_index].vectors[b].p);
+            }
+            b_vector/=centroids[minimum_index].vectors.size();
+
+            float si=(b_vector-a_vector)/max(a_vector,b_vector);
+            averages_si+=si;
+            total_average+=si;
+            total_number++;
+        }
+        averages_si/=centroids[i].vectors.size();
+        averages.push_back(averages_si);
     }
+
+    total_average/=total_number;
     return {averages,total_average};
 }
 

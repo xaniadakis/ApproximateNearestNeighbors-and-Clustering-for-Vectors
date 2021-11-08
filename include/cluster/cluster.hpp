@@ -23,7 +23,7 @@ public:
     struct centroid
     {
         vector<float> coordinates;
-        list<centroid_item> vectors;
+        vector<centroid_item> vectors;
     };
 
     vector<centroid> get_clusters();
