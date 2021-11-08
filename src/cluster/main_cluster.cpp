@@ -6,27 +6,56 @@
 #include <sstream>
 #include <algorithm>
 #include <getopt.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "cluster.hpp"
 
 using namespace std;
 
-void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,vector<pair<vector<float>,float>> silhouettes,double time_cluster,string algorithm,bool complete)
+void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,pair<vector<float>,float> silhouettes,vector<string> ids,double time_cluster,string algorithm,bool complete)
 {
 	outfile << "Algorithm: " << algorithm << endl;
 	for (int i = 0; i < centroids.size(); i++)
 	{
+		outfile<<"CLUSTER-"<<i+1;
+		outfile<<" {size: "<<centroids[i].vectors.size();
+		outfile<<", centroid: ";
 		
+		outfile<<"[";
+		for(auto it = centroids[i].coordinates.begin(); it != centroids[i].coordinates.end(); ++it)
+		{
+			outfile<<*it<<",";
+		}
+		outfile<<"]}"<<endl;
 	}
 
 	outfile << "clustering_time: " << time_cluster << endl;
-	outfile << "Silhouette:";
+	outfile << "Silhouette: [";
+	for(auto it = silhouettes.first.begin(); it < silhouettes.first.end(); ++it)
+	{
+		outfile<<*it<<",";
+	}
+	outfile<<silhouettes.second<<"]"<<endl;
 
 	if(complete)
 	{
 		for (int i = 0; i < centroids.size(); i++)
 		{
-			
+			outfile<<"CLUSTER-"<<i+1;
+			outfile<<" { ";
+			outfile<<"[";
+			for(auto it = centroids[i].coordinates.begin(); it != centroids[i].coordinates.end(); ++it)
+			{
+				outfile<<*it<<",";
+			}
+			outfile<<"]";
+
+			for(auto it = centroids[i].vectors.begin(); it != centroids[i].vectors.end(); ++it)
+			{
+				outfile<<", "<<ids[it->index];
+			}
+			outfile<<"}"<<endl;
 		}
 	}
 }
@@ -134,14 +163,21 @@ int main(int argc, char *argv[]){
 	vector<string> ids;
 	read_file(input_file,vectors,ids);
 
+	struct stat info;
+	if (stat("./output",&info) == -1) {
+		mkdir("./output", 0700);
+	}
+	ofstream outfile ("./output/" + output_file, ios::out | ios::trunc);
 	if(method=="Classic")
 	{
 		cout << "Using k-means clustering with Lloyd's assignment" << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
-		cluster_lloyds(K_cluster,vectors,ids);
+		cluster_lloyds cluster(K_cluster,vectors,ids);
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
+
+		write_file_cluster(outfile,cluster.get_clusters(),cluster.get_silhouettes_average(),ids,time_cluster,"Lloyds",complete);
 	}
 	else if(method=="LSH" || method=="Hypercube")
 	{
@@ -152,6 +188,8 @@ int main(int argc, char *argv[]){
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
 	}
+
+	outfile.close();
 
 	string option;
 	cout << "Enter /exit to exit program.\n";

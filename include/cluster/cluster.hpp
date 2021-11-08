@@ -25,6 +25,9 @@ public:
         vector<float> coordinates;
         list<centroid_item> vectors;
     };
+
+    vector<centroid> get_clusters();
+    pair<vector<float>,float> get_silhouettes_average();
 protected:
     vector<vector<float>> vectors;
     vector<string> ids;
@@ -38,10 +41,7 @@ protected:
     ~cluster();
 
     void new_centroids();
-    void output();
     bool convergence(vector<centroid> centroids_old);
-    vector<centroid> get_clusters();
-    vector<pair<vector<float>,float>> get_silhouettes_average();
 };
 
 class cluster_lloyds : public cluster
