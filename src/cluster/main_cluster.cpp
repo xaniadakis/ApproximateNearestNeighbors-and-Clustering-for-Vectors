@@ -11,9 +11,24 @@
 
 using namespace std;
 
-void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,vector<pair<vector<float>,float>> silhouettes,double time_cluster,string algorithm)
+void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,vector<pair<vector<float>,float>> silhouettes,double time_cluster,string algorithm,bool complete)
 {
+	outfile << "Algorithm: " << algorithm << endl;
+	for (int i = 0; i < centroids.size(); i++)
+	{
+		
+	}
 
+	outfile << "clustering_time: " << time_cluster << endl;
+	outfile << "Silhouette:";
+
+	if(complete)
+	{
+		for (int i = 0; i < centroids.size(); i++)
+		{
+			
+		}
+	}
 }
 
 int main(int argc, char *argv[]){
@@ -132,7 +147,7 @@ int main(int argc, char *argv[]){
 	{
 		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
-		cluster_ANN(K_cluster,vectors,ids,method,K,k,M,L);
+		cluster_ANN(vectors,ids,K_cluster,k_cube,probes_cube,M_cube,L_lsh,method);
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();

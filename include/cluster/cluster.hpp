@@ -53,7 +53,7 @@ public:
 class cluster_ANN
 {
 public:
-    cluster_ANN::cluster_ANN(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M,int L,string method);
+    cluster_ANN(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M,int L,string method);
     ~cluster_ANN();
 };
 

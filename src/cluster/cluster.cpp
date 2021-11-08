@@ -4,6 +4,7 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <iterator>
 #include "cluster.hpp"
 #include "utils.hpp"
 
@@ -21,11 +22,12 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     iota(non_centroids.begin(), non_centroids.end(), 0);
 
     vector<float> D(n);
-    fill(D.begin(), D.end(), HUGE_VAL);
-    
+    fill(D.begin(), D.end(), numeric_limits<float>::max());
+
     centroid c1;
-    int index=uniform_distribution_rng(0,n);
+    int index=uniform_distribution_rng(0,n-1);
     c1.coordinates=vectors[index];
+    D[index]=0;
     non_centroids.erase(remove(non_centroids.begin(), non_centroids.end(), index), non_centroids.end());
     centroids.push_back(c1);
     for(int t=1;t<K;t++)
@@ -58,13 +60,15 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
 
         for (auto it = P.begin(); it != P.end(); ++it)
         {
-            auto next=it++;
-            if(x>it->first && x<=next->first)
+            auto it_next=next(it,1);
+            if(x>it->first && x<=it_next->first)
             {
                 centroid c;
-                c.coordinates=vectors[next->second];
-                non_centroids.erase(remove(non_centroids.begin(), non_centroids.end(), next->second), non_centroids.end());
+                c.coordinates=vectors[it_next->second];
+                D[it_next->second]=0;
+                non_centroids.erase(remove(non_centroids.begin(), non_centroids.end(), it_next->second), non_centroids.end());
                 centroids.push_back(c);
+                break;
             }
         }
     }
@@ -105,13 +109,13 @@ vector<cluster::centroid> cluster::get_clusters()
     return centroids;
 }
 
-// vector<pair<vector<float>,float>> cluster::get_silhouettes_average()
-// {
-//     for (auto it = centroids.begin(); it != centroids.end(); ++it)
-//     {
+vector<pair<vector<float>,float>> cluster::get_silhouettes_average()
+{
+    for (auto it = centroids.begin(); it != centroids.end(); ++it)
+    {
         
-//     }
-// }
+    }
+}
 
 bool cluster::convergence(vector<centroid> centroids_old)
 {
@@ -142,14 +146,15 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
     for(int i=0;i<vectors.size();i++)
     {
         centroid_item ci={p:vectors[i],index:i};
-        int minimum=numeric_limits<int>::max(),minimum_index;
-        for (auto it = centroids.begin(); it != centroids.end(); ++it)
+        float minimum=numeric_limits<float>::max();
+        int minimum_index;
+        for (int v=0;v<centroids.size();v++)
         {
-            float distance=eucledian_distance(vectors[i],it->coordinates);
+            float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
             if(distance<minimum)
             {
                 minimum=distance;
-                minimum_index= it - centroids.begin();
+                minimum_index= v;
             }
         }
         centroids[minimum_index].vectors.push_back(ci);
@@ -163,14 +168,15 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
         for(int i=0;i<vectors.size();i++)
         {
             centroid_item ci={p:vectors[i],index:i};
-            int minimum=numeric_limits<int>::max(),minimum_index;
-            for (auto it = centroids.begin(); it != centroids.end(); ++it)
+            float minimum=numeric_limits<float>::max();
+            int minimum_index;
+            for (int v=0;v<centroids.size();v++)
             {
-                float distance=eucledian_distance(vectors[i],it->coordinates);
+                float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
                 if(distance<minimum)
                 {
                     minimum=distance;
-                    minimum_index= it - centroids.begin();
+                    minimum_index= v;
                 }
             }
             centroids[minimum_index].vectors.push_back(ci);
@@ -179,19 +185,4 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
         if(convergence(centroids_old)==true)
             break;
     }
-}    //First assignment
-    for(int i=0;i<vectors.size();i++)
-    {
-        centroid_item ci={p:vectors[i],index:i};
-        int minimum=numeric_limits<int>::max(),minimum_index;
-        for (auto it = centroids.begin(); it != centroids.end(); ++it)
-        {
-            float distance=eucledian_distance(vectors[i],it->coordinates);
-            if(distance<minimum)
-            {
-                minimum=distance;
-                minimum_index= it - centroids.begin();
-            }
-        }
-        centroids[minimum_index].vectors.push_back(ci);
-    }
+}
