@@ -1,4 +1,7 @@
 #pragma once
+#ifndef cluster_h
+#define cluster_h
+
 using namespace std;
 #include <vector>
 #include <list>
@@ -70,3 +73,5 @@ public:
     cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
     ~cluster_cube();
 };
+
+#endif

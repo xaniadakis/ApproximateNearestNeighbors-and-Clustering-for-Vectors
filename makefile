@@ -13,7 +13,7 @@ LSH_ARGS 		?= -i $(INPUT_FILE) -o lsh_$(OUTPUT_FILE) -q $(QUERY_FILE)
 CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE) -complete
 
 CC				= g++
-CFLAGS 			?= -g -I$(INCLUDE_COMMON)
+CFLAGS 			?= -I$(INCLUDE_COMMON)
 DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON)
 
 all: compile_lsh compile_cube compile_cluster
