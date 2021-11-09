@@ -17,7 +17,7 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     cluster::n=ids.size();
 
     //K-Means++ initialization
-    vector<int> non_centroids(n);
+    vector<int> non_centroids;
     iota(non_centroids.begin(), non_centroids.end(), 0);
 
     vector<float> D(n);
@@ -132,8 +132,8 @@ bool cluster::convergence(vector<centroid> centroids_old)
 
 cluster::~cluster()
 {
-}
 
+}
 
 //Cluster Lloyd's
 cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids) : cluster(K,vectors,ids)
@@ -179,19 +179,4 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
         if(convergence(centroids_old)==true)
             break;
     }
-}    //First assignment
-    for(int i=0;i<vectors.size();i++)
-    {
-        centroid_item ci={p:vectors[i],index:i};
-        int minimum=numeric_limits<int>::max(),minimum_index;
-        for (auto it = centroids.begin(); it != centroids.end(); ++it)
-        {
-            float distance=eucledian_distance(vectors[i],it->coordinates);
-            if(distance<minimum)
-            {
-                minimum=distance;
-                minimum_index= it - centroids.begin();
-            }
-        }
-        centroids[minimum_index].vectors.push_back(ci);
-    }
+}

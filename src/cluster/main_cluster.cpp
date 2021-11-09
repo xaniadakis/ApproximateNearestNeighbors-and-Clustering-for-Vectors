@@ -130,7 +130,7 @@ int main(int argc, char *argv[]){
 	}
 	else if(method=="LSH" || method=="Hypercube")
 	{
-		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << endl;
+		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << " method" << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
 		cluster_ANN(K_cluster,vectors,ids,method,K,k,M,L);
 		auto stop_cluster = chrono::high_resolution_clock::now();
