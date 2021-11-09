@@ -1,7 +1,8 @@
 #pragma once
+#ifndef hash_table_h
+#define hash_table_h
 //HashTable of fixed size with overflow buckets
 //Created using vectors
-#include <iostream>
 #include <vector>
 #include <list>
 using namespace std;
@@ -34,3 +35,5 @@ public:
         return Buckets[key%tablesize].end();
     };
 };
+
+#endif

@@ -1,4 +1,7 @@
-#include <iostream>
+#pragma once
+#ifndef cube_h
+#define cube_h
+
 #include <ctime>
 #include <cstring>
 #include <unistd.h>
@@ -17,9 +20,7 @@ using namespace std;
 
 class Cube
 {
-
 private:
-
 	struct hashtable_item_cube
 	{
 		vector<float> p;
@@ -52,3 +53,6 @@ public:
 	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);
 };
 
+template class hash_table<Cube::hashtable_item_cube>;
+
+#endif

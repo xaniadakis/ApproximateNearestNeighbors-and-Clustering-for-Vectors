@@ -1,4 +1,7 @@
 #pragma once
+#ifndef cluster_h
+#define cluster_h
+
 using namespace std;
 #include <vector>
 #include <list>
@@ -23,8 +26,11 @@ public:
     struct centroid
     {
         vector<float> coordinates;
-        list<centroid_item> vectors;
+        vector<centroid_item> vectors;
     };
+
+    vector<centroid> get_clusters();
+    pair<vector<float>,float> get_silhouettes_average();
 protected:
     vector<vector<float>> vectors;
     vector<string> ids;
@@ -38,10 +44,7 @@ protected:
     ~cluster();
 
     void new_centroids();
-    void output();
     bool convergence(vector<centroid> centroids_old);
-    vector<centroid> get_clusters();
-    vector<pair<vector<float>,float>> get_silhouettes_average();
 };
 
 class cluster_lloyds : public cluster
@@ -53,7 +56,7 @@ public:
 class cluster_ANN
 {
 public:
-    cluster_ANN::cluster_ANN(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M,int L,string method);
+    cluster_ANN(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M,int L,string method);
     ~cluster_ANN();
 };
 
@@ -70,3 +73,5 @@ public:
     cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
     ~cluster_cube();
 };
+
+#endif

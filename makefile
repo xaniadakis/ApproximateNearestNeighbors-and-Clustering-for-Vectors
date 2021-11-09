@@ -10,10 +10,10 @@ CONGIF_FILE		?= ./examples/cluster_example.conf
 
 CUBE_ARGS 		?= -i $(INPUT_FILE) -o cube_$(OUTPUT_FILE) -q $(QUERY_FILE) 
 LSH_ARGS 		?= -i $(INPUT_FILE) -o lsh_$(OUTPUT_FILE) -q $(QUERY_FILE) 
-CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE)
+CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE) -complete
 
 CC				= g++
-CFLAGS 			?= -g -I$(INCLUDE_COMMON)
+CFLAGS 			?= -I$(INCLUDE_COMMON)
 DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON)
 
 all: compile_lsh compile_cube compile_cluster
@@ -50,7 +50,7 @@ clean_cluster:
 	rm -f ./output/cluster_$(OUTPUT_FILE)
 
 compile_cluster: clean_cluster
-	$(CC) ./src/cluster/main_cluster.cpp ./src/cluster/cluster.cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cluster $(CFLAGS) -I./include/cluster -I./include/lsh -I./include/cube
+	$(CC) ./src/cluster/main_cluster.cpp ./src/cluster/cluster.cpp ./src/cluster/cluster_ANN.cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cluster $(CFLAGS) -I./include/cluster -I./include/lsh -I./include/cube
 
 run_cluster: 
 	./bin/cluster $(CLUSTER_ARGS)

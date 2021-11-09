@@ -66,67 +66,79 @@ int main(int argc, char *argv[]){
 		R = 10000; //-R
 	}
 
-
-	while(input_file.empty())
+	while (true)
 	{
-		cout<<"Enter input file location: ";
-		cin >> input_file;
+		while(input_file.empty())
+		{
+			cout<<"Enter input file location: ";
+			cin >> input_file;
+		}
+		while (query_file.empty())
+		{
+			cout<<"Enter query file location: ";
+			cin >> query_file;
+		}
+		while (output_file.empty())
+		{
+			cout<<"Enter output file location: ";
+			cin >> output_file;
+		}
+
+		vector<vector<float>> vectors;
+		vector<string> ids;
+		read_file(input_file,vectors,ids);
+		LSH lsh(vectors,ids,k,L,L2);
+
+		struct stat info;
+		if (stat("./output",&info) == -1) {
+			mkdir("./output", 0700);
+		}
+		ofstream outfile ("./output/" + output_file, ios::out | ios::trunc);
+
+		vector<vector<float>> vectors_query;
+		vector<string> ids_query;
+		read_file(query_file,vectors_query,ids_query);
+		unsigned int n_query=ids_query.size();
+		for (unsigned int i=0 ; i<n_query ; i++)
+		{
+			auto start_lsh = chrono::high_resolution_clock::now();
+			vector<pair<float,unsigned int>> N_Nearest = lsh.find_N_nearest(vectors_query[i],N);
+			auto stop_lsh = chrono::high_resolution_clock::now();
+			auto elapsed_lsh = stop_lsh - start_lsh ;
+			double time_lsh = chrono::duration<double>(elapsed_lsh).count();
+
+
+			vector<pair<float,unsigned int>> R_Nearest = lsh.find_R_nearest(vectors_query[i],R);
+
+			auto start_true = chrono::high_resolution_clock::now();
+			vector<pair<float,unsigned int>> True_N_Nearest = exhaustive_search(vectors_query[i],vectors,N,&eucledian_distance);
+			auto stop_true = chrono::high_resolution_clock::now();
+			auto elapsed_true = stop_true - start_true ;
+			double time_true = chrono::duration<double>(elapsed_true).count();
+
+			write_file(outfile,ids_query[i],vectors,ids,N_Nearest,R_Nearest,True_N_Nearest,time_lsh,time_true,"LSH");
+		}
+
+		outfile.close();
+		
+
+		string option;
+		cout << "Enter /exit to exit program.\n";
+		cout << "Enter /rerun to rerun program with new options.\n";
+		while (true)
+		{   
+			cin >> option;
+			if (option.compare("/rerun")==0)
+			{
+				input_file.clear();
+				query_file.clear();
+				output_file.clear();
+				break;
+			}
+			if(option.compare("/exit")==0)
+			{
+				exit(0);
+			}
+		}
 	}
-	while (query_file.empty())
-	{
-		cout<<"Enter query file location: ";
-		cin >> query_file;
-	}
-	while (output_file.empty())
-	{
-		cout<<"Enter output file location: ";
-		cin >> output_file;
-	}
-
-	vector<vector<float>> vectors;
-	vector<string> ids;
-	read_file(input_file,vectors,ids);
-	LSH lsh(vectors,ids,k,L,L2);
-
-	struct stat info;
-	if (stat("./output",&info) == -1) {
-		mkdir("./output", 0700);
-	}
-	ofstream outfile ("./output/" + output_file, ios::out | ios::trunc);
-
-	vector<vector<float>> vectors_query;
-	vector<string> ids_query;
-	read_file(query_file,vectors_query,ids_query);
-	unsigned int n_query=ids_query.size();
-	for (unsigned int i=0 ; i<n_query ; i++)
-	{
-		auto start_lsh = chrono::high_resolution_clock::now();
-		vector<pair<float,unsigned int>> N_Nearest = lsh.find_N_nearest(vectors_query[i],N);
-		auto stop_lsh = chrono::high_resolution_clock::now();
-		auto elapsed_lsh = stop_lsh - start_lsh ;
-		double time_lsh = chrono::duration<double>(elapsed_lsh).count();
-
-
-		vector<pair<float,unsigned int>> R_Nearest = lsh.find_R_nearest(vectors_query[i],R);
-
-		auto start_true = chrono::high_resolution_clock::now();
-		vector<pair<float,unsigned int>> True_N_Nearest = exhaustive_search(vectors_query[i],vectors,N,&eucledian_distance);
-		auto stop_true = chrono::high_resolution_clock::now();
-		auto elapsed_true = stop_true - start_true ;
-		double time_true = chrono::duration<double>(elapsed_true).count();
-
-		write_file(outfile,ids_query[i],vectors,ids,N_Nearest,R_Nearest,True_N_Nearest,time_lsh,time_true,"LSH");
-	}
-
-	outfile.close();
-	
-
-	string option;
-	cout << "Enter /exit to exit program.\n";
-	cout << "Enter /rerun to rerun program with new options.\n";
-	while (option.compare("/exit")!=0)
-	{   
-		cin >> option;
-	}
-	return 0;
 }

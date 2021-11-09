@@ -1,6 +1,7 @@
 #pragma once
+#ifndef lsh_h
+#define lsh_h
 
-#include <iostream>
 #include <ctime>
 #include <cstring>
 #include <unistd.h>
@@ -20,7 +21,6 @@ using namespace std;
 
 class LSH
 {
-
 private:
 	struct hashtable_item_lsh
 	{
@@ -56,3 +56,7 @@ public:
 	vector<pair<float,unsigned int>> find_N_nearest(vector<float> p,unsigned int N);
 	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);
 };
+
+template class hash_table<LSH::hashtable_item_lsh>;
+
+#endif
