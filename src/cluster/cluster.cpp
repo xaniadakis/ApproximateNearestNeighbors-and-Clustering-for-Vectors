@@ -18,7 +18,7 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
     cluster::n=ids.size();
 
     //K-Means++ initialization
-    vector<int> non_centroids;
+    vector<int> non_centroids(n);
     iota(non_centroids.begin(), non_centroids.end(), 0);
 
     vector<float> D(n);
@@ -163,16 +163,22 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
 
 bool cluster::convergence(vector<centroid> centroids_old)
 {
-    for (int i = 0; i < centroids.size(); i++)
+    for (int i = 0; i < K; i++)
     {   
         if(centroids[i].vectors.size() != centroids_old[i].vectors.size())
             return false;
-        auto it=centroids[i].vectors.begin();
-        auto it_old=centroids_old[i].vectors.begin();
-        for(;it!=centroids[i].vectors.end();it++,it_old++)
+        for(auto it=centroids[i].vectors.begin();it!=centroids[i].vectors.end();++it)
         {
-            if(it->index!=it_old->index)
-                return false;
+            bool found=false;
+            for (auto it2=centroids_old[i].vectors.begin();it2!=centroids_old[i].vectors.end();++it2)
+            {
+                if((*it2).index == (*it).index)
+                {
+                    found=true;
+                    break;
+                }
+            }
+            if(found==false) return false;
         }
     }
     return true;
