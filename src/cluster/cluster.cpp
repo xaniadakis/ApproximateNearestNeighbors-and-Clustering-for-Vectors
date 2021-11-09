@@ -72,6 +72,7 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
             }
         }
     }
+    // cout << "size = " << centroids.size() << endl;
 }
 
 void cluster::new_centroids()
