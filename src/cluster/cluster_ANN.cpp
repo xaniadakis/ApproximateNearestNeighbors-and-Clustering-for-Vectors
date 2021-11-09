@@ -1,8 +1,9 @@
 #include "cluster.hpp"
 #include "utils.hpp"
 #include <algorithm>
+
 //Cluster LSH
-cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids), LSH(vectors,ids,k,L,L2,1/8)
+cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids), LSH(vectors,ids,k,L,L2,0.125)
 {
     //First assignment
     new_assignment();
@@ -127,13 +128,13 @@ void cluster_cube::new_assignment()
     float current_distance;
     for(int i=0;i<K;i++)
         for(int j=0;j<K;j++){
-            cout << "YO" << i << endl ;
-            for (float a: cluster::centroids[i].coordinates)
-                std::cout << a << ' ';
-            cout << "YO" << j << endl ;
-            for (float b: cluster::centroids[j].coordinates)
-                std::cout << b << ' ';
-            cout << endl;
+            // cout << "YO" << i << endl ;
+            // for (float a: cluster::centroids[i].coordinates)
+            //     std::cout << a << ' ';
+            // cout << "YO" << j << endl ;
+            // for (float b: cluster::centroids[j].coordinates)
+            //     std::cout << b << ' ';
+            // cout << endl;
             current_distance = eucledian_distance(cluster::centroids[i].coordinates, cluster::centroids[j].coordinates);
             if(current_distance<min_distance)
                 min_distance = current_distance;

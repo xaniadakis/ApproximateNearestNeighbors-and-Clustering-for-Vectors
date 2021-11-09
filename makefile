@@ -101,7 +101,6 @@ cluster: compile_cluster run_cluster
 
 
 mkdir:
-# mkdir ./bin
 	if [ ! -d "./bin" ]; then mkdir ./bin; fi
 
 
