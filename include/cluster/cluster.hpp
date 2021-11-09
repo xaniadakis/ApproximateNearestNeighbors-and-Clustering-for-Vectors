@@ -28,13 +28,13 @@ public:
         vector<float> coordinates;
         vector<centroid_item> vectors;
     };
-
+    
     vector<centroid> get_clusters();
     pair<vector<float>,float> get_silhouettes_average();
 protected:
+    vector<centroid> centroids;
     vector<vector<float>> vectors;
     vector<string> ids;
-    vector<centroid> centroids;
     int K;
 
     int vectorSize;
@@ -64,7 +64,7 @@ class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (ra
 {
 public:
     cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L);
-    void new_assignment(vector<vector<float>> vectors,vector<string> ids);
+    void new_assignment();
     ~cluster_lsh();
 };
 
@@ -72,7 +72,7 @@ class cluster_cube : public cluster,public Cube //Using Hypercube reverse assign
 {
 public:
     cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
-    void new_assignment(vector<vector<float>> vectors,vector<string> ids);
+    void new_assignment();
     ~cluster_cube();
 };
 

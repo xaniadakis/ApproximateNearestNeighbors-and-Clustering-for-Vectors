@@ -5,24 +5,24 @@
 cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids), LSH(vectors,ids,k,L,L2,1/8)
 {
     //First assignment
-    new_assignment(vectors, ids);
+    new_assignment();
 
     //Assignment/Update
     while(true)
     {
         vector<centroid> centroids_old=centroids;
         new_centroids();
-        new_assignment(vectors, ids);
+        new_assignment();
 
         if(convergence(centroids_old)==true)
             break;
     }
 }
 
-void cluster_lsh::new_assignment(vector<vector<float>> vectors,vector<string> ids)
+void cluster_lsh::new_assignment()
 {
     vector<tuple<int,int,float>> flagged_indexes;
-    
+
     float min_distance;
     float current_distance;
     for(int i=0;i<K;i++)
@@ -34,7 +34,7 @@ void cluster_lsh::new_assignment(vector<vector<float>> vectors,vector<string> id
 
     int search_radius = min_distance/2;
     while(true){
-        if(flagged_indexes.size()>=(ids.size()*(8/10)))
+        if(flagged_indexes.size()>=(cluster::ids.size()*(8/10)))
             break;
         vector<tuple<int,int,float>> new_indexes;
         int found = 0;
@@ -52,7 +52,7 @@ void cluster_lsh::new_assignment(vector<vector<float>> vectors,vector<string> id
                 }
                 if(found==1){
                 // if (find(flagged_indexes.begin(), flagged_indexes.end(),Index)==flagged_indexes.end()){             
-                    centroid_item ci={p:vectors[Index],index:Index};
+                    centroid_item ci={p:cluster::vectors[Index],index:Index};
                     centroids[i].vectors.push_back(ci);
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
                 }
@@ -104,21 +104,22 @@ cluster_lsh::~cluster_lsh()
 //Cluster hypercube
 cluster_cube::cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M) : cluster(K,vectors,ids), Cube(vectors,ids,k,M,probes,L2)
 {
-    new_assignment(vectors,ids);
+    //First assignment
+    new_assignment();
     
     //Assignment/Update
     while(true)
     {
         vector<centroid> centroids_old=centroids;
         new_centroids();
-        new_assignment(vectors,ids);
+        new_assignment();
 
         if(convergence(centroids_old)==true)
             break;
     }
 }
 
-void cluster_cube::new_assignment(vector<vector<float>> vectors,vector<string> ids)
+void cluster_cube::new_assignment()
 {
     vector<tuple<int,int,float>> flagged_indexes;
     
@@ -126,6 +127,13 @@ void cluster_cube::new_assignment(vector<vector<float>> vectors,vector<string> i
     float current_distance;
     for(int i=0;i<K;i++)
         for(int j=0;j<K;j++){
+            cout << "YO" << i << endl ;
+            for (float a: cluster::centroids[i].coordinates)
+                std::cout << a << ' ';
+            cout << "YO" << j << endl ;
+            for (float b: cluster::centroids[j].coordinates)
+                std::cout << b << ' ';
+            cout << endl;
             current_distance = eucledian_distance(cluster::centroids[i].coordinates, cluster::centroids[j].coordinates);
             if(current_distance<min_distance)
                 min_distance = current_distance;
@@ -133,7 +141,7 @@ void cluster_cube::new_assignment(vector<vector<float>> vectors,vector<string> i
 
     int search_radius = min_distance/2;
     while(true){
-        if(flagged_indexes.size()>=(ids.size()*(8/10)))
+        if(flagged_indexes.size()>=(cluster::ids.size()*(8/10)))
             break;
         vector<tuple<int,int,float>> new_indexes;
         int found = 0;
@@ -151,7 +159,7 @@ void cluster_cube::new_assignment(vector<vector<float>> vectors,vector<string> i
                 }
                 if(found==1){
                 // if (find(flagged_indexes.begin(), flagged_indexes.end(),Index)==flagged_indexes.end()){             
-                    centroid_item ci={p:vectors[Index],index:Index};
+                    centroid_item ci={p:cluster::vectors[Index],index:Index};
                     centroids[i].vectors.push_back(ci);
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
                 }
