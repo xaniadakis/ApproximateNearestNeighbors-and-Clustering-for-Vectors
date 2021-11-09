@@ -64,6 +64,7 @@ class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (ra
 {
 public:
     cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L);
+    void new_assignment(vector<vector<float>> vectors,vector<string> ids);
     ~cluster_lsh();
 };
 
@@ -71,6 +72,7 @@ class cluster_cube : public cluster,public Cube //Using Hypercube reverse assign
 {
 public:
     cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
+    void new_assignment(vector<vector<float>> vectors,vector<string> ids);
     ~cluster_cube();
 };
 

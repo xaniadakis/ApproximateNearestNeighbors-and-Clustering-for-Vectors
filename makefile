@@ -23,7 +23,7 @@ clean_lsh:
 	rm -f ./bin/cube
 	rm -f ./output/lsh_$(OUTPUT_FILE)
 
-compile_lsh: clean_lsh
+compile_lsh: clean_lsh mkdir
 	$(CC) ./src/lsh/main_lsh.cpp ./src/lsh/lsh.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/lsh -I./include/lsh $(CFLAGS)
 
 run_lsh:
@@ -36,7 +36,7 @@ clean_cube:
 	rm -f ./bin/cube
 	rm -f ./output/cube_$(OUTPUT_FILE)
 
-compile_cube: clean_cube
+compile_cube: clean_cube mkdir
 	$(CC) ./src/cube/main_cube.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cube -I./include/cube $(CFLAGS)
 
 run_cube: 
@@ -49,10 +49,15 @@ clean_cluster:
 	rm -f ./bin/cluster
 	rm -f ./output/cluster_$(OUTPUT_FILE)
 
-compile_cluster: clean_cluster
+compile_cluster: clean_cluster mkdir
 	$(CC) ./src/cluster/main_cluster.cpp ./src/cluster/cluster.cpp ./src/cluster/cluster_ANN.cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cluster $(CFLAGS) -I./include/cluster -I./include/lsh -I./include/cube
 
 run_cluster: 
 	./bin/cluster $(CLUSTER_ARGS)
 
 cluster: compile_cluster run_cluster
+
+
+mkdir:
+# mkdir ./bin
+	if [ ! -d "./bin" ]; then mkdir ./bin; fi
