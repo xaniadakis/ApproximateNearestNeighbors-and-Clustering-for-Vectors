@@ -69,19 +69,19 @@ cluster_cube::cluster_cube(vector<vector<float>> vectors,vector<string> ids,int 
             if(current_distance<min_distance)
                 min_distance = current_distance;
         }
-
-
+    
     int search_radius = min_distance/2;
     for(int i=0;i<K;i++){
         vector<pair<float,unsigned int>> R_Nearest = cube.find_R_nearest(cluster::centroids[i].coordinates, search_radius);
+        
         for(int j=0;j<R_Nearest.size();j++)
         {
-            centroid_item ci={p:R_Nearest.first,index:i};
+            int Index = R_Nearest[j].second;
+            centroid_item ci={p:vectors[Index],index:Index};
+
         }
     }
         
-
-
     //First assignment
     for(int i=0;i<vectors.size();i++)
     {
