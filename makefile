@@ -29,9 +29,19 @@ compile_lsh: clean_lsh mkdir
 run_lsh:
 	./bin/lsh $(LSH_ARGS)
 
-gdb_lsh:
+compile_debug_lsh:
 	$(CC) ./src/lsh/main_lsh.cpp ./src/lsh/lsh.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/lsh -I./include/lsh $(DEBUGFLAGS)
+
+gdb_lsh: compile_debug_lsh
 	gdb --args ./bin/lsh $(LSH_ARGS)
+
+valgrind_lsh: compile_debug_lsh
+	valgrind --leak-check=full \
+			--show-leak-kinds=all \
+			--track-origins=yes \
+			--verbose \
+			--log-file=valgrind-out-lsh.txt \
+			./bin/lsh $(LSH_ARGS)
 
 lsh: compile_lsh run_lsh
 
@@ -46,9 +56,19 @@ compile_cube: clean_cube mkdir
 run_cube: 
 	./bin/cube $(CUBE_ARGS)
 
-gdb_cube:
+compile_debug_cube:
 	$(CC) ./src/cube/main_cube.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cube -I./include/cube $(DEBUGFLAGS)
+
+gdb_cube: compile_debug_cube
 	gdb --args 	./bin/cube $(CUBE_ARGS)
+
+valgrind_cube: compile_debug_cube
+	valgrind --leak-check=full \
+			--show-leak-kinds=all \
+			--track-origins=yes \
+			--verbose \
+			--log-file=valgrind-out-cube.txt \
+			./bin/cube $(CUBE_ARGS)
 
 cube: compile_cube run_cube
 
@@ -63,9 +83,19 @@ compile_cluster: clean_cluster mkdir
 run_cluster: 
 	./bin/cluster $(CLUSTER_ARGS)
 
-gdb_cluster:
+compile_debug_cluster:
 	$(CC) ./src/cluster/main_cluster.cpp ./src/cluster/cluster.cpp ./src/cluster/cluster_ANN.cpp ./src/lsh/lsh.cpp ./src/cube/cube.cpp $(COMMON)/hash_functions.cpp $(COMMON)/utils.cpp $(COMMON)/exhaustive_search.cpp -o ./bin/cluster $(DEBUGFLAGS) -I./include/cluster -I./include/lsh -I./include/cube
+
+gdb_cluster: compile_debug_cluster
 	gdb --args ./bin/cluster $(CLUSTER_ARGS)
+
+valgrind_cluster: compile_debug_cluster
+	valgrind --leak-check=full \
+			--show-leak-kinds=all \
+			--track-origins=yes \
+			--verbose \
+			--log-file=valgrind-out-cluster.txt \
+			./bin/cluster $(CLUSTER_ARGS)
 
 cluster: compile_cluster run_cluster
 
