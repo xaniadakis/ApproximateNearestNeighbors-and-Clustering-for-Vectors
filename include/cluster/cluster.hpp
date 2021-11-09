@@ -21,6 +21,15 @@ public:
     {
         vector<float> p;
 		int index;
+
+        bool operator < (const centroid_item& str) const
+        {
+            return (index < str.index);
+        }
+        bool operator == (const centroid_item& str) const
+        {
+            return (index == str.index);
+        }
     };
 
     struct centroid

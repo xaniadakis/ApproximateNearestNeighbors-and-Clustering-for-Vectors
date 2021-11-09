@@ -72,7 +72,6 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
             }
         }
     }
-    // cout << "size = " << centroids.size() << endl;
 }
 
 void cluster::new_centroids()
@@ -167,20 +166,11 @@ bool cluster::convergence(vector<centroid> centroids_old)
     for (int i = 0; i < K; i++)
     {   
         if(centroids[i].vectors.size() != centroids_old[i].vectors.size())
-            return false;
-        for(auto it=centroids[i].vectors.begin();it!=centroids[i].vectors.end();++it)
-        {
-            bool found=false;
-            for (auto it2=centroids_old[i].vectors.begin();it2!=centroids_old[i].vectors.end();++it2)
-            {
-                if((*it2).index == (*it).index)
-                {
-                    found=true;
-                    break;
-                }
-            }
-            if(found==false) return false;
-        }
+                return false;
+        sort(centroids_old[i].vectors.begin(),centroids_old[i].vectors.end());
+        sort(centroids[i].vectors.begin(), centroids[i].vectors.end());
+
+        if(centroids[i].vectors!=centroids_old[i].vectors) return false;
     }
     return true;
 }
