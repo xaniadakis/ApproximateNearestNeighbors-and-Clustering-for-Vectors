@@ -178,17 +178,27 @@ int main(int argc, char *argv[]){
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
-
 		write_file_cluster(outfile,cluster.get_clusters(),cluster.get_silhouettes_average(),ids,time_cluster,"Lloyds",complete);
 	}
-	else if(method=="LSH" || method=="Hypercube")
+	else if(method=="Hypercube")
 	{
 		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
-		cluster_ANN(vectors,ids,K_cluster,k_cube,probes_cube,M_cube,L_lsh,method);
+		cluster_cube cluster(vectors,ids,K_cluster,k_cube,probes_cube,M_cube);
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
+		write_file_cluster(outfile,cluster.get_clusters(),cluster.get_silhouettes_average(),ids,time_cluster,"Hypercube",complete);
+	}
+	else if(method=="LSH")
+	{
+		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << endl;
+		auto start_cluster = chrono::high_resolution_clock::now();
+		cluster_lsh cluster(vectors,ids,K_cluster,k_lsh,L_lsh);
+		auto stop_cluster = chrono::high_resolution_clock::now();
+		auto elapsed_cluster = stop_cluster - start_cluster ;
+		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
+		write_file_cluster(outfile,cluster.get_clusters(),cluster.get_silhouettes_average(),ids,time_cluster,"LSH",complete);
 	}
 
 	outfile.close();
