@@ -93,7 +93,7 @@ Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids, int k, 
 	Cube::k=k;
 	Cube::argM=argM;
 	Cube::probes=probes;
-	vectorSize=(!vectors[0].empty()) ? vectors[0].size() : 0;
+	vectorSize=(!vectors.empty()) ? vectors[0].size() : 0;
 	f_table = new map<int, int>[k];
 	hypercube = new hash_table<hashtable_item_cube>(pow(2,k));
 	w=300;
