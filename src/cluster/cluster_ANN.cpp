@@ -124,22 +124,15 @@ void cluster_cube::new_assignment()
 {
     vector<tuple<int,int,float>> flagged_indexes;
     
-    float min_distance;
+    float min_distance=numeric_limits<float>::max();
     float current_distance;
     for(int i=0;i<K;i++)
-        for(int j=0;j<K;j++){
-            // cout << "YO" << i << endl ;
-            // for (float a: cluster::centroids[i].coordinates)
-            //     std::cout << a << ' ';
-            // cout << "YO" << j << endl ;
-            // for (float b: cluster::centroids[j].coordinates)
-            //     std::cout << b << ' ';
-            // cout << endl;
+        for(int j=i+1;j<K;j++){
             current_distance = eucledian_distance(cluster::centroids[i].coordinates, cluster::centroids[j].coordinates);
             if(current_distance<min_distance)
                 min_distance = current_distance;
         }
-
+    
     int search_radius = min_distance/2;
     while(true){
         if(flagged_indexes.size()>=(cluster::ids.size()*(8/10)))

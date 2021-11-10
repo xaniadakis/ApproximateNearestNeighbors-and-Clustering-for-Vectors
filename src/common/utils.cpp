@@ -156,12 +156,12 @@ int uniform_distribution_rng_float(float lowerRange,float higherRange)
 	uniform_real_distribution<float> distr(lowerRange, higherRange);
 
 	return distr(generator);
-}  
+}
 
 void read_file(string filename,vector<vector<float>> &vectors,vector<string> &ids)
 {
 	ifstream  file(filename);
-	int filelines=count(istreambuf_iterator<char>(file), 
+	unsigned int filelines=count(istreambuf_iterator<char>(file), 
     istreambuf_iterator<char>(), '\n');
 
 	vectors=vector<vector<float>>(filelines);

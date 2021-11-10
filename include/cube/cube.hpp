@@ -34,6 +34,8 @@ private:
 	hash_table<hashtable_item_cube> *hypercube;
 	int k;//Number of hash functions
 
+	int vectorSize;
+
 	vector<float> *v;//Random vector used by hash function
 	float *t;//Random number used by hash function
 	unsigned int w;//Window used by hash function
