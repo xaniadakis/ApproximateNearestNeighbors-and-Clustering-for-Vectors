@@ -56,6 +56,18 @@ vector<pair<float,unsigned int>> Cube::find_N_nearest(vector<float> p,unsigned i
 	return N_Nearest;
 }
 
+void Cube::unmarkAssignedPoints()
+{
+	for(int i=0; i<pow(2,k);i++)
+	{
+		for(auto it = hypercube->begin(i) ; it != hypercube->end(i) ; ++it){
+			(*it).flag=false;
+			(*it).radius_found=0.0;
+		}
+	}
+}
+
+
 vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 {
 	//Returns indexes of R nearest element
@@ -68,6 +80,13 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 			if(counter >= argM)
 				break;
 			hashtable_item_cube p_b = *it;
+			if(clusterMode)
+				if(p_b.flag && p_b.radius_found!=R)
+					continue;
+				else{
+					p_b.flag = true;
+					p_b.radius_found = R;
+				}
 			float distance = Cube::distance(p,p_b.p);
 			if(distance<=R)
 				distances.insert({distance,p_b.index});

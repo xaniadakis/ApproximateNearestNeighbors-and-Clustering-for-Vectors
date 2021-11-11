@@ -27,6 +27,8 @@ private:
 		vector<float> p;
 		unsigned long long int ID;
 		int index;
+		bool flag = false;
+		float radius_found = 0;
 	};
 
 	int n;//Number of vectors
@@ -46,7 +48,11 @@ private:
 
 	unsigned int g(vector<float> p,unsigned int j);
 	unsigned long long int ID(vector<float> p,unsigned int j);
-	
+
+protected:
+	bool clusterMode = false;
+	void unmarkAssignedPoints();
+
 public:
 	LSH(vector<vector<float>> input_vectors,int k,int L,int metric,float hashtable_size_ratio = 0.25);
 	~LSH();//Destructor

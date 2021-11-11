@@ -25,12 +25,13 @@ private:
 	{
 		vector<float> p;
 		int index;
+		bool flag = false;
+		float radius_found=0;
 	};
 
 	float (*distance)(vector<float>, vector<float>);//Distance function
 	hash_table<hashtable_item_cube> *hypercube;
 	int k;//Number of hash functions
-
 	int vectorSize;
 
 	vector<float> *v;//Random vector used by hash function
@@ -43,6 +44,10 @@ private:
 
 	unsigned int f(int i, int h_p);
 	unsigned int F(vector<float> p);
+
+protected:
+	bool clusterMode = false;
+	void unmarkAssignedPoints();
 
 public:
 

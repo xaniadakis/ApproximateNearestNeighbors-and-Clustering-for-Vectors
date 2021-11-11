@@ -23,6 +23,17 @@ unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
 	return modulo(_g,M);
 }
 
+void LSH::unmarkAssignedPoints()
+{
+	for(int p=0; p<L; p++)
+		for(int id=0; id<tableSize;id++)
+			for(auto it = hashtables[p].begin(id) ; it != hashtables[p].end(id) ; ++it)
+			{
+				(*it).flag=false;
+				(*it).radius_found=0.0;
+			}
+}
+
 vector<pair<float,unsigned int>> LSH::find_N_nearest(vector<float> p,unsigned int N)
 {
 	//Returns indexes of N Nearest elements
