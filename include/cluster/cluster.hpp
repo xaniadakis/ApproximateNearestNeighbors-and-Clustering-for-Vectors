@@ -56,7 +56,8 @@ protected:
     void new_centroids();
     bool convergence(vector<centroid> centroids_old);
     void bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes);
-    float cluster::init_search_radius();
+    float init_search_radius();
+    bool terminationCriterion(vector<tuple<int,int,float>> flagged_indexes, float search_radius, int* updatedCentroid);
 };
 
 class cluster_lloyds : public cluster

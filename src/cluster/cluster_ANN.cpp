@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <climits>
 
+#define FLT_MAX 3.40282e+038
+
 //cluster
 void cluster::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes)
 {
@@ -47,6 +49,23 @@ float cluster::init_search_radius()
     return min_distance/2;
 }
 
+bool cluster::terminationCriterion(vector<tuple<int,int,float>> flagged_indexes, float search_radius, int* updatedCentroid)
+{
+        if(flagged_indexes.size()>=(cluster::ids.size()*0.8))
+            return true;
+        if(search_radius>(std::numeric_limits<float>::max()/2)+5 || search_radius==0)
+            return true;
+        int check = 0;
+        for(int i=0;i<K;i++){
+            if(updatedCentroid[i]>0)
+                check++;
+            updatedCentroid[i] = 0;
+        }
+        if(check<=K/2)
+            return true;
+        return false;
+}
+
 //Cluster LSH
 cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids), LSH(vectors,k,L,L2,0.125)
 {
@@ -82,18 +101,16 @@ void cluster_lsh::new_assignment()
 
 void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius)
 {
-        while(true){
-        if(flagged_indexes.size()>=(cluster::ids.size()*0.8)){
-            break;
-        }
+    int updatedCentroid[K];
+    for(int i=0;i<K;i++)
+        updatedCentroid[i] = 0;
+
+    while(true){
         // cout << "array" << flagged_indexes.size() << endl;
         vector<tuple<int,int,float>> new_indexes;
         int found = 0;
         search_radius = search_radius*2;
-        if(search_radius>=INT_MAX || search_radius==0)
-            break;
         // cout << "radius " << search_radius << endl;
-
         for(int i=0;i<K;i++){
             // cout << i << "th centroid search" << endl;
             vector<pair<float,unsigned int>> R_Nearest = LSH::find_R_nearest(cluster::centroids[i].coordinates, search_radius);
@@ -113,6 +130,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
                     cluster::centroids[i].vectors.push_back(ci);
                     // toInsert.push_back({ci,i});
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
+                    updatedCentroid[i]++;
                 }
             }
         }
@@ -136,6 +154,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
                                 // toInsert.erase(toInsert.begin()+k);
                                 centroids[centroidj].vectors.erase(centroids[centroidj].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+j);
+                                updatedCentroid[j]--;
                             }
                         }
                     }
@@ -146,6 +165,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
                             if(centroids[centroidi].vectors[k].index==indexi){
                                 centroids[centroidi].vectors.erase(centroids[centroidi].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+i);
+                                updatedCentroid[i]--;
                             }
                         }
                     }
@@ -153,6 +173,9 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
         }
         for(int i=0;i<new_indexes.size();i++)
             flagged_indexes.push_back(new_indexes[i]);
+        
+        if(terminationCriterion(flagged_indexes, search_radius, updatedCentroid))
+            break;
     }
 }
 
@@ -196,18 +219,16 @@ void cluster_cube::new_assignment()
 
 void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius)
 {
-        while(true){
-        if(flagged_indexes.size()>=(cluster::ids.size()*0.8)){
-            break;
-        }
+    int updatedCentroid[K];
+    for(int i=0;i<K;i++)
+        updatedCentroid[i] = 0;
+
+    while(true){
         // cout << "array" << flagged_indexes.size() << endl;
         vector<tuple<int,int,float>> new_indexes;
         int found = 0;
         search_radius = search_radius*2;
-        if(search_radius>=INT_MAX || search_radius==0)
-            break;
         // cout << "radius " << search_radius << endl;
-
         for(int i=0;i<K;i++){
             // cout << i << "th centroid search" << endl;
             vector<pair<float,unsigned int>> R_Nearest = Cube::find_R_nearest(cluster::centroids[i].coordinates, search_radius);
@@ -227,6 +248,7 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
                     cluster::centroids[i].vectors.push_back(ci);
                     // toInsert.push_back({ci,i});
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
+                    updatedCentroid[i]++;
                 }
             }
         }
@@ -250,6 +272,7 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
                                 // toInsert.erase(toInsert.begin()+k);
                                 centroids[centroidj].vectors.erase(centroids[centroidj].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+j);
+                                updatedCentroid[j]--;
                             }
                         }
                     }
@@ -260,6 +283,7 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
                             if(centroids[centroidi].vectors[k].index==indexi){
                                 centroids[centroidi].vectors.erase(centroids[centroidi].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+i);
+                                updatedCentroid[i]--;
                             }
                         }
                     }
@@ -267,6 +291,9 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
         }
         for(int i=0;i<new_indexes.size();i++)
             flagged_indexes.push_back(new_indexes[i]);
+        
+        if(terminationCriterion(flagged_indexes, search_radius, updatedCentroid))
+            break;
     }
 }
 
@@ -274,5 +301,3 @@ cluster_cube::~cluster_cube()
 {
 
 }
-
-
