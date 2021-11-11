@@ -84,17 +84,14 @@ vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
 	return R_Nearest;
 }
 
-LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int L,int metric,float hashtable_size_ratio)//Constructor
+LSH::LSH(vector<vector<float>> input_vectors,int k,int L,int metric,float hashtable_size_ratio)//Constructor
 {
-	vectors=input_vectors;
-	ids=input_ids;
-	
 	//Initialize values
 	LSH::L=L;
 	LSH::k=k;
 	w=300;
-	vectorSize=(!vectors.empty()) ? vectors[0].size() : 0;
-	n=ids.size();
+	vectorSize=(!input_vectors.empty()) ? input_vectors[0].size() : 0;
+	n=input_vectors.size();
 	tableSize=ceil(n*hashtable_size_ratio);
 	hashtables = new hash_table<hashtable_item_lsh>[L];
 	for (int i = 0; i < L; i++)
@@ -130,7 +127,7 @@ LSH::LSH(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int 
 	{
 		for(int y=0;y<L;y++)
 		{
-			hashtable_item_lsh p{vectors[i],ID(vectors[i],y),i};
+			hashtable_item_lsh p{input_vectors[i],ID(input_vectors[i],y),i};
 			hashtables[y].insert(p.ID,p);
 		}
 	}

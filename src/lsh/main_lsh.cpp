@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
 		vector<vector<float>> vectors;
 		vector<string> ids;
 		read_file(input_file,vectors,ids);
-		LSH lsh(vectors,ids,k,L,L2);
+		LSH lsh(vectors,k,L,L2);
 
 		struct stat info;
 		if (stat("./output",&info) == -1) {
