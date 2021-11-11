@@ -66,7 +66,7 @@ void Cube::unmarkAssignedPoints()
 	}
 }
 
-vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
+vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,float R)
 {
 	//Returns indexes of R nearest element
 	multimap<float, int> distances;
@@ -142,5 +142,8 @@ Cube::Cube(vector<vector<float>> input_vectors, int k, int argM, int probes, int
 
 Cube::~Cube()//Destructor
 {
-	return;
+	delete[] v;
+	delete[] t;
+	delete[] f_table;
+	delete hypercube;
 };

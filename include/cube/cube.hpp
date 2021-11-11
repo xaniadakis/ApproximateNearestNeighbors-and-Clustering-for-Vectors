@@ -54,7 +54,7 @@ public:
 	Cube(vector<vector<float>> input_vectors,int k,int argM, int probes, int metric);
 	~Cube();//Destructor
 	vector<pair<float,unsigned int>> find_N_nearest(vector<float> p,unsigned int N);
-	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);
+	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,float R);
 };
 
 template class hash_table<Cube::hashtable_item_cube>;

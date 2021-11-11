@@ -5,11 +5,16 @@
 
 #define FLT_MAX 3.40282e+038
 
+cluster_ANN::cluster_ANN(int K,vector<vector<float>> vectors) : cluster(K,vectors)
+{
+    cluster_ANN::vectors=vectors;
+}
+
 //cluster
-void cluster::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes)
+void cluster_ANN::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes)
 {
     int found = 0;
-    for(int i=0;i<(int) cluster::vectors.size();i++)
+    for(int i=0;i<(int) cluster_ANN::vectors.size();i++)
     {
         for(int j=0;j<(int) flagged_indexes.size();j++)
             if(get<0>(flagged_indexes[j])==i){
@@ -24,7 +29,7 @@ void cluster::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes
         int minimum_index;
         for (int v=0;v<(int) cluster::centroids.size();v++)
         {
-            float distance=eucledian_distance(cluster::vectors[i],cluster::centroids[v].coordinates);
+            float distance=eucledian_distance(cluster_ANN::vectors[i],cluster::centroids[v].coordinates);
             if(distance<minimum)
             {
                 minimum=distance;
@@ -35,7 +40,7 @@ void cluster::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes
     }
 }
 
-float cluster::init_search_radius()
+float cluster_ANN::init_search_radius()
 {
     float min_distance=numeric_limits<float>::max();
     float current_distance;
@@ -48,25 +53,23 @@ float cluster::init_search_radius()
     return min_distance/2;
 }
 
-bool cluster::terminationCriterion(vector<tuple<int,int,float>> flagged_indexes, float search_radius, int* updatedCentroid)
+bool cluster_ANN::terminationCriterion(float search_radius, int* updatedCentroid)
 {
-        if(flagged_indexes.size()>=(cluster::vectors.size()*0.8))
-            return true;
-        if(search_radius>(std::numeric_limits<float>::max()/2)+5 || search_radius==0)
-            return true;
-        int check = 0;
-        for(int i=0;i<K;i++){
-            if(updatedCentroid[i]>0)
-                check++;
-            updatedCentroid[i] = 0;
-        }
-        if(check<=K/2)
-            return true;
-        return false;
+    if(search_radius>(std::numeric_limits<float>::max()/2)+5 || search_radius==0)
+        return true;
+    int check = 0;
+    for(int i=0;i<K;i++){
+        if(updatedCentroid[i]>0)
+            check++;
+        updatedCentroid[i] = 0;
+    }
+    if(check<=K/2)
+        return true;
+    return false;
 }
 
 //Cluster LSH
-cluster_lsh::cluster_lsh(vector<vector<float>> vectors,int K,int k,int L) : cluster(K,vectors), LSH(vectors,k,L,L2,0.125)
+cluster_lsh::cluster_lsh(vector<vector<float>> vectors,int K,int k,int L) : cluster_ANN(K,vectors), LSH(vectors,k,L,L2,0.125)
 {
     LSH::clusterMode = true;
     //First assignment
@@ -92,7 +95,7 @@ void cluster_lsh::new_assignment()
 
     rangeSearch_Assignment(flagged_indexes, search_radius);
 
-    cluster::bruteforce_assignment(flagged_indexes);
+    cluster_ANN::bruteforce_assignment(flagged_indexes);
 
     LSH::unmarkAssignedPoints();
 }
@@ -119,7 +122,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
                         found = 1;
                 }
                 if(found!=1){      
-                    centroid_item ci={p:cluster::vectors[Index],index:Index};
+                    centroid_item ci={p:cluster_ANN::vectors[Index],index:Index};
                     cluster::centroids[i].vectors.push_back(ci);
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
                     updatedCentroid[i]++;
@@ -167,7 +170,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
         for(int i=0;i<(int) new_indexes.size();i++)
             flagged_indexes.push_back(new_indexes[i]);
         
-        if(terminationCriterion(flagged_indexes, search_radius, updatedCentroid))
+        if(terminationCriterion(search_radius, updatedCentroid))
             break;
         search_radius = search_radius*2;
     }
@@ -179,7 +182,7 @@ cluster_lsh::~cluster_lsh()
 }
 
 //Cluster hypercube
-cluster_cube::cluster_cube(vector<vector<float>> vectors,int K,int k,int probes,int M) : cluster(K,vectors), Cube(vectors,k,M,probes,L2)
+cluster_cube::cluster_cube(vector<vector<float>> vectors,int K,int k,int probes,int M) : cluster_ANN(K,vectors), Cube(vectors,k,M,probes,L2)
 {
     Cube::clusterMode = true;
     
@@ -206,7 +209,7 @@ void cluster_cube::new_assignment()
 
     rangeSearch_Assignment(flagged_indexes, search_radius);
 
-    cluster::bruteforce_assignment(flagged_indexes);
+    cluster_ANN::bruteforce_assignment(flagged_indexes);
 
     Cube::unmarkAssignedPoints();
 }
@@ -233,7 +236,7 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
                         found = 1;
                 }
                 if(found!=1){           
-                    centroid_item ci={p:cluster::vectors[Index],index:Index};
+                    centroid_item ci={p:cluster_ANN::vectors[Index],index:Index};
                     cluster::centroids[i].vectors.push_back(ci);
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
                     updatedCentroid[i]++;
@@ -280,12 +283,12 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
         for(int i=0;i<(int) new_indexes.size();i++)
             flagged_indexes.push_back(new_indexes[i]);
         
-        if(terminationCriterion(flagged_indexes, search_radius, updatedCentroid))
+        if(terminationCriterion(search_radius, updatedCentroid))
             break;
     }
 }
 
 cluster_cube::~cluster_cube()
 {
-
+    return;
 }

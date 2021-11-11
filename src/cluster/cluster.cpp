@@ -11,7 +11,6 @@
 //Cluster parent class
 cluster::cluster(int K,vector<vector<float>> vectors)
 {
-    cluster::vectors=vectors;
     cluster::K=K;
     cluster::vectorSize=(!vectors.empty()) ? vectors[0].size() : 0;
     cluster::n=vectors.size();

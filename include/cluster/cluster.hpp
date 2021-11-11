@@ -14,7 +14,7 @@ using namespace std;
 //L2 Metric
 //Update centroids using 
 
-class cluster //Using lloyd's
+class cluster
 {
 public:
     struct centroid_item
@@ -43,7 +43,6 @@ public:
 
 protected:
     vector<centroid> centroids;
-    vector<vector<float>> vectors;
     int K;
 
     int vectorSize;
@@ -54,9 +53,6 @@ protected:
 
     void new_centroids();
     bool convergence(vector<centroid> centroids_old);
-    void bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes);
-    float init_search_radius();
-    bool terminationCriterion(vector<tuple<int,int,float>> flagged_indexes, float search_radius, int* updatedCentroid);
 };
 
 class cluster_lloyds : public cluster
@@ -66,7 +62,23 @@ public:
 };
 
 
-class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (range search)
+
+
+
+
+class cluster_ANN : public cluster
+{
+    protected:
+        void bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes);
+        float init_search_radius();
+        bool terminationCriterion(float search_radius, int* updatedCentroid);
+
+        vector<vector<float>> vectors;
+
+        cluster_ANN(int K,vector<vector<float>> vectors);
+};
+
+class cluster_lsh : public cluster_ANN,public LSH //Using LSH reverse assignment (range search)
 {
 public:
     cluster_lsh(vector<vector<float>> vectors,int K,int k,int L);
@@ -75,7 +87,7 @@ public:
     ~cluster_lsh();
 };
 
-class cluster_cube : public cluster,public Cube //Using Hypercube reverse assignment (range search)
+class cluster_cube : public cluster_ANN,public Cube //Using Hypercube reverse assignment (range search)
 {
 public:
     cluster_cube(vector<vector<float>> vectors,int K,int k,int probes,int M);

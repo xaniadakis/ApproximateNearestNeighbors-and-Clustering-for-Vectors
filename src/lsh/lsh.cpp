@@ -155,5 +155,12 @@ LSH::LSH(vector<vector<float>> input_vectors,int k,int L,int metric,float hashta
 
 LSH::~LSH()//Destructor
 {
-	return;
+	delete[] hashtables;
+	for(int i=0;i<L;i++)
+	{
+		delete[] t[i];
+		delete[] v[i];
+	}
+	delete[] t;
+	delete[] v;
 };
