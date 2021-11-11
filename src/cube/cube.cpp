@@ -75,22 +75,29 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 
 	vector<int> nearbyProbes = getNearbyProbes(F(p), probes, k);
 	for(int i=0; i<probes; i++)
-		for (auto it = hypercube->begin(nearbyProbes[i]); it != hypercube->end(nearbyProbes[i]); ++it )	{
+	{
+		for (auto it = hypercube->begin(nearbyProbes[i]); it != hypercube->end(nearbyProbes[i]); ++it )	
+		{
 			if(counter >= argM)
 				break;
 			hashtable_item_cube p_b = *it;
-			if(clusterMode)
-				if(p_b.flag && p_b.radius_found!=R)
-					continue;
-				else{
-					p_b.flag = true;
-					p_b.radius_found = R;
-				}
 			float distance = Cube::distance(p,p_b.p);
 			if(distance<=R)
+			{
+				if(clusterMode)
+				{
+					if(p_b.flag && p_b.radius_found!=R) continue;
+					else
+					{
+						p_b.flag = true;
+						p_b.radius_found = R;
+					}
+				}
 				distances.insert({distance,p_b.index});
+			}
 			counter++;
 		}
+	}
 
 	vector<pair<float,unsigned int>> R_Nearest;
 	auto it=distances.begin();

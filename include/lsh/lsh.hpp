@@ -57,7 +57,7 @@ public:
 	LSH(vector<vector<float>> input_vectors,int k,int L,int metric,float hashtable_size_ratio = 0.25);
 	~LSH();//Destructor
 	vector<pair<float,unsigned int>> find_N_nearest(vector<float> p,unsigned int N);
-	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);
+	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,float R);
 };
 
 template class hash_table<LSH::hashtable_item_lsh>;
