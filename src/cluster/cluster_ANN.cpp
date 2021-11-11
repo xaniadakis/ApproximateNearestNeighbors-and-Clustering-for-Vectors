@@ -3,6 +3,50 @@
 #include <algorithm>
 #include <climits>
 
+//cluster
+void cluster::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes)
+{
+    int found = 0;
+    for(int i=0;i<cluster::vectors.size();i++)
+    {
+        for(int j=0;j<flagged_indexes.size();j++)
+            if(get<0>(flagged_indexes[j])==i){
+                // cout << "found" << i << endl;
+                found = 1;
+            }
+        if(found==1){
+            found=0;
+            continue;
+        }
+        centroid_item ci={p:vectors[i],index:i};
+        float minimum=numeric_limits<float>::max();
+        int minimum_index;
+        for (int v=0;v<cluster::centroids.size();v++)
+        {
+            float distance=eucledian_distance(cluster::vectors[i],cluster::centroids[v].coordinates);
+            if(distance<minimum)
+            {
+                minimum=distance;
+                minimum_index= v;
+            }
+        }
+        centroids[minimum_index].vectors.push_back(ci);
+    }
+}
+
+float cluster::init_search_radius()
+{
+    float min_distance=numeric_limits<float>::max();
+    float current_distance;
+    for(int i=0;i<K;i++)
+        for(int j=i+1;j<K;j++){
+            current_distance = eucledian_distance(cluster::centroids[i].coordinates, cluster::centroids[j].coordinates);
+            if(current_distance<min_distance)
+                min_distance = current_distance;
+        }
+    return min_distance/2;
+}
+
 //Cluster LSH
 cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids), LSH(vectors,k,L,L2,0.125)
 {
@@ -25,18 +69,20 @@ cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,
 void cluster_lsh::new_assignment()
 {
     vector<tuple<int,int,float>> flagged_indexes;
-    float min_distance=numeric_limits<float>::max();
-    float current_distance;
-    for(int i=0;i<K;i++)
-        for(int j=i+1;j<K;j++){
-            current_distance = eucledian_distance(cluster::centroids[i].coordinates, cluster::centroids[j].coordinates);
-            if(current_distance<min_distance)
-                min_distance = current_distance;
-        }
-    unsigned long int search_radius = min_distance/2;
-    vector<pair<centroid_item,int>> toInsert;
 
-    while(true){
+    float search_radius = init_search_radius();
+
+    rangeSearch_Assignment(flagged_indexes, search_radius);
+
+    cluster::bruteforce_assignment(flagged_indexes);
+
+    LSH::unmarkAssignedPoints();
+}
+
+
+void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius)
+{
+        while(true){
         if(flagged_indexes.size()>=(cluster::ids.size()*0.8)){
             break;
         }
@@ -64,7 +110,7 @@ void cluster_lsh::new_assignment()
                 if(found!=1){
                 // if (find(flagged_indexes.begin(), flagged_indexes.end(),Index)==flagged_indexes.end()){             
                     centroid_item ci={p:cluster::vectors[Index],index:Index};
-                    centroids[i].vectors.push_back(ci);
+                    cluster::centroids[i].vectors.push_back(ci);
                     // toInsert.push_back({ci,i});
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
                 }
@@ -84,7 +130,7 @@ void cluster_lsh::new_assignment()
                 if(indexi==indexj && centroidi!=centroidj)
                     if(distancei<=distancej)
                     {
-                        for(int k=0;k<centroids[centroidj].vectors.size();k++)
+                        for(int k=0;k<cluster::centroids[centroidj].vectors.size();k++)
                         {
                             if(centroids[centroidj].vectors[k].index==indexj){
                                 // toInsert.erase(toInsert.begin()+k);
@@ -95,7 +141,7 @@ void cluster_lsh::new_assignment()
                     }
                     else               
                     {
-                        for(int k=0;k<centroids[centroidi].vectors.size();k++)
+                        for(int k=0;k<cluster::centroids[centroidi].vectors.size();k++)
                         {
                             if(centroids[centroidi].vectors[k].index==indexi){
                                 centroids[centroidi].vectors.erase(centroids[centroidi].vectors.begin()+k);
@@ -108,33 +154,6 @@ void cluster_lsh::new_assignment()
         for(int i=0;i<new_indexes.size();i++)
             flagged_indexes.push_back(new_indexes[i]);
     }
-    int found = 0;
-    for(int i=0;i<vectors.size();i++)
-    {
-        for(int j=0;j<flagged_indexes.size();j++)
-            if(get<0>(flagged_indexes[j])==i){
-                // cout << "found" << i << endl;
-                found = 1;
-            }
-        if(found==1){
-            found=0;
-            continue;
-        }
-        centroid_item ci={p:vectors[i],index:i};
-        float minimum=numeric_limits<float>::max();
-        int minimum_index;
-        for (int v=0;v<centroids.size();v++)
-        {
-            float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
-            if(distance<minimum)
-            {
-                minimum=distance;
-                minimum_index= v;
-            }
-        }
-        centroids[minimum_index].vectors.push_back(ci);
-    }
-    LSH::unmarkAssignedPoints();
 }
 
 cluster_lsh::~cluster_lsh()
@@ -146,6 +165,7 @@ cluster_lsh::~cluster_lsh()
 cluster_cube::cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M) : cluster(K,vectors,ids), Cube(vectors,k,M,probes,L2)
 {
     Cube::clusterMode = true;
+    
     //First assignment
     new_assignment();
 
@@ -156,9 +176,6 @@ cluster_cube::cluster_cube(vector<vector<float>> vectors,vector<string> ids,int 
         new_centroids();
         new_assignment();
 
-        // for(int i=0;i<K;i++)
-        //     cout << " size " << cluster::centroids[i].vectors.size() << endl;
-
         if(convergence(centroids_old)==true)
             break;
     }
@@ -167,18 +184,19 @@ cluster_cube::cluster_cube(vector<vector<float>> vectors,vector<string> ids,int 
 void cluster_cube::new_assignment()
 {
     vector<tuple<int,int,float>> flagged_indexes;
-    float min_distance=numeric_limits<float>::max();
-    float current_distance;
-    for(int i=0;i<K;i++)
-        for(int j=i+1;j<K;j++){
-            current_distance = eucledian_distance(cluster::centroids[i].coordinates, cluster::centroids[j].coordinates);
-            if(current_distance<min_distance)
-                min_distance = current_distance;
-        }
-    unsigned long int search_radius = min_distance/2;
-    vector<pair<centroid_item,int>> toInsert;
 
-    while(true){
+    float search_radius = init_search_radius();
+
+    rangeSearch_Assignment(flagged_indexes, search_radius);
+
+    cluster::bruteforce_assignment(flagged_indexes);
+
+    Cube::unmarkAssignedPoints();
+}
+
+void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius)
+{
+        while(true){
         if(flagged_indexes.size()>=(cluster::ids.size()*0.8)){
             break;
         }
@@ -206,7 +224,7 @@ void cluster_cube::new_assignment()
                 if(found!=1){
                 // if (find(flagged_indexes.begin(), flagged_indexes.end(),Index)==flagged_indexes.end()){             
                     centroid_item ci={p:cluster::vectors[Index],index:Index};
-                    centroids[i].vectors.push_back(ci);
+                    cluster::centroids[i].vectors.push_back(ci);
                     // toInsert.push_back({ci,i});
                     new_indexes.push_back({Index,i,get<float>(R_Nearest[j])});
                 }
@@ -226,7 +244,7 @@ void cluster_cube::new_assignment()
                 if(indexi==indexj && centroidi!=centroidj)
                     if(distancei<=distancej)
                     {
-                        for(int k=0;k<centroids[centroidj].vectors.size();k++)
+                        for(int k=0;k<cluster::centroids[centroidj].vectors.size();k++)
                         {
                             if(centroids[centroidj].vectors[k].index==indexj){
                                 // toInsert.erase(toInsert.begin()+k);
@@ -237,7 +255,7 @@ void cluster_cube::new_assignment()
                     }
                     else               
                     {
-                        for(int k=0;k<centroids[centroidi].vectors.size();k++)
+                        for(int k=0;k<cluster::centroids[centroidi].vectors.size();k++)
                         {
                             if(centroids[centroidi].vectors[k].index==indexi){
                                 centroids[centroidi].vectors.erase(centroids[centroidi].vectors.begin()+k);
@@ -250,36 +268,11 @@ void cluster_cube::new_assignment()
         for(int i=0;i<new_indexes.size();i++)
             flagged_indexes.push_back(new_indexes[i]);
     }
-    int found = 0;
-    for(int i=0;i<vectors.size();i++)
-    {
-        for(int j=0;j<flagged_indexes.size();j++)
-            if(get<0>(flagged_indexes[j])==i){
-                // cout << "found" << i << endl;
-                found = 1;
-            }
-        if(found==1){
-            found=0;
-            continue;
-        }
-        centroid_item ci={p:vectors[i],index:i};
-        float minimum=numeric_limits<float>::max();
-        int minimum_index;
-        for (int v=0;v<centroids.size();v++)
-        {
-            float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
-            if(distance<minimum)
-            {
-                minimum=distance;
-                minimum_index= v;
-            }
-        }
-        centroids[minimum_index].vectors.push_back(ci);
-    }
-    Cube::unmarkAssignedPoints();
 }
 
 cluster_cube::~cluster_cube()
 {
 
 }
+
+
