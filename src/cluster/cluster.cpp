@@ -173,7 +173,7 @@ bool cluster::convergence(vector<centroid> centroids_old)
 
 cluster::~cluster()
 {
-
+    return;
 }
 
 //Cluster Lloyd's
