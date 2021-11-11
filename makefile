@@ -1,5 +1,4 @@
 #makefile
-
 COMMON 			?= ./src/common
 INCLUDE_COMMON 	?= ./include/common
 
@@ -18,8 +17,6 @@ CFLAGS 			?= -I$(INCLUDE_COMMON) -O2
 DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON)
 
 all: compile_lsh compile_cube compile_cluster
-
-cleanall: clean_lsh clean_cube clean_cluster
 
 #LSH
 clean_lsh:
@@ -102,6 +99,7 @@ valgrind_cluster: compile_debug_cluster
 
 cluster: compile_cluster run_cluster
 
+#DIRS
+mkdir: if [ ! -d "./bin" ]; then mkdir ./bin; fi
 
-mkdir:
-	if [ ! -d "./bin" ]; then mkdir ./bin; fi
+cleanall: clean_lsh clean_cube clean_cluster
