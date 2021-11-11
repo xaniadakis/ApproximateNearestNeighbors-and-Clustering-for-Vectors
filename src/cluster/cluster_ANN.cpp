@@ -98,7 +98,6 @@ void cluster_lsh::new_assignment()
     LSH::unmarkAssignedPoints();
 }
 
-
 void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius)
 {
     int updatedCentroid[K];
@@ -109,7 +108,6 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
         // cout << "array" << flagged_indexes.size() << endl;
         vector<tuple<int,int,float>> new_indexes;
         int found = 0;
-        search_radius = search_radius*2;
         // cout << "radius " << search_radius << endl;
         for(int i=0;i<K;i++){
             // cout << i << "th centroid search" << endl;
@@ -176,6 +174,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
         
         if(terminationCriterion(flagged_indexes, search_radius, updatedCentroid))
             break;
+        search_radius = search_radius*2;
     }
 }
 

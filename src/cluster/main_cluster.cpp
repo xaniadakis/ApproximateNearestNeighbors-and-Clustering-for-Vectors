@@ -68,9 +68,9 @@ int main(int argc, char *argv[]){
 	string input_file; //-i
 	string output_file; //-o
     int complete = false;//-complete
-    string method = "Hypercube";//-m
-
+    string method = "Classic";//-m
     string configuration_file; //-c
+	
     int K_cluster;
     int L_lsh=3;
     int k_lsh=4;
