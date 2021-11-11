@@ -92,7 +92,7 @@ void cluster::new_centroids()
         }
         new_centroids.push_back(new_centroid);
     }
-    for (int i=0;i<(int) new_centroids.size();i++)
+    for (int i=0;i<K;i++)
     {
         centroids[i].coordinates=new_centroids[i];
         centroids[i].vectors.clear();
@@ -110,14 +110,14 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
     float total_average=0;
     int total_number=0;
 
-    for (int i = 0; i < (int) centroids.size(); i++)
+    for (int i = 0; i < K; i++)
     {
         float averages_si=0;
-        for (int v = 0; v < (int) centroids[i].vectors.size(); v++)
+        for (int v = 0; v < centroids[i].vectors.size(); v++)
         {
             float a_vector;
             float b_vector;
-            for (int a = 0; a < (int) centroids[i].vectors.size(); a++)
+            for (int a = 0; a < centroids[i].vectors.size(); a++)
             {
                 if(a==v) continue;
                 a_vector+=eucledian_distance(centroids[i].vectors[v].p,centroids[i].vectors[a].p);
@@ -126,7 +126,7 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
 
             float minimum=numeric_limits<float>::max();
             int minimum_index;
-            for (int c=0;c<(int) centroids.size();c++)
+            for (int c=0;c<centroids.size();c++)
             {
                 if (c==i) continue;
                 
@@ -137,7 +137,7 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
                     minimum_index=c;
                 }
             }
-            for (int b = 0; b < (int) centroids[minimum_index].vectors.size(); b++)
+            for (int b = 0; b < centroids[minimum_index].vectors.size(); b++)
             {
                 b_vector+=eucledian_distance(centroids[i].vectors[v].p,centroids[minimum_index].vectors[b].p);
             }
@@ -170,21 +170,16 @@ bool cluster::convergence(vector<centroid> centroids_old)
     return true;
 }
 
-cluster::~cluster()
-{
-    return;
-}
-
 //Cluster Lloyd's
 cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors) : cluster(K,vectors)
 {
     //First assignment
-    for(int i=0;i<(int) vectors.size();i++)
+    for(int i=0;i<n;i++)
     {
         centroid_item ci={p:vectors[i],index:i};
         float minimum=numeric_limits<float>::max();
         int minimum_index;
-        for (int v=0;v<(int) centroids.size();v++)
+        for (int v=0;v<K;v++)
         {
             float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
             if(distance<minimum)
@@ -201,12 +196,12 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors) : cluster(K,
         vector<centroid> centroids_old=centroids;
         new_centroids();
 
-        for(int i=0;i<(int) vectors.size();i++)
+        for(int i=0;i<n;i++)
         {
             centroid_item ci={p:vectors[i],index:i};
             float minimum=numeric_limits<float>::max();
             int minimum_index;
-            for (int v=0;v<(int) centroids.size();v++)
+            for (int v=0;v<K;v++)
             {
                 float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
                 if(distance<minimum)

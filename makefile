@@ -14,7 +14,7 @@ CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE) -m
 
 CC				= g++
 CFLAGS 			?= -I$(INCLUDE_COMMON) -O2
-DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON)
+DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON) -O2
 
 all: compile_lsh compile_cube compile_cluster
 

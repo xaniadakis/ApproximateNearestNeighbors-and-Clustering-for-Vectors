@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 
 #include "cluster.hpp"
+#include "cluster_ANN.hpp"
 
 using namespace std;
 
