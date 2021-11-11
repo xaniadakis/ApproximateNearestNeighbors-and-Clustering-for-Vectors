@@ -27,9 +27,6 @@ private:
 		int index;
 	};
 
-	vector<vector<float>> vectors;//Vectors from dataset
-	vector<string> ids;//Ids of vectors from dataset
-
 	float (*distance)(vector<float>, vector<float>);//Distance function
 	hash_table<hashtable_item_cube> *hypercube;
 	int k;//Number of hash functions
@@ -49,7 +46,7 @@ private:
 
 public:
 
-	Cube(vector<vector<float>> input_vectors,vector<string> input_ids,int k,int argM, int probes, int metric);
+	Cube(vector<vector<float>> input_vectors,int k,int argM, int probes, int metric);
 	~Cube();//Destructor
 	vector<pair<float,unsigned int>> find_N_nearest(vector<float> p,unsigned int N);
 	vector<pair<float,unsigned int>> find_R_nearest(vector<float> p,int R);

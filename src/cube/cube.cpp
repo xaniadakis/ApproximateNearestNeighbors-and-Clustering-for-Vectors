@@ -84,16 +84,13 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 	return R_Nearest;
 }
 
-Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids, int k, int argM, int probes, int metric)
+Cube::Cube(vector<vector<float>> input_vectors, int k, int argM, int probes, int metric)
 {
-	vectors=input_vectors;
-	ids=input_ids;
-	
 	//Initialize values
 	Cube::k=k;
 	Cube::argM=argM;
 	Cube::probes=probes;
-	vectorSize=(!vectors.empty()) ? vectors[0].size() : 0;
+	vectorSize=(!input_vectors.empty()) ? input_vectors[0].size() : 0;
 	f_table = new map<int, int>[k];
 	hypercube = new hash_table<hashtable_item_cube>(pow(2,k));
 	w=300;
@@ -112,10 +109,10 @@ Cube::Cube(vector<vector<float>> input_vectors,vector<string> input_ids, int k, 
 	if(metric==L2)
 		distance=&eucledian_distance;
 
-	for(int i = 0;i<ids.size();i++)
+	for(int i = 0;i<input_vectors.size();i++)
 	{
-		hashtable_item_cube p{vectors[i],i};
-		hypercube->insert(F(vectors[i]),p);
+		hashtable_item_cube p{input_vectors[i],i};
+		hypercube->insert(F(input_vectors[i]),p);
 	}
 };
 
