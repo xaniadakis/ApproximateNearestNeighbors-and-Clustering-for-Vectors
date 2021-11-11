@@ -10,10 +10,11 @@ CONGIF_FILE		?= ./examples/cluster_example.conf
 
 CUBE_ARGS 		?= -i $(INPUT_FILE) -o cube_$(OUTPUT_FILE) -q $(QUERY_FILE) 
 LSH_ARGS 		?= -i $(INPUT_FILE) -o lsh_$(OUTPUT_FILE) -q $(QUERY_FILE) 
-CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE) -complete
+CLUSTER_METHOD	?= Hypercube
+CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE) -m $(CLUSTER_METHOD) -complete 
 
 CC				= g++
-CFLAGS 			?= -I$(INCLUDE_COMMON) -Wextra -Wall -O2
+CFLAGS 			?= -I$(INCLUDE_COMMON) -O2
 DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON)
 
 all: compile_lsh compile_cube compile_cluster

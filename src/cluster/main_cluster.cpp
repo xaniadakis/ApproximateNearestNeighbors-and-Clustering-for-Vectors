@@ -170,6 +170,7 @@ int main(int argc, char *argv[]){
 		mkdir("./output", 0700);
 	}
 	ofstream outfile ("./output/" + output_file, ios::out | ios::trunc);
+	
 	if(method=="Classic")
 	{
 		cout << "Using k-means clustering with Lloyd's assignment" << endl;
