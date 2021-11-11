@@ -63,7 +63,7 @@ vector<pair<float,unsigned int>> LSH::find_N_nearest(vector<float> p,unsigned in
 	return N_Nearest;
 }
 
-vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
+vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,float R)
 {
 	//Returns indexes of R nearest element
 	multimap<float, int> distances;
@@ -78,6 +78,15 @@ vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,int R)
 				float distance = LSH::distance(p,p_b.p);
 				if(distance<=R)
 				{
+					if(clusterMode)
+					{
+						if(p_b.flag && p_b.radius_found!=R) continue;
+						else
+						{
+							p_b.flag = true;
+							p_b.radius_found=R;
+						}
+					}
 					if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
 						distances.insert({distance,p_b.index});
 				}

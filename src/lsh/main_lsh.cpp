@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 	int k = 4; //-k
 	int L = 5; //-L
 	unsigned int N = 1; //-N
-	double R = 10000; //-R
+	float R = 10000; //-R
 
 
 	int k_flag=0,L_flag=0;

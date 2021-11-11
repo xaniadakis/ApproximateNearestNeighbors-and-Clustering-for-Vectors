@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
 	int M = 10; //-M
 	int probes = 2; //-probes
     int N = 1;//-N
-	double R = 10000; //-R
+	float R = 10000; //-R
 
 	//handle given parameters 
 	int c;
