@@ -6,6 +6,7 @@
 //Cluster LSH
 cluster_lsh::cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L) : cluster(K,vectors,ids), LSH(vectors,k,L,L2,0.125)
 {
+    LSH::clusterMode = true;
     //First assignment
     new_assignment();
 
@@ -32,25 +33,25 @@ void cluster_lsh::new_assignment()
             if(current_distance<min_distance)
                 min_distance = current_distance;
         }
-    unsigned int search_radius = min_distance/2;
+    unsigned long int search_radius = min_distance/2;
     vector<pair<centroid_item,int>> toInsert;
 
     while(true){
         if(flagged_indexes.size()>=(cluster::ids.size()*0.8)){
             break;
         }
-        // cout << "array " << flagged_indexes.size() << endl;
+        // cout << "array" << flagged_indexes.size() << endl;
         vector<tuple<int,int,float>> new_indexes;
         int found = 0;
         search_radius = search_radius*2;
-        if(search_radius>=UINT_MAX || search_radius==0)
+        if(search_radius>=INT_MAX || search_radius==0)
             break;
         // cout << "radius " << search_radius << endl;
 
         for(int i=0;i<K;i++){
             // cout << i << "th centroid search" << endl;
             vector<pair<float,unsigned int>> R_Nearest = LSH::find_R_nearest(cluster::centroids[i].coordinates, search_radius);
-            // cout << R_Nearest.size() << " in radius " << search_radius << endl;
+            // cout << "found " << R_Nearest.size() << "in radius " << search_radius << endl;
             for(int j=0;j<R_Nearest.size();j++)
             {
                 int Index = get<unsigned int>(R_Nearest[j]);
@@ -69,7 +70,6 @@ void cluster_lsh::new_assignment()
                 }
             }
         }
-    
         for(int i=0;i<new_indexes.size();i++)
         {
             int indexi = get<0>(new_indexes[i]);
@@ -112,8 +112,10 @@ void cluster_lsh::new_assignment()
     for(int i=0;i<vectors.size();i++)
     {
         for(int j=0;j<flagged_indexes.size();j++)
-            if(get<0>(flagged_indexes[j])==i)
+            if(get<0>(flagged_indexes[j])==i){
+                // cout << "found" << i << endl;
                 found = 1;
+            }
         if(found==1){
             found=0;
             continue;
@@ -132,7 +134,7 @@ void cluster_lsh::new_assignment()
         }
         centroids[minimum_index].vectors.push_back(ci);
     }
-
+    LSH::unmarkAssignedPoints();
 }
 
 cluster_lsh::~cluster_lsh()
@@ -191,7 +193,7 @@ void cluster_cube::new_assignment()
         for(int i=0;i<K;i++){
             // cout << i << "th centroid search" << endl;
             vector<pair<float,unsigned int>> R_Nearest = Cube::find_R_nearest(cluster::centroids[i].coordinates, search_radius);
-            cout << "found " << R_Nearest.size() << "in radius " << search_radius << endl;
+            // cout << "found " << R_Nearest.size() << "in radius " << search_radius << endl;
             for(int j=0;j<R_Nearest.size();j++)
             {
                 int Index = get<unsigned int>(R_Nearest[j]);

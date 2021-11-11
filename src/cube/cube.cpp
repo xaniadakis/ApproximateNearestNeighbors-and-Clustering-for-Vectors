@@ -67,7 +67,6 @@ void Cube::unmarkAssignedPoints()
 	}
 }
 
-
 vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,int R)
 {
 	//Returns indexes of R nearest element
