@@ -121,7 +121,7 @@ int main(int argc, char *argv[]){
 			auto stop_true = chrono::high_resolution_clock::now();
 			auto elapsed_true = stop_true - start_true;
 			double time_true = chrono::duration<double>(elapsed_true).count();
-			write_file(outfile,ids_query[i],vectors,ids,N_Nearest,R_Nearest,True_N_Nearest,time_cube,time_true,"Cube");
+			write_file(outfile,ids_query[i],ids,N_Nearest,R_Nearest,True_N_Nearest,time_cube,time_true,"Cube");
 		}
 
 		outfile.close();

@@ -20,7 +20,6 @@ unsigned int Cube::f(int i, int h_p) {
 unsigned int Cube::F(vector<float> p){
 	string _F;
 	char c;
-	int hash;
 	for(int i=0; i<k; i++){
 		c = intToChar(f(i,hash_L2(i,p,v,t,w)));
 		_F.push_back(c);
@@ -134,7 +133,7 @@ Cube::Cube(vector<vector<float>> input_vectors, int k, int argM, int probes, int
 	if(metric==L2)
 		distance=&eucledian_distance;
 
-	for(int i = 0;i<input_vectors.size();i++)
+	for(int i = 0;i<(int) input_vectors.size();i++)
 	{
 		hashtable_item_cube p{input_vectors[i],i};
 		hypercube->insert(F(input_vectors[i]),p);

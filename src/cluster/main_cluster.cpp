@@ -16,7 +16,7 @@ using namespace std;
 void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,pair<vector<float>,float> silhouettes,vector<string> ids,double time_cluster,string algorithm,bool complete)
 {
 	outfile << "Algorithm: " << algorithm << endl;
-	for (int i = 0; i < centroids.size(); i++)
+	for (int i = 0; i < (int) centroids.size(); i++)
 	{
 		outfile<<"CLUSTER-"<<i+1;
 		outfile<<" {size: "<<centroids[i].vectors.size();
@@ -41,7 +41,7 @@ void write_file_cluster(ofstream &outfile,vector<cluster::centroid> centroids,pa
 
 	if(complete)
 	{
-		for (int i = 0; i < centroids.size(); i++)
+		for (int i = 0; i < (int) centroids.size(); i++)
 		{
 			outfile<<"CLUSTER-"<<i+1;
 			outfile<<" { ";
@@ -175,7 +175,7 @@ int main(int argc, char *argv[]){
 	{
 		cout << "Using k-means clustering with Lloyd's assignment" << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
-		cluster_lloyds cluster(K_cluster,vectors,ids);
+		cluster_lloyds cluster(K_cluster,vectors);
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
@@ -185,7 +185,7 @@ int main(int argc, char *argv[]){
 	{
 		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << " method" << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
-		cluster_cube cluster(vectors,ids,K_cluster,k_cube,probes_cube,M_cube);
+		cluster_cube cluster(vectors,K_cluster,k_cube,probes_cube,M_cube);
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]){
 	{
 		cout << "Using k-means clustering with Approximate Reverse Approach using " << method << endl;
 		auto start_cluster = chrono::high_resolution_clock::now();
-		cluster_lsh cluster(vectors,ids,K_cluster,k_lsh,L_lsh);
+		cluster_lsh cluster(vectors,K_cluster,k_lsh,L_lsh);
 		auto stop_cluster = chrono::high_resolution_clock::now();
 		auto elapsed_cluster = stop_cluster - start_cluster ;
 		double time_cluster = chrono::duration<double>(elapsed_cluster).count();

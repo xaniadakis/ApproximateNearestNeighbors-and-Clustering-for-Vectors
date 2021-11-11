@@ -44,13 +44,12 @@ public:
 protected:
     vector<centroid> centroids;
     vector<vector<float>> vectors;
-    vector<string> ids;
     int K;
 
     int vectorSize;
     int n;
     
-    cluster(int K,vector<vector<float>> vectors,vector<string> ids);
+    cluster(int K,vector<vector<float>> vectors);
     ~cluster();
 
     void new_centroids();
@@ -63,14 +62,14 @@ protected:
 class cluster_lloyds : public cluster
 {
 public:
-    cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids);
+    cluster_lloyds(int K,vector<vector<float>> vectors);
 };
 
 
 class cluster_lsh : public cluster,public LSH //Using LSH reverse assignment (range search)
 {
 public:
-    cluster_lsh(vector<vector<float>> vectors,vector<string> ids,int K,int k,int L);
+    cluster_lsh(vector<vector<float>> vectors,int K,int k,int L);
     void new_assignment();
     void rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius);
     ~cluster_lsh();
@@ -79,7 +78,7 @@ public:
 class cluster_cube : public cluster,public Cube //Using Hypercube reverse assignment (range search)
 {
 public:
-    cluster_cube(vector<vector<float>> vectors,vector<string> ids,int K,int k,int probes,int M);
+    cluster_cube(vector<vector<float>> vectors,int K,int k,int probes,int M);
     void new_assignment();
     void rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_indexes, float search_radius);
     ~cluster_cube();

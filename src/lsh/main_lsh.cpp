@@ -116,7 +116,7 @@ int main(int argc, char *argv[]){
 			auto elapsed_true = stop_true - start_true ;
 			double time_true = chrono::duration<double>(elapsed_true).count();
 
-			write_file(outfile,ids_query[i],vectors,ids,N_Nearest,R_Nearest,True_N_Nearest,time_lsh,time_true,"LSH");
+			write_file(outfile,ids_query[i],ids,N_Nearest,R_Nearest,True_N_Nearest,time_lsh,time_true,"LSH");
 		}
 
 		outfile.close();

@@ -9,13 +9,12 @@
 #include "utils.hpp"
 
 //Cluster parent class
-cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
+cluster::cluster(int K,vector<vector<float>> vectors)
 {
     cluster::vectors=vectors;
-    cluster::ids=ids;
     cluster::K=K;
-    cluster::vectorSize=vectors[0].size();
-    cluster::n=ids.size();
+    cluster::vectorSize=(!vectors.empty()) ? vectors[0].size() : 0;
+    cluster::n=vectors.size();
 
     //K-Means++ initialization
     vector<int> non_centroids(n);
@@ -77,7 +76,6 @@ cluster::cluster(int K,vector<vector<float>> vectors,vector<string> ids)
 void cluster::new_centroids()
 {
     vector<vector<float>> new_centroids;
-    int converge_count=0;
     for (auto it = centroids.begin(); it != centroids.end(); ++it)
     {
         vector<float> new_centroid(vectorSize);
@@ -94,10 +92,8 @@ void cluster::new_centroids()
             new_centroid[y] /= it->vectors.size();
         }
         new_centroids.push_back(new_centroid);
-
-
     }
-    for (int i=0;i<new_centroids.size();i++)
+    for (int i=0;i<(int) new_centroids.size();i++)
     {
         centroids[i].coordinates=new_centroids[i];
         centroids[i].vectors.clear();
@@ -115,14 +111,14 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
     float total_average=0;
     int total_number=0;
 
-    for (int i = 0; i < centroids.size(); i++)
+    for (int i = 0; i < (int) centroids.size(); i++)
     {
         float averages_si=0;
-        for (int v = 0; v < centroids[i].vectors.size(); v++)
+        for (int v = 0; v < (int) centroids[i].vectors.size(); v++)
         {
             float a_vector;
             float b_vector;
-            for (int a = 0; a < centroids[i].vectors.size(); a++)
+            for (int a = 0; a < (int) centroids[i].vectors.size(); a++)
             {
                 if(a==v) continue;
                 a_vector+=eucledian_distance(centroids[i].vectors[v].p,centroids[i].vectors[a].p);
@@ -131,7 +127,7 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
 
             float minimum=numeric_limits<float>::max();
             int minimum_index;
-            for (int c=0;c<centroids.size();c++)
+            for (int c=0;c<(int) centroids.size();c++)
             {
                 if (c==i) continue;
                 
@@ -142,7 +138,7 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
                     minimum_index=c;
                 }
             }
-            for (int b = 0; b < centroids[minimum_index].vectors.size(); b++)
+            for (int b = 0; b < (int) centroids[minimum_index].vectors.size(); b++)
             {
                 b_vector+=eucledian_distance(centroids[i].vectors[v].p,centroids[minimum_index].vectors[b].p);
             }
@@ -181,15 +177,15 @@ cluster::~cluster()
 }
 
 //Cluster Lloyd's
-cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string> ids) : cluster(K,vectors,ids)
+cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors) : cluster(K,vectors)
 {
     //First assignment
-    for(int i=0;i<vectors.size();i++)
+    for(int i=0;i<(int) vectors.size();i++)
     {
         centroid_item ci={p:vectors[i],index:i};
         float minimum=numeric_limits<float>::max();
         int minimum_index;
-        for (int v=0;v<centroids.size();v++)
+        for (int v=0;v<(int) centroids.size();v++)
         {
             float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
             if(distance<minimum)
@@ -206,12 +202,12 @@ cluster_lloyds::cluster_lloyds(int K,vector<vector<float>> vectors,vector<string
         vector<centroid> centroids_old=centroids;
         new_centroids();
 
-        for(int i=0;i<vectors.size();i++)
+        for(int i=0;i<(int) vectors.size();i++)
         {
             centroid_item ci={p:vectors[i],index:i};
             float minimum=numeric_limits<float>::max();
             int minimum_index;
-            for (int v=0;v<centroids.size();v++)
+            for (int v=0;v<(int) centroids.size();v++)
             {
                 float distance=eucledian_distance(vectors[i],centroids[v].coordinates);
                 if(distance<minimum)

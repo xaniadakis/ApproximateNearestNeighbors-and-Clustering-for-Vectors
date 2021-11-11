@@ -25,6 +25,6 @@ int getValue(map<int,int> m, int key);
 int notExists(map<int,int> m, int key);
 vector<int> getNearbyProbes(int key, int n, int size);
 string fixedDecimalToBinary(int decimal, int size);
-void write_file(ofstream &outfile,string query_id,vector<vector<float>> vectors,vector<string> ids,vector<pair<float,unsigned int>> N_Nearest,vector<pair<float,unsigned int>> R_Nearest,vector<pair<float,unsigned int>> True_N_Nearest,double time,double time_true,string algorithm);
+void write_file(ofstream &outfile,string query_id,vector<string> ids,vector<pair<float,unsigned int>> N_Nearest,vector<pair<float,unsigned int>> R_Nearest,vector<pair<float,unsigned int>> True_N_Nearest,double time,double time_true,string algorithm);
 
 #endif
