@@ -12,7 +12,7 @@ LSH_ARGS 		?= -i $(INPUT_FILE) -o lsh_$(OUTPUT_FILE) -q $(QUERY_FILE)
 CLUSTER_METHOD	?= Classic
 CLUSTER_ARGS 	?= -i $(INPUT_FILE) -o cluster_$(OUTPUT_FILE) -c $(CONGIF_FILE) -m $(CLUSTER_METHOD) -complete 
 
-CC				= g++
+CC				= g++ -std=c++14
 CFLAGS 			?= -I$(INCLUDE_COMMON) -O2
 DEBUGFLAGS 		?= -g -Wextra -Wall -I$(INCLUDE_COMMON) -O2
 

@@ -160,7 +160,10 @@ int main(int argc, char *argv[]){
 	}
 
 	if(K_flag==false)
-        exit(1);
+	{
+		cout<<"Enter number of clusters to be created: ";
+		cin>>K_cluster;
+	}
 	
 	vector<vector<float>> vectors;
 	vector<string> ids;
