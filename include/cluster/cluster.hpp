@@ -9,7 +9,7 @@ using namespace std;
 //Implementation of centroid-based clustering
 //K-Means++ Initialization
 //L2 Metric
-//Update centroids using 
+//Update centroids by calculating mean vector
 
 class cluster
 {

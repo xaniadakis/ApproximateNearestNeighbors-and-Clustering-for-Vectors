@@ -5,6 +5,8 @@
 #include "lsh.hpp"
 #include "cube.hpp"
 
+//Implementation of clustering with reverse assignment
+
 class cluster_ANN : public cluster
 {
 protected:

@@ -109,7 +109,7 @@ LSH::LSH(vector<vector<float>> input_vectors,int k,int L,int metric,float hashta
 	//Initialize values
 	LSH::L=L;
 	LSH::k=k;
-	w=300;
+	w=600;
 	vectorSize=(!input_vectors.empty()) ? input_vectors[0].size() : 0;
 	n=input_vectors.size();
 	tableSize=ceil(n*hashtable_size_ratio);

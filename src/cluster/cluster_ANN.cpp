@@ -10,7 +10,7 @@ cluster_ANN::cluster_ANN(int K,vector<vector<float>> vectors) : cluster(K,vector
     cluster_ANN::vectors=vectors;
 }
 
-//cluster
+//cluster_ANN
 void cluster_ANN::bruteforce_assignment(vector<tuple<int,int,float>> flagged_indexes)
 {
     int found = 0;

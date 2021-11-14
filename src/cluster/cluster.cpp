@@ -74,6 +74,7 @@ cluster::cluster(int K,vector<vector<float>> vectors)
 
 void cluster::new_centroids()
 {
+    //Create new centroids by calculating mean vector
     vector<vector<float>> new_centroids;
     for (auto it = centroids.begin(); it != centroids.end(); ++it)
     {
@@ -106,6 +107,8 @@ vector<cluster::centroid> cluster::get_clusters()
 
 pair<vector<float>,float> cluster::get_silhouettes_average()
 {
+    //Return average silhouettes for every cluster
+    //Plus average for whole dataset
     vector<float> averages;
     float total_average=0;
     int total_number=0;
@@ -158,6 +161,8 @@ pair<vector<float>,float> cluster::get_silhouettes_average()
 
 bool cluster::convergence(vector<centroid> centroids_old)
 {
+    //Check if centroids converge by checking if they have the same
+    //elements as previous assignment
     for (int i = 0; i < K; i++)
     {   
         if(centroids[i].vectors.size() != centroids_old[i].vectors.size())
