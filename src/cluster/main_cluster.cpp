@@ -207,5 +207,5 @@ int main(int argc, char *argv[]){
 	}
 
 	outfile.close();
-	exit(0);
+	return 0;
 }

@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
 			R = std::stof(optarg);
 			break;
 		default:
-			exit (1);
+			return 1;
 		}
 	}
 
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]){
 			}
 			if(option.compare("/exit")==0)
 			{
-				exit(0);
+				return 0;
 			}
 		}
 	}

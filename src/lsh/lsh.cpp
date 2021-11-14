@@ -20,6 +20,7 @@ unsigned long long int LSH::ID(vector<float> p,unsigned int j) {
 	unsigned long long int _g = 0;
 	for(int i=0; i<k; i++)
 		_g += modulo((r[i]*h[i]),M);
+	delete[] h;
 	return modulo(_g,M);
 }
 
