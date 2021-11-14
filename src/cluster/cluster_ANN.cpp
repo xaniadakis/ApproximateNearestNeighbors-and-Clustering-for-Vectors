@@ -149,7 +149,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
                             if(centroids[centroidj].vectors[k].index==indexj){
                                 centroids[centroidj].vectors.erase(centroids[centroidj].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+j);
-                                updatedCentroid[j]--;
+                                updatedCentroid[centroidj]--;
                             }
                         }
                     }
@@ -160,7 +160,7 @@ void cluster_lsh::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_in
                             if(centroids[centroidi].vectors[k].index==indexi){
                                 centroids[centroidi].vectors.erase(centroids[centroidi].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+i);
-                                updatedCentroid[i]--;
+                                updatedCentroid[centroidi]--;
                             }
                         }
                     }
@@ -257,7 +257,7 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
                             if(centroids[centroidj].vectors[k].index==indexj){
                                 centroids[centroidj].vectors.erase(centroids[centroidj].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+j);
-                                updatedCentroid[j]--;
+                                updatedCentroid[centroidj]--;
                             }
                         }
                     }
@@ -268,7 +268,7 @@ void cluster_cube::rangeSearch_Assignment(vector<tuple<int,int,float>> flagged_i
                             if(centroids[centroidi].vectors[k].index==indexi){
                                 centroids[centroidi].vectors.erase(centroids[centroidi].vectors.begin()+k);
                                 new_indexes.erase(new_indexes.begin()+i);
-                                updatedCentroid[i]--;
+                                updatedCentroid[centroidi]--;
                             }
                         }
                     }

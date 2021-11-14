@@ -75,17 +75,14 @@ vector<pair<float,unsigned int>> LSH::find_R_nearest(vector<float> p,float R)
 			hashtable_item_lsh p_b = *it;
 			if (p_b.ID == ID)
 			{
+				if(clusterMode && p_b.flag && p_b.radius_found!=R) continue;
 				float distance = LSH::distance(p,p_b.p);
 				if(distance<=R)
 				{
 					if(clusterMode)
 					{
-						if(p_b.flag && p_b.radius_found!=R) continue;
-						else
-						{
-							p_b.flag = true;
-							p_b.radius_found=R;
-						}
+						p_b.flag = true;
+						p_b.radius_found=R;
 					}
 					if(distances.find(distance) == distances.end() || distances.find(distance)->second != p_b.index)
 						distances.insert({distance,p_b.index});

@@ -80,17 +80,14 @@ vector<pair<float,unsigned int>> Cube::find_R_nearest(vector<float> p,float R)
 			if(counter >= argM)
 				break;
 			hashtable_item_cube p_b = *it;
+			if(clusterMode && p_b.flag && p_b.radius_found!=R) continue;
 			float distance = Cube::distance(p,p_b.p);
 			if(distance<=R)
 			{
 				if(clusterMode)
 				{
-					if(p_b.flag && p_b.radius_found!=R) continue;
-					else
-					{
-						p_b.flag = true;
-						p_b.radius_found = R;
-					}
+					p_b.flag = true;
+					p_b.radius_found = R;
 				}
 				distances.insert({distance,p_b.index});
 			}
